@@ -21,6 +21,12 @@ public class StorefrontFacade {
 
 
     public void createProduct(String sku, String name) {
+        if (sku.isEmpty()){
+            throw new RuntimeException("Please add a valid sku");
+        }
+        else if (name.isEmpty()) {
+            throw new RuntimeException("Please add a valid name");
+        }
         Product createdProduct = new Product(name, "", "", "", sku, 0.0);
         productsBySku.put(sku,createdProduct);
     }
