@@ -32,6 +32,7 @@ public class StorefrontFacade {
         }
         Product createdProduct = new Product(name, "", "", "", sku, 0.0);
         productsBySku.put(sku,createdProduct);
+        System.out.println("Product with sku "+productsBySku.get(sku).getSku()+" has been added");
     }
 
     public void updateProduct(String sku, String name, String description, String vendor, String urlSlug, double price) {
@@ -42,7 +43,7 @@ public class StorefrontFacade {
             throw new RuntimeException("Please add a valid name");
         }
         else if (description.isEmpty() || vendor.isEmpty() || urlSlug.isEmpty() || Double.isNaN(price)) {
-            throw new RuntimeException("Please add all fields");
+            throw new RuntimeException("Please add all fields correctly");
         }
         if (urlSlug.length() > 100 || !urlSlug.matches("^[0-9a-z-]+$")) {
             throw new RuntimeException("Please add a valid url slug");
@@ -62,6 +63,7 @@ public class StorefrontFacade {
         } else {
             productsBySlug.replace(urlSlug,getUpdatedProduct);
         }
+        System.out.println("Product with sku "+productsBySku.get(sku).getSku()+" has been updated");
     }
 
     public Product getProduct(String sku) {
