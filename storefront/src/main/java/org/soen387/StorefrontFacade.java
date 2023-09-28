@@ -1,9 +1,11 @@
 package org.soen387;
 
-import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 import org.soen387.Product;
 
 public class StorefrontFacade {
@@ -21,34 +23,31 @@ public class StorefrontFacade {
 
 
     public void createProduct(String sku, String name) {
-        if (sku.isEmpty()){
+        if (sku.isEmpty()) {
             throw new RuntimeException("Please add a valid sku");
-        }
-        else if (name.isEmpty()) {
+        } else if (name.isEmpty()) {
             throw new RuntimeException("Please add a valid name");
         }
-        if (productsBySku.containsKey(sku)){
+        if (productsBySku.containsKey(sku)) {
             throw new RuntimeException("Sku is already in use. Please select another sku identifier");
         }
         Product createdProduct = new Product(name, "", "", "", sku, 0.0);
-        productsBySku.put(sku,createdProduct);
-        System.out.println("Product with sku "+productsBySku.get(sku).getSku()+" has been added");
+        productsBySku.put(sku, createdProduct);
+        System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been added");
     }
 
     public void updateProduct(String sku, String name, String description, String vendor, String urlSlug, double price) {
-        if (sku.isEmpty()){
+        if (sku.isEmpty()) {
             throw new RuntimeException("Please add a valid sku");
-        }
-        else if (name.isEmpty()) {
+        } else if (name.isEmpty()) {
             throw new RuntimeException("Please add a valid name");
-        }
-        else if (description.isEmpty() || vendor.isEmpty() || urlSlug.isEmpty() || Double.isNaN(price)) {
+        } else if (description.isEmpty() || vendor.isEmpty() || urlSlug.isEmpty() || Double.isNaN(price)) {
             throw new RuntimeException("Please add all fields correctly");
         }
         if (urlSlug.length() > 100 || !urlSlug.matches("^[0-9a-z-]+$")) {
             throw new RuntimeException("Please add a valid url slug");
         }
-        if (!productsBySku.containsKey(sku)){
+        if (!productsBySku.containsKey(sku)) {
             throw new RuntimeException("Product does not exist. Please add product before updating it");
         }
         Product getUpdatedProduct = productsBySku.get(sku);
@@ -57,13 +56,13 @@ public class StorefrontFacade {
         getUpdatedProduct.setVendor(vendor);
         getUpdatedProduct.setUrlSlug(urlSlug);
         getUpdatedProduct.setPrice(price);
-        productsBySku.replace(sku,getUpdatedProduct);
+        productsBySku.replace(sku, getUpdatedProduct);
         if (!productsBySlug.containsKey(urlSlug)) {
             productsBySlug.put(urlSlug, getUpdatedProduct);
         } else {
-            productsBySlug.replace(urlSlug,getUpdatedProduct);
+            productsBySlug.replace(urlSlug, getUpdatedProduct);
         }
-        System.out.println("Product with sku "+productsBySku.get(sku).getSku()+" has been updated");
+        System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been updated");
     }
 
     public Product getProduct(String sku) {
@@ -113,11 +112,35 @@ public class StorefrontFacade {
     }
 
     public void removeProductFromCart(String user, String sku) {
-
+        if (user == null || user.isEmpty()) {
+            throw new IllegalArgumentException("User must not be null or empty");
+        }
+        if (sku == null || sku.isEmpty()) {
+            throw new IllegalArgumentException("SKU must not be null or empty");
+        }
+        Cart cart = cartsByUser.get(user);
+        if (cart == null) {
+            // No cart is associated with the user, so no operation is performed.
+            return;
+        }
+        cart.removeProductBySku(sku);
     }
 
     public void downloadProductCatalog() {
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProductCatalog.txt"))) {
+            for (Product product : productsBySku.values()) {
+                writer.write("Name: " + product.getName() + "\n");
+                writer.write("Description: " + product.getDescription() + "\n");
+                writer.write("Vendor: " + product.getVendor() + "\n");
+                writer.write("URL Slug: " + product.getUrlSlug() + "\n");
+                writer.write("SKU: " + product.getSku() + "\n");
+                writer.write("Price: " + product.getPrice() + "\n");
+                writer.write("-------------------------------\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to write the product catalog to file");
+        }
     }
 
 
