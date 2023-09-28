@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.soen387.Product;
 
 public class StorefrontFacade {
 
@@ -20,7 +21,8 @@ public class StorefrontFacade {
 
 
     public void createProduct(String sku, String name) {
-
+        Product createdProduct = new Product(name, "", "", "", sku, 0.0);
+        productsBySku.put(sku,createdProduct);
     }
 
     public void updateProduct(String sku, String name) {
