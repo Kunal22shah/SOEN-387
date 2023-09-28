@@ -27,6 +27,9 @@ public class StorefrontFacade {
         else if (name.isEmpty()) {
             throw new RuntimeException("Please add a valid name");
         }
+        if (productsBySku.containsKey(sku)){
+            throw new RuntimeException("Sku is already in use. Please select another sku identifier");
+        }
         Product createdProduct = new Product(name, "", "", "", sku, 0.0);
         productsBySku.put(sku,createdProduct);
     }
@@ -44,6 +47,9 @@ public class StorefrontFacade {
         if (urlSlug.length() > 100 || !urlSlug.matches("^[0-9a-z-]+$")) {
             throw new RuntimeException("Please add a valid url slug");
         }
+        if (!productsBySku.containsKey(sku)){
+            throw new RuntimeException("Product does not exist. Please add product before updating it");
+        }
         Product getUpdatedProduct = productsBySku.get(sku);
         getUpdatedProduct.setName(name);
         getUpdatedProduct.setDescription(description);
@@ -51,6 +57,11 @@ public class StorefrontFacade {
         getUpdatedProduct.setUrlSlug(urlSlug);
         getUpdatedProduct.setPrice(price);
         productsBySku.replace(sku,getUpdatedProduct);
+        if (!productsBySlug.containsKey(urlSlug)) {
+            productsBySlug.put(urlSlug, getUpdatedProduct);
+        } else {
+            productsBySlug.replace(urlSlug,getUpdatedProduct);
+        }
     }
 
     public Product getProduct(String sku) {
