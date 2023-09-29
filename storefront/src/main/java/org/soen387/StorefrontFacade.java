@@ -67,22 +67,49 @@ public class StorefrontFacade {
     }
 
     public Product getProduct(String sku) {
-
-        return null;
+        if (sku == null || sku.isEmpty()) {
+            throw new IllegalArgumentException("SKU must not be null or empty");
+        }
+        Product product = productsBySku.get(sku);
+        if (product == null) {
+            throw new RuntimeException("Product with SKU " + sku + " does not exist");
+        }
+        return product;
     }
 
-
     public Product getProductBySlug(String slug) {
-        return null;
+        if (slug == null || slug.isEmpty()) {
+            throw new IllegalArgumentException("Slug must not be null or empty");
+        }
+        Product product = productsBySlug.get(slug);
+        if (product == null) {
+            throw new RuntimeException("Product with slug " + slug + " does not exist");
+        }
+        return product;
     }
 
     public Cart getCart(String user) {
-
-        return null;
+        if (user == null || user.isEmpty()) {
+            throw new IllegalArgumentException("User must not be null or empty");
+        }
+        Cart cart = cartsByUser.getOrDefault(user, new Cart());
+        return cart;
     }
 
     public void addProductToCart(String user, String sku) {
-
+        if (user == null || user.isEmpty()) {
+            throw new IllegalArgumentException("User must not be null or empty");
+        }
+        if (sku == null || sku.isEmpty()) {
+            throw new IllegalArgumentException("SKU must not be null or empty");
+        }
+        Product product = getProduct(sku); // Reuse the getProduct method to ensure the product exists
+        Cart cart = cartsByUser.get(user);
+        if (cart == null) {
+            cart = new Cart();
+            cartsByUser.put(user, cart);
+        }
+        cart.addProduct(product);
     }
 
     public void removeProductFromCart(String user, String sku) {
