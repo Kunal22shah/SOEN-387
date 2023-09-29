@@ -5,27 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3dfacee-d5b5-48d8-b156-6beb80155737" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/storefront-react/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/public/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/public/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/public/logo192.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/public/logo512.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/public/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/public/robots.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/App.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/App.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/App.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/reportWebVitals.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront-react/src/setupTests.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Cart.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Product.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/CartServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,13 +25,18 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -100,7 +90,8 @@
       <option name="presentableId" value="Default" />
       <updated>1695828320808</updated>
       <workItem from="1695828321861" duration="1491000" />
-      <workItem from="1695830189747" duration="1310000" />
+      <workItem from="1695830189747" duration="1479000" />
+      <workItem from="1695928868412" duration="1315000" />
     </task>
     <servers />
   </component>

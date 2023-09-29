@@ -2,6 +2,7 @@ package org.soen387;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cart {
 
@@ -20,10 +21,22 @@ public class Cart {
     }
 
     public void addProduct(Product p) {
+        if (p != null) {
+
+            for (Product product : products) {
+                if (product.getSku().equals(p.getSku())) {
+                    return;
+                }
+            }
+            products.add(p);
+        }
 
     }
 
     public void removeProductBySku(String sku) {
+        products = products.stream()
+                .filter(product -> !product.getSku().equals(sku))
+                .collect(Collectors.toList());
 
     }
 }
