@@ -3,6 +3,7 @@ package org.soen387;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,6 +75,15 @@ public class StorefrontFacade {
             throw new RuntimeException("Product with SKU " + sku + " does not exist");
         }
         return product;
+    }
+
+    public ArrayList<Product> getAllProduct(){
+        ArrayList<Product> allProducts = new ArrayList<Product>();
+        for (Product product : productsBySku.values()){
+            Product oneProduct = new Product (product.getName(), product.getDescription(), product.getVendor(), product.getUrlSlug(), product.getSku(), product.getPrice());
+            allProducts.add(oneProduct);
+        }
+        return allProducts;
     }
 
     public Product getProductBySlug(String slug) {
