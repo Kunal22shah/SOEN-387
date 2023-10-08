@@ -29,8 +29,11 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-        store.addProductToCart("singleCustomer", productToAdd.getSku());
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.sendRedirect("/cart");
+        try {
+            store.addProductToCart("singleCustomer", productToAdd.getSku());
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.sendRedirect("/cart");
+        } catch (ProductAlreadyInCartException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product has already been added to the cart");
     }
 }

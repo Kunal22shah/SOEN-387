@@ -83,10 +83,14 @@ public class ProductServlet extends HttpServlet {
             return;
         }
 
+        try {
         // Update the product
         store.updateProduct(existingProduct.getSku(), name, description, vendor, urlSlug, price);
         response.setStatus(HttpServletResponse.SC_OK);
         response.sendRedirect("/products/" + urlSlug);
+        } catch (RuntimeException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        }
     }
-    }
+    
 }
