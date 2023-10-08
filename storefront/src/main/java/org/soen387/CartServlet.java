@@ -30,6 +30,7 @@ public class CartServlet extends HttpServlet {
         }
 
         store.addProductToCart("singleCustomer", productToAdd.getSku());
+        response.setStatus(HttpServletResponse.SC_OK);
         response.sendRedirect("/cart");
     }
 }

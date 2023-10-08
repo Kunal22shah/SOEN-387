@@ -85,6 +85,7 @@ public class ProductServlet extends HttpServlet {
 
         // Update the product
         store.updateProduct(existingProduct.getSku(), name, description, vendor, urlSlug, price);
+        response.setStatus(HttpServletResponse.SC_OK);
         response.sendRedirect("/products/" + urlSlug);
     }
     }
