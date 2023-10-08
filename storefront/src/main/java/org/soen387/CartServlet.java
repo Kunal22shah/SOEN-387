@@ -12,7 +12,24 @@ public class CartServlet extends HttpServlet {
         // Handle GET requests to /cart
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle POST requests to /cart/products/:slug
+
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null || !pathInfo.startsWith("/products/")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product slug");
+            return;
+        }
+
+        String slug = pathInfo.split("/")[2];
+        Product productToAdd = store.getProductBySlug(slug);
+        if (productToAdd == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+            return;
+        }
+
+        store.addProductToCart("singleCustomer", productToAdd.getSku());
+        response.sendRedirect("/cart");
     }
 }

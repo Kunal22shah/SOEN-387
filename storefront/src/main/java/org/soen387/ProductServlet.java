@@ -55,5 +55,37 @@ public class ProductServlet extends HttpServlet {
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle POST requests to /products/:slug
+
+        // Extract slug from the path
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null || pathInfo.equals("/")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product slug");
+            return;
+        }
+
+        String slug = pathInfo.split("/")[1];
+        Product existingProduct = store.getProductBySlug(slug);
+        if (existingProduct == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+            return;
+        }
+
+        // Extract product details from the request
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        String vendor = request.getParameter("vendor");
+        String urlSlug = request.getParameter("urlSlug");
+        double price;
+        try {
+            price = Double.parseDouble(request.getParameter("price"));
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid price format");
+            return;
+        }
+
+        // Update the product
+        store.updateProduct(existingProduct.getSku(), name, description, vendor, urlSlug, price);
+        response.sendRedirect("/products/" + urlSlug);
+    }
     }
 }
