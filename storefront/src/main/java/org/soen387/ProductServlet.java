@@ -34,18 +34,25 @@ public class ProductServlet extends HttpServlet {
         String getPathInfo = request.getPathInfo();
 
         if("/download".equals((getPathInfo))){
-           store.downloadProductCatalog();
+                      try {
+                store.downloadProductCatalog();
 
-           response.setContentType(("text/plain"));
-            response.setHeader("Content-Disposition", "attachment; filename=ProductCatalog.txt");
+                response.setContentType("text/plain");
+                response.setHeader("Content-Disposition", "attachment; filename=ProductCatalog.txt");
 
-            try (ServletOutputStream outputStream = response.getOutputStream();
-                 FileInputStream fileInputStream = new FileInputStream("ProductCatalog.txt")) {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
+                try (ServletOutputStream outputStream = response.getOutputStream();
+                     FileInputStream fileInputStream = new FileInputStream("ProductCatalog.txt")) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
                 }
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("Download successful");
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("Error occurred while downloading the product catalog: " + e.getMessage());
             }
             return;
         }
