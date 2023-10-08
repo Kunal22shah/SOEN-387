@@ -26,13 +26,13 @@ public class CartServlet extends HttpServlet {
 
         String getPathInfo = request.getPathInfo();
         if (getPathInfo == null || getPathInfo.split("/").length <= 1) {
-//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         String slug = getPathInfo.split("/")[1];
         String user = "defaultUser";
         store.removeProductFromCart(user, slug);
-//        response.setStatus(HttpServletResponse.SC_OK);
+        response.setStatus(HttpServletResponse.SC_OK);
 
     }
 }
