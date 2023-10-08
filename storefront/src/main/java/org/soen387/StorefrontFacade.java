@@ -51,6 +51,10 @@ public class StorefrontFacade {
         if (!productsBySku.containsKey(sku)) {
             throw new RuntimeException("Product does not exist. Please add product before updating it");
         }
+        Product productWithSameSlug = productsBySlug.get(urlSlug);
+        if (productWithSameSlug != null && !productWithSameSlug.getSku().equals(sku)) {
+            throw new RuntimeException("URL slug is already in use. Please select another slug.");
+        }
         Product getUpdatedProduct = productsBySku.get(sku);
         getUpdatedProduct.setName(name);
         getUpdatedProduct.setDescription(description);
@@ -114,6 +118,9 @@ public class StorefrontFacade {
         }
         Product product = getProduct(sku); // Reuse the getProduct method to ensure the product exists
         Cart cart = cartsByUser.get(user);
+        if (cart.containsProduct(sku)) {
+            throw new ProductAlreadyInCartException("Product with SKU " + sku + " is already in the cart");
+    }
         if (cart == null) {
             cart = new Cart();
             cartsByUser.put(user, cart);
@@ -153,5 +160,9 @@ public class StorefrontFacade {
         }
     }
 
-
+    public static class ProductAlreadyInCartException extends RuntimeException {
+        public ProductAlreadyInCartException(String message) {
+            super(message);
+        }
+    }
 }
