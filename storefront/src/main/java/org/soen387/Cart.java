@@ -39,4 +39,13 @@ public class Cart {
                 .collect(Collectors.toList());
 
     }
+
+    public boolean containsProduct(String sku) {
+        for (Product product : products) {
+            if (product.getSku().equals(sku)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

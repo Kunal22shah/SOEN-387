@@ -37,23 +37,25 @@ public class CartServlet extends HttpServlet {
             store.addProductToCart("singleCustomer", productToAdd.getSku());
             response.setStatus(HttpServletResponse.SC_OK);
             response.sendRedirect("/cart");
-        } catch (ProductAlreadyInCartException e) {
+        } catch (StorefrontFacade.ProductAlreadyInCartException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product has already been added to the cart");
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
-        // Handle DELETE requests to /cart/products/:slug
-
-        String getPathInfo = request.getPathInfo();
-        if (getPathInfo == null || getPathInfo.split("/").length <= 1) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
         }
-        String slug = getPathInfo.split("/")[1];
-        String user = "defaultUser";
-        store.removeProductFromCart(user, slug);
-        response.setStatus(HttpServletResponse.SC_OK);
-
     }
-}
+
+        @Override
+        protected void doDelete (HttpServletRequest request, HttpServletResponse response)  throws  ServletException, IOException {
+            // Handle DELETE requests to /cart/products/:slug
+
+            String getPathInfo = request.getPathInfo();
+            if (getPathInfo == null || getPathInfo.split("/").length <= 1) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+            String slug = getPathInfo.split("/")[1];
+            String user = "defaultUser";
+            store.removeProductFromCart(user, slug);
+            response.setStatus(HttpServletResponse.SC_OK);
+
+        }
+    }
+
