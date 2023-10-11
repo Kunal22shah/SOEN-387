@@ -85,14 +85,20 @@ public class ProductServlet extends HttpServlet {
 
         //Handle the GET /products/:slug request
         //Extract slug form "/:slug"
-//        String getRequestSlug = getPathInfo.split("/")[1];
-//
-//        Product singleProduct = store.getProductBySlug(getRequestSlug);
-//        request.setAttribute("product",singleProduct);
-//        RequestDispatcher rd = request.getRequestDispatcher("/productDetails.jsp");
-//        rd.forward(request, response );
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        return;
+        String getRequestSlug = getPathInfo.split("/")[1];
+
+        try {
+            Product singleProduct = store.getProductBySlug(getRequestSlug);
+            request.setAttribute("product",singleProduct);
+            RequestDispatcher rd = request.getRequestDispatcher("product.jsp");
+            rd.forward(request, response );
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+        catch (RuntimeException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Product may not exist. Please try again " + e.getMessage());
+        }
+        return;
 
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
