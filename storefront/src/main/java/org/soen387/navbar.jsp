@@ -16,7 +16,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="products.jsp"><button type="button" class="btn btn-outline-primary">Products</button></a>
+              <a class="nav-link active" aria-current="page" href="/storefront/products"><button type="button" class="btn btn-outline-primary">Products</button></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#"><button type="button" class="btn btn-outline-primary">Cart</button></a>
