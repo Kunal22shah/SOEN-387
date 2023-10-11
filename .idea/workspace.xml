@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Adding dynamic single page">
+    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Small UI changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/product.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/products.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696988069364</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Small UI changes">
+      <created>1696990813275</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1696990813275</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -202,7 +206,8 @@
     <MESSAGE value="Adding dynamic all products page" />
     <MESSAGE value="Adding static single product page" />
     <MESSAGE value="Adding dynamic single page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding dynamic single page" />
+    <MESSAGE value="Small UI changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Small UI changes" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
