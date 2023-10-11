@@ -1,6 +1,5 @@
 <%@ include file="navbar.jsp" %>
-
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
@@ -19,18 +18,12 @@
     </div>
     <div class="col">
       <div class="p-3" style="margin:auto; margin-top:100px;">
-        <h1>Test Product</h1>
-        <p>99.99$</p>
+        <h1>${product.name}</h1>
+        <p style="font-weight:bold">Price: ${product.price} $</p>
         <p>
-             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-             enim ad minim veniam, quis nostrud exercitation ullamco laboris
-             nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-             in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-             nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-            sunt in culpa qui officia deserunt mollit anim id est laborum.
+             Description: ${product.description}
         </p>
-        <p>Vendor: John Doe</p>
+        <p>Vendor: ${product.vendor}</p>
         <button type="button" class="btn btn-primary">Add to cart</button>
     </div>
   </div>

@@ -19,9 +19,9 @@
           <div class="card-body">
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text" style="text-align:center">Seller: ${product.vendor}</p>
-            <p class="card-text" style="text-align:center; font-weight:bold">${product.price}</p>
+            <p class="card-text" style="text-align:center; font-weight:bold">Price: ${product.price} $</p>
             <div style="display:flex; justify-content:center;">
-                <a href="#" class="btn btn-primary">View Details</a>
+                <a href="/storefront/products/${product.urlSlug}" class="btn btn-primary">View Details</a>
             </div>
           </div>
         </div
