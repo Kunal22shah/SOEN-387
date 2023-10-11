@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Adding static single product page">
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java" afterDir="false" />
+    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Adding dynamic single page">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/navbar.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/product.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/products.jsp" afterDir="false" />
     </list>
@@ -172,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696985333122</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Adding dynamic single page">
+      <created>1696988069364</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1696988069364</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -193,7 +201,8 @@
     <MESSAGE value="Adding Navbar.jsp and all products page" />
     <MESSAGE value="Adding dynamic all products page" />
     <MESSAGE value="Adding static single product page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding static single product page" />
+    <MESSAGE value="Adding dynamic single page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding dynamic single page" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

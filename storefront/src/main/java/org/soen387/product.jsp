@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>View Product</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   </head>
   <body>
@@ -13,7 +13,7 @@
   <div class="row gx-5">
     <div class="col">
      <div class="p-3" >
-        <img src="https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png" alt="productimage" style="margin:auto; margin-top:100px;"/>
+        <img src="https://pngimg.com/d/box_PNG21.png" alt="productimage" style="margin:auto; margin-top:100px; height:300px;"/>
      </div>
     </div>
     <div class="col">
