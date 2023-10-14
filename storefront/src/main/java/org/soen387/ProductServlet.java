@@ -2,6 +2,7 @@ package org.soen387;
 
 import com.google.gson.Gson;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
@@ -24,8 +25,21 @@ public class ProductServlet extends HttpServlet {
     public void init() throws ServletException{
         super.init();
         store.createProduct("1","test");
+        store.updateProduct("1",  "Airpods Pro 2nd Generation", "Airpods that was barely used. Was worn only twice", "Micheal Smith", "airpods-pro-2ndgen", 249.99);
         store.createProduct("2","test2");
-        store.updateProduct("2",  "test2", "test description", "test", "test-product", 25.99);
+        store.updateProduct("2",  "2021 Macbook Air M1", "Used Macbook Air in good condition. Comes with charger and case", "Steven Bala", "macbook-air-2021", 999.99);
+        store.createProduct("3","test2");
+        store.updateProduct("3",  "2020 Day One edition PS5", "PS5 that was bought on launch day", "Rodrigo Guy", "ps5-dayone", 499.99);
+        store.createProduct("4","test2");
+        store.updateProduct("4",  "Gucci Shoes", "Gucci shoes. Good condition", "Rob Wayne", "gucci-shoes", 299.99);
+        store.createProduct("5","test2");
+        store.updateProduct("5",  "Gaming chair", "Gaming chair. Not in good condition but selling it for cheap. Negotiable", "Max Bobby", "gaming-chair", 30.00);
+        store.createProduct("6","test2");
+        store.updateProduct("6",  "Gaming PC", "Gaming PC I built back in 2020. Parts are still good and the PC is very customizable", "Jeffrey Kai", "gaming-pc", 550.00);
+        store.createProduct("7","test2");
+        store.updateProduct("7",  "IPhone 14 Pro Max", "IPhone 14 Pro Max Unlocked. Everything works fine and in good condition. Provided with charging outlet", "Angelo Mo", "iphone14-promax", 1200.00);
+        store.createProduct("8","test2");
+        store.updateProduct("8",  "Samsung Smart Watch", "Used Samsung Smart Watch i bought in 2021. In very good condition", "Rod Mike", "samsung-watch-2021", 100.00);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -57,19 +71,15 @@ public class ProductServlet extends HttpServlet {
             return;
         }
         // Handle GET requests to /products/*
-        response.setContentType("application/json");
-
-
-
-        Gson gson = new Gson();
-        PrintWriter out = response.getWriter();
 
         /* Handle the GET /products request */
         if (getPathInfo == null){
             ArrayList<Product> allProducts;
             allProducts = store.getAllProduct();
-            String allProductsjson = gson.toJson(allProducts);
-            out.println(allProductsjson);
+            request.setAttribute("products",allProducts);
+            RequestDispatcher rd = request.getRequestDispatcher("products.jsp");
+            rd.forward(request, response );
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
@@ -77,8 +87,18 @@ public class ProductServlet extends HttpServlet {
         //Extract slug form "/:slug"
         String getRequestSlug = getPathInfo.split("/")[1];
 
-        String singleProduct = gson.toJson(store.getProductBySlug(getRequestSlug));
-        out.println(singleProduct);
+        try {
+            Product singleProduct = store.getProductBySlug(getRequestSlug);
+            request.setAttribute("product",singleProduct);
+            RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
+            rd.forward(request, response );
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+        catch (RuntimeException e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Error fetching product. Product may not exist. Please try again: " + e.getMessage());
+        }
 
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
