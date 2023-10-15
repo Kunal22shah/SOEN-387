@@ -1,0 +1,40 @@
+package org.soen387;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/createProduct")
+public class CreateProductServlet extends HttpServlet {
+
+    protected static final StorefrontFacade store = new StorefrontFacade();
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Extract product details from the request
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        String vendor = request.getParameter("vendor");
+        String urlSlug = request.getParameter("urlSlug");
+        String sku = request.getParameter("sku");
+        double price;
+        try {
+            price = Double.parseDouble(request.getParameter("price"));
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid price format");
+            return;
+        }
+
+        try {
+            Product newProduct = new Product(name, description, vendor, urlSlug, sku, price);
+            store.createProduct(newProduct.getSku(), newProduct.getName()); // Assuming you'll modify the createProduct method to handle all product details
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.sendRedirect("/products/" + urlSlug); // Redirect to the newly created product's page
+        } catch (RuntimeException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        }
+    }
+}
