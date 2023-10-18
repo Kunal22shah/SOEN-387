@@ -24,7 +24,9 @@
              Description: ${product.description}
         </p>
         <p>Vendor: ${product.vendor}</p>
-        <button type="button" class="btn btn-primary">Add to cart</button>
+        <form action="/storefront/cart/products/${product.urlSlug}" method="post">
+          <button type="submit" class="btn btn-primary">Add to cart</button>
+        </form>
     </div>
   </div>
 </div>

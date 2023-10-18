@@ -19,11 +19,13 @@
               <a class="nav-link active" aria-current="page" href="/storefront/products"><button type="button" class="btn btn-outline-primary">Products</button></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#"><button type="button" class="btn btn-outline-primary">Cart</button></a>
+              <a class="nav-link" href="/storefront/cart"><button type="button" class="btn btn-outline-primary">Cart</button></a>
             </li>
           </ul>
-          <span class="navbar-text">
-               <button type="button" class="btn btn-primary">Autenticate as Staff</button>
+            <span class="navbar-text">
+               <a class="nav-link" href="/storefront/staffAuth">
+                <button type="button" class="btn btn-primary">Authenticate as Staff</button>
+            </a>
           </span>
         </div>
       </div>
