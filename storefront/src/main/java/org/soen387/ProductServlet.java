@@ -99,7 +99,8 @@ public class ProductServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            out.println("<h1>Error Status Code 404: NOT FOUND!! <h1/>");
+            out.println("<h1 style='text-align:center;'>Error Status Code 404: NOT FOUND!! </h1>");
+            out.println("<div style='text-align:center;'><a href='/storefront'><button>Home</button></a></div>");
         }
 
     }
