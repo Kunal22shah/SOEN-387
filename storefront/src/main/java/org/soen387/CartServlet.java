@@ -14,6 +14,10 @@ public class CartServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle GET requests to /cart
+        String user = "defaultUser";
+        Cart userCart = store.getCart(user);
+        request.setAttribute("cart", userCart);
+        request.getRequestDispatcher("/cart.jsp").forward(request, response);
     }
 
     @Override
@@ -33,16 +37,25 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
+        String methodOverride = request.getParameter("_method");
+        if ("delete".equalsIgnoreCase(methodOverride)) {
+            doDelete(request, response);
+            response.sendRedirect("/storefront/cart");
+            return;
+        }
         try {
-            store.addProductToCart("singleCustomer", productToAdd.getSku());
+            store.addProductToCart("defaultUser", productToAdd.getSku());
             response.setStatus(HttpServletResponse.SC_OK);
-            response.sendRedirect("/cart");
+            response.sendRedirect("/storefront/cart");
         } catch (StorefrontFacade.ProductAlreadyInCartException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product has already been added to the cart");
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while adding the product to the cart");
         }
     }
 
-        @Override
+
+    @Override
         protected void doDelete (HttpServletRequest request, HttpServletResponse response)  throws  ServletException, IOException {
             // Handle DELETE requests to /cart/products/:slug
 
@@ -51,11 +64,16 @@ public class CartServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
-            String slug = getPathInfo.split("/")[1];
+            String slug = getPathInfo.split("/")[2];
+            Product productToRemove = store.getProductBySlug(slug);
+            if (productToRemove == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+                return;
+            }
             String user = "defaultUser";
-            store.removeProductFromCart(user, slug);
+            store.removeProductFromCart(user, productToRemove.getSku());
+            System.out.println("Processing DELETE request for product slug: " + slug);
             response.setStatus(HttpServletResponse.SC_OK);
-
         }
     }
 

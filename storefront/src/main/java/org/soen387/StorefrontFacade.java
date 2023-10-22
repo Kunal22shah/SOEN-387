@@ -117,15 +117,17 @@ public class StorefrontFacade {
         if (sku == null || sku.isEmpty()) {
             throw new IllegalArgumentException("SKU must not be null or empty");
         }
-        Product product = getProduct(sku); // Reuse the getProduct method to ensure the product exists
+        Product product = getProduct(sku);
         Cart cart = cartsByUser.get(user);
-        if (cart.containsProduct(sku)) {
-            throw new ProductAlreadyInCartException("Product with SKU " + sku + " is already in the cart");
-    }
         if (cart == null) {
             cart = new Cart();
             cartsByUser.put(user, cart);
         }
+
+        if (cart.containsProduct(sku)) {
+            throw new ProductAlreadyInCartException("Product with SKU " + sku + " is already in the cart");
+        }
+
         cart.addProduct(product);
     }
 
