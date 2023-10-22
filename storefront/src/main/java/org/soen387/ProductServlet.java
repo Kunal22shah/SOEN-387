@@ -96,8 +96,10 @@ public class ProductServlet extends HttpServlet {
             return;
         }
         catch (RuntimeException e){
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("Error fetching product. Product may not exist. Please try again: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<h1>Error Status Code 404: NOT FOUND!! <h1/>");
         }
 
     }
