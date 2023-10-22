@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import com.google.gson.Gson;
 
 import org.soen387.Product;
 
@@ -144,16 +145,11 @@ public class StorefrontFacade {
     }
 
     public void downloadProductCatalog() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProductCatalog.txt"))) {
-            for (Product product : productsBySku.values()) {
-                writer.write("Name: " + product.getName() + "\n");
-                writer.write("Description: " + product.getDescription() + "\n");
-                writer.write("Vendor: " + product.getVendor() + "\n");
-                writer.write("URL Slug: " + product.getUrlSlug() + "\n");
-                writer.write("SKU: " + product.getSku() + "\n");
-                writer.write("Price: " + product.getPrice() + "\n");
-                writer.write("-------------------------------\n");
-            }
+        Gson gson = new Gson();
+        String jsonCatalog = gson.toJson(productsBySku.values());
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProductCatalog.json"))) {
+            writer.write(jsonCatalog);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to write the product catalog to file");

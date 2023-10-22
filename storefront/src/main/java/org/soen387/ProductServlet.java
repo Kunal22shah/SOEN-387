@@ -34,14 +34,14 @@ public class ProductServlet extends HttpServlet {
         String getPathInfo = request.getPathInfo();
 
         if("/download".equals((getPathInfo))){
-                      try {
+            try {
                 store.downloadProductCatalog();
 
-                response.setContentType("text/plain");
-                response.setHeader("Content-Disposition", "attachment; filename=ProductCatalog.txt");
+                response.setContentType("application/json");
+                response.setHeader("Content-Disposition", "attachment; filename=ProductCatalog.json");
 
                 try (ServletOutputStream outputStream = response.getOutputStream();
-                     FileInputStream fileInputStream = new FileInputStream("ProductCatalog.txt")) {
+                     FileInputStream fileInputStream = new FileInputStream("ProductCatalog.json")) {
                     byte[] buffer = new byte[1024];
                     int bytesRead;
                     while ((bytesRead = fileInputStream.read(buffer)) != -1) {
