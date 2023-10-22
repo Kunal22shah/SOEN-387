@@ -20,6 +20,8 @@ public class AuthServlet extends HttpServlet {
         String passcode = request.getParameter("passcode");
 
         if ("secret".equals(passcode)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("isStaff", true);
             response.sendRedirect("/storefront/createProduct");
         } else {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid passcode");
