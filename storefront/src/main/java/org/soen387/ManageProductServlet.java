@@ -16,6 +16,16 @@ public class ManageProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+
+        // Check if the user is logged in as staff
+        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
+        if (isStaff == null || !isStaff) {
+            // If not logged in as staff, redirect to an error page or login page
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not authorized to access this page.");
+            return;
+        }
         String pathInfo = request.getPathInfo();
 
         // Check if pathInfo is not null and has more than one segment
