@@ -12,7 +12,7 @@ import org.soen387.Product;
 
 public class StorefrontFacade {
 
-    private Map<String, Product> productsBySku;
+    protected Map<String, Product> productsBySku;
     private Map<String, Product> productsBySlug;
     private Map<String, Cart> cartsByUser;
 
@@ -24,7 +24,7 @@ public class StorefrontFacade {
     }
 
 
-    public void createProduct(String sku, String name) {
+    public void createProduct(String sku, String name, String description, String vendor, String urlSlug, double price) {
         if (sku.isEmpty()) {
             throw new RuntimeException("Please add a valid sku");
         } else if (name.isEmpty()) {
@@ -33,8 +33,10 @@ public class StorefrontFacade {
         if (productsBySku.containsKey(sku)) {
             throw new RuntimeException("Sku is already in use. Please select another sku identifier");
         }
-        Product createdProduct = new Product(name, "", "", "", sku, 0.0);
+        Product createdProduct = new Product(name, description, vendor, urlSlug, sku, price);
         productsBySku.put(sku, createdProduct);
+        productsBySlug.put(urlSlug, createdProduct); // Also add to productsBySlug map
+
         System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been added");
     }
 
@@ -72,6 +74,8 @@ public class StorefrontFacade {
     }
 
     public Product getProduct(String sku) {
+        System.out.println("Available products: " + productsBySku.keySet());
+
         if (sku == null || sku.isEmpty()) {
             throw new IllegalArgumentException("SKU must not be null or empty");
         }

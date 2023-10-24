@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/staffAuth/*")
 public class AuthServlet extends HttpServlet {
@@ -20,7 +21,9 @@ public class AuthServlet extends HttpServlet {
         String passcode = request.getParameter("passcode");
 
         if ("secret".equals(passcode)) {
-            response.sendRedirect("/storefront/createProduct");
+            HttpSession session = request.getSession();
+            session.setAttribute("isStaff", true);
+            response.sendRedirect("/storefront/products");
         } else {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid passcode");
         }
