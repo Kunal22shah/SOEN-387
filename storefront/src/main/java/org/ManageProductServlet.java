@@ -8,26 +8,32 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.servlet.http.HttpSession;
 
+import static org.soen387.ProductServlet.store;
 
-@WebServlet("/manageProduct")
+
+@WebServlet("/manageProduct/*")
 public class ManageProductServlet extends HttpServlet {
-    protected static final StorefrontFacade store = new StorefrontFacade();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String sku = request.getParameter("sku");
-        if (sku != null && !sku.isEmpty()) {
-            String sku = request.getParameter("sku");
-            Product product = store.getProductBySku(sku); // fetch product by SKU
-            request.setAttribute("product", product); // for pre-filling the form
+        String pathInfo = request.getPathInfo();
+
+        // Check if pathInfo is not null and has more than one segment
+        if (pathInfo != null && pathInfo.split("/").length > 1) {
+            String sku = pathInfo.split("/")[1];
+
+            // If SKU is provided, fetch the product by SKU
+            if (sku != null && !sku.isEmpty()) {
+                Product product = store.getProduct(sku);
+                request.setAttribute("product", product); // for pre-filling the form
+            }
         }
-        // For a new product, no attribute is set, so 'product' will be empty in the JSP
         request.getRequestDispatcher("/manageProduct.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String vendor = request.getParameter("vendor");
@@ -41,23 +47,25 @@ public class ManageProductServlet extends HttpServlet {
             return;
         }
 
-        if (sku == null || sku.isEmpty()) {
+        String action = request.getParameter("action");
+        System.out.println(action);
+
+        if ("create".equals(action)) {
+            Product newProduct = null;
             try {
-                Product newProduct = new Product(name, description, vendor, urlSlug, sku, price);
-                store.createProduct(newProduct.getSku(), newProduct.getName());
-                response.setStatus(HttpServletResponse.SC_OK);
-                // Redirect or forward after successful creation (this is just an example).
-                response.sendRedirect("/products/" + urlSlug);
+                newProduct = new Product(name, description, vendor, urlSlug, sku, price);
+                store.createProduct(newProduct.getSku(), newProduct.getName(), newProduct.getDescription(), newProduct.getVendor(), newProduct.getUrlSlug(), newProduct.getPrice());
+                System.out.println("New Product added: " + newProduct.getSku() + newProduct.getName());
+                response.sendRedirect("/storefront/products/" + newProduct.getUrlSlug());
             } catch (RuntimeException e) {
-                // Handle creation errors. For example, set error messages in request scope and forward back to form.
                 request.setAttribute("error", e.getMessage());
                 request.getRequestDispatcher("/manageProduct.jsp").forward(request, response);
             }
-        } else {
+        } else if ("edit".equals(action)) {
             try {
                 store.updateProduct(sku, name, description, vendor, urlSlug, price);
                 // Redirect after successful update.
-                response.sendRedirect("/products/" + urlSlug);
+                response.sendRedirect("/storefront/products/" + urlSlug);
             } catch (RuntimeException e) {
                 // Handle update errors.
                 request.setAttribute("error", e.getMessage());
