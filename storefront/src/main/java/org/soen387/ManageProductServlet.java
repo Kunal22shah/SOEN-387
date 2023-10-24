@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 
 import static org.soen387.ProductServlet.store;
-
 
 @WebServlet("/manageProduct/*")
 public class ManageProductServlet extends HttpServlet {
@@ -22,8 +22,7 @@ public class ManageProductServlet extends HttpServlet {
         // Check if the user is logged in as staff
         Boolean isStaff = (Boolean) session.getAttribute("isStaff");
         if (isStaff == null || !isStaff) {
-            // If not logged in as staff, redirect to an error page or login page
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not authorized to access this page.");
+            displayError(response, HttpServletResponse.SC_FORBIDDEN, "You are not authorized to access this page.");
             return;
         }
         String pathInfo = request.getPathInfo();
@@ -53,19 +52,16 @@ public class ManageProductServlet extends HttpServlet {
         try {
             price = Double.parseDouble(request.getParameter("price"));
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid price format");
+            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Invalid price format");
             return;
         }
 
         String action = request.getParameter("action");
-        System.out.println(action);
 
         if ("create".equals(action)) {
-            Product newProduct = null;
             try {
-                newProduct = new Product(name, description, vendor, urlSlug, sku, price);
+                Product newProduct = new Product(name, description, vendor, urlSlug, sku, price);
                 store.createProduct(newProduct.getSku(), newProduct.getName(), newProduct.getDescription(), newProduct.getVendor(), newProduct.getUrlSlug(), newProduct.getPrice());
-                System.out.println("New Product added: " + newProduct.getSku() + newProduct.getName());
                 response.sendRedirect("/storefront/products/" + newProduct.getUrlSlug());
             } catch (RuntimeException e) {
                 request.setAttribute("error", e.getMessage());
@@ -74,13 +70,34 @@ public class ManageProductServlet extends HttpServlet {
         } else if ("edit".equals(action)) {
             try {
                 store.updateProduct(sku, name, description, vendor, urlSlug, price);
-                // Redirect after successful update.
                 response.sendRedirect("/storefront/products/" + urlSlug);
             } catch (RuntimeException e) {
-                // Handle update errors.
                 request.setAttribute("error", e.getMessage());
                 request.getRequestDispatcher("/manageProduct.jsp").forward(request, response);
             }
         }
+    }
+    private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
+        response.setStatus(statusCode);
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>");
+        out.println("<title>Error</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<div class='container mt-5'>");
+        out.println("<div class='alert alert-danger' role='alert'>");
+        out.println("<h4 class='alert-heading'>Error " + statusCode + "</h4>");
+        out.println("<p>" + errorMessage + "</p>");
+        out.println("</div>");
+        out.println("<div class='text-center'>");
+        out.println("<a href='/storefront' class='btn btn-primary'>Home</a>");
+        out.println("</div>");
+        out.println("</div>");
+        out.println("</body>");
+        out.println("</html>");
     }
 }

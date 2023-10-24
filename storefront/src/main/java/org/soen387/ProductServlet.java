@@ -88,12 +88,8 @@ public class ProductServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-        catch (RuntimeException e){
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println("<h1 style='text-align:center;'>Error Status Code 404: NOT FOUND!! </h1>");
-            out.println("<div style='text-align:center;'><a href='/storefront'><button>Home</button></a></div>");
+        catch (RuntimeException e) {
+            displayError(response, HttpServletResponse.SC_NOT_FOUND, "Product not found");
         }
 
     }
@@ -135,6 +131,30 @@ public class ProductServlet extends HttpServlet {
         } catch (RuntimeException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
+    }
+    private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
+        response.setStatus(statusCode);
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>");
+        out.println("<title>Error</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<div class='container mt-5'>");
+        out.println("<div class='alert alert-danger' role='alert'>");
+        out.println("<h4 class='alert-heading'>Error " + statusCode + "</h4>");
+        out.println("<p>" + errorMessage + "</p>");
+        out.println("</div>");
+        out.println("<div class='text-center'>");
+        out.println("<a href='/storefront' class='btn btn-primary'>Home</a>");
+        out.println("<a href='/storefront/products' class='btn btn-secondary'>Return to Products</a>");
+        out.println("</div>");
+        out.println("</div>");
+        out.println("</body>");
+        out.println("</html>");
     }
     
 }
