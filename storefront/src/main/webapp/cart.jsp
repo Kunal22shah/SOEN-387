@@ -20,10 +20,12 @@
         </tr>
         </thead>
         <tbody>
+        <c:set var="totalPrice" value="0" />
         <c:forEach var="product" items="${cart.products}">
             <tr>
                 <td><a href="/storefront/products/${product.urlSlug}">${product.name}</a></td>
                 <td>${product.price}</td>
+                <c:set var="totalPrice" value="${totalPrice + product.price}" />
                 <td>
                     <form action="/storefront/cart/products/${product.urlSlug}" method="post">
                         <input type="hidden" name="_method" value="delete">
@@ -33,6 +35,12 @@
             </tr>
         </c:forEach>
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2" class="text-end"><strong>Total:</strong></td>
+            <td>${totalPrice}</td>
+        </tr>
+        </tfoot>
     </table>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

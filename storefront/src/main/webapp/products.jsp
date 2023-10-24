@@ -28,7 +28,7 @@
             <div style="display:flex; justify-content:center;">
                 <a href="/storefront/products/${product.urlSlug}" class="btn btn-primary">View Details</a>
                 <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
-                  <a href="/storefront/manageProduct?sku=${product.sku}" class="btn btn-secondary">Edit</a>
+                  <a href="/storefront/manageProduct/${product.sku}" class="btn btn-secondary">Edit</a>
                 </c:if>
             </div>
           </div>

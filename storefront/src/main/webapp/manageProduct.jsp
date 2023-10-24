@@ -1,3 +1,4 @@
+<%@ include file="navbar.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +10,9 @@
     <div class="container mt-5">
         <h2>${empty product ? 'Create New Product' : 'Edit Product'}</h2>
         <div id="feedbackAlert" class="alert" role="alert" style="display:none;"></div>
-        <form id="productForm" action="manageProduct" method="post">
-            <c:if test="${not empty product}">
-                <input type="hidden" name="sku" value="${product.sku}">
-            </c:if>
+        <form id="productForm" action="/storefront/manageProduct/" method="post">
+            <input type="hidden" name="action" value="${empty product ? 'create' : 'edit'}">
+
             <div class="form-group">
                 <label for="name">Product Name:</label>
                 <input type="text" id="name" name="name" value="${product.name}" class="form-control" required/>
@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label for="sku">SKU:</label>
-                <input type="text" class="form-control" id="sku" placeholder="Enter SKU" name="sku" value="${product.sku}" required ${not empty product ? 'readonly' : ''}>
+                <input type="text" class="form-control" id="sku" placeholder="Enter SKU" name="sku" value="${product.sku}" required ${not empty product ? 'readonly' :" "}>
             </div>
             <div class="form-group">
                 <label for="price">Price:</label>

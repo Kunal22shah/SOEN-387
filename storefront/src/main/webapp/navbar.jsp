@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
@@ -22,11 +23,21 @@
               <a class="nav-link" href="/storefront/cart"><button type="button" class="btn btn-outline-primary">Cart</button></a>
             </li>
           </ul>
-            <span class="navbar-text">
-               <a class="nav-link" href="/storefront/staffAuth">
+          <span class="navbar-text">
+    <c:choose>
+      <c:when test="${sessionScope.isStaff}">
+            <a class="nav-link" href="/storefront/logout">
+                <button type="button" class="btn btn-danger">Log Out</button>
+            </a>
+      </c:when>
+      <c:otherwise>
+            <a class="nav-link" href="/storefront/staffAuth">
                 <button type="button" class="btn btn-primary">Authenticate as Staff</button>
             </a>
-          </span>
+      </c:otherwise>
+    </c:choose>
+</span>
+
         </div>
       </div>
     </nav>
