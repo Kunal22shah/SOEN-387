@@ -91,6 +91,8 @@ public class ProductServlet extends HttpServlet {
         String getRequestSlug = getPathInfo.split("/")[1];
 
         try {
+            //Will be used for error handling, Uncomment once db connection for post products is done
+            //store.getProductBySlug(getRequestSlug);
             Product singleProduct = new Product();
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
