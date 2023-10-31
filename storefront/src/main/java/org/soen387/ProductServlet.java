@@ -91,7 +91,29 @@ public class ProductServlet extends HttpServlet {
         String getRequestSlug = getPathInfo.split("/")[1];
 
         try {
-            Product singleProduct = store.getProductBySlug(getRequestSlug);
+            Product singleProduct = new Product();
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM PRODUCTS WHERE urlSlug = ?");
+                stmt.setString(1,getRequestSlug);
+                ResultSet rs = stmt.executeQuery();
+                while(rs.next()){
+                    String name = rs.getString("name");
+                    String vendor = rs.getString("vendor");
+                    String urlSlug = rs.getString("urlSlug");
+                    String sku = rs.getString("sku");
+                    String description = rs.getString("description");
+                    double price = rs.getDouble("price");
+                    singleProduct = new Product(name,description,vendor,urlSlug,sku,price);
+                }
+            }
+            catch(SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            catch(ClassNotFoundException c){
+                c.printStackTrace();
+            }
             request.setAttribute("product",singleProduct);
             RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
             rd.forward(request, response );
