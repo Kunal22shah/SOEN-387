@@ -65,20 +65,20 @@ public class AuthServlet extends HttpServlet {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
         }
     }
-    private void writeUserToJsonFile(User user) throws IOException {
-        String filename = "users.json";
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, User> users = new HashMap<>();
-
-        if (Files.exists(Paths.get(filename))) {
-            users = objectMapper.readValue(Files.readAllBytes(Paths.get(filename)), objectMapper.getTypeFactory().constructMapType(Map.class, String.class, User.class));
-        }
-
-        users.put(user.getUsername(), user);
-
-        String jsonContent = objectMapper.writeValueAsString(users);
-        Files.write(Paths.get(filename), jsonContent.getBytes(), StandardOpenOption.CREATE);
-    }
+//    private void writeUserToJsonFile(User user) throws IOException {
+//        String filename = "../java/org/soen387/users.json";
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Map<String, User> users = new HashMap<>();
+//
+//        if (Files.exists(Paths.get(filename))) {
+//            users = objectMapper.readValue(Files.readAllBytes(Paths.get(filename)), objectMapper.getTypeFactory().constructMapType(Map.class, String.class, User.class));
+//        }
+//
+//        users.put(user.getUsername(), user);
+//
+//        String jsonContent = objectMapper.writeValueAsString(users);
+//        Files.write(Paths.get(filename), jsonContent.getBytes(), StandardOpenOption.CREATE);
+//    }
     private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -101,7 +101,7 @@ public class AuthServlet extends HttpServlet {
         newUser.setEmail(email);
 
         userUtility.addUser(newUser);
-        writeUserToJsonFile(newUser);
+//        writeUserToJsonFile(newUser);
         response.sendRedirect("/storefront/auth/login");
     }
 
