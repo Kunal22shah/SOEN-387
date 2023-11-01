@@ -4,10 +4,16 @@
 <head>
     <title>Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        .container-custom-margin {
+            margin-top: 5rem;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<div class="container mt-5">
+<div class="container container-custom-margin">
     <h2>Login</h2>
     <form action="/storefront/auth/login" method="post">
         <div class="mb-3">
