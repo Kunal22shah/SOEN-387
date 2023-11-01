@@ -1,7 +1,5 @@
 package org.soen387;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,12 +9,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.util.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper; // To convert objects to JSON
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 
 @WebServlet("/auth/*")
