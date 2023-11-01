@@ -10,6 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import java.util.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper; // To convert objects to JSON
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 
 @WebServlet("/auth/*")
 public class AuthServlet extends HttpServlet {
@@ -48,7 +56,7 @@ public class AuthServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         User user = userUtility.getUserByEmail(email);
-        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+        if (user != null && Objects.equals(password, user.getPassword())) {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", user); // Storing the entire user object
             session.setAttribute("loggedInUserEmail", user.getEmail()); // Storing just the user's email
@@ -56,6 +64,20 @@ public class AuthServlet extends HttpServlet {
         } else {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
         }
+    }
+    private void writeUserToJsonFile(User user) throws IOException {
+        String filename = "users.json";
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, User> users = new HashMap<>();
+
+        if (Files.exists(Paths.get(filename))) {
+            users = objectMapper.readValue(Files.readAllBytes(Paths.get(filename)), objectMapper.getTypeFactory().constructMapType(Map.class, String.class, User.class));
+        }
+
+        users.put(user.getUsername(), user);
+
+        String jsonContent = objectMapper.writeValueAsString(users);
+        Files.write(Paths.get(filename), jsonContent.getBytes(), StandardOpenOption.CREATE);
     }
     private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
@@ -75,11 +97,11 @@ public class AuthServlet extends HttpServlet {
 
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+        newUser.setPassword(password);
         newUser.setEmail(email);
 
         userUtility.addUser(newUser);
-
+        writeUserToJsonFile(newUser);
         response.sendRedirect("/storefront/auth/login");
     }
 
