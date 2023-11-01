@@ -19,7 +19,7 @@
                 <h5 class="modal-title" id="staffAuthModalLabel">Authenticate as Staff</h5>
             </div>
             <div class="modal-body">
-                <form action="/storefront/staffAuth" method="post">
+                <form action="/storefront/auth/staffAuth" method="post">
                     <div class="mb-3">
                         <label for="passcode" class="form-label">Enter Passcode</label>
                         <input type="password" class="form-control" id="passcode" name="passcode" required placeholder="Enter your passcode">
