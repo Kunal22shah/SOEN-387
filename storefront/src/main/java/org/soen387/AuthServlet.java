@@ -50,7 +50,8 @@ public class AuthServlet extends HttpServlet {
         User user = userUtility.getUserByEmail(email);
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             HttpSession session = request.getSession();
-            session.setAttribute("currentUser", user);
+            session.setAttribute("loggedInUser", user); // Storing the entire user object
+            session.setAttribute("loggedInUserEmail", user.getEmail()); // Storing just the user's email
             response.sendRedirect("/storefront/products");
         } else {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
