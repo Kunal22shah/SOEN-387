@@ -12,28 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.ArrayList;
 
 @WebServlet("/products/*")
 public class ProductServlet extends HttpServlet {
 
     protected static final StorefrontFacade store = new StorefrontFacade();
-
-    //Initialization method used for testing purposes
-    //This will create products in the store to test the GET request
-    //This method will only be executed once
-    public void init() throws ServletException{
-        super.init();
-
-        store.createProduct("1",  "Airpods Pro 2nd Generation", "Airpods that was barely used. Was worn only twice", "Micheal Smith", "airpods-pro-2ndgen", 249.99);
-        store.createProduct("2",  "2021 Macbook Air M1", "Used Macbook Air in good condition. Comes with charger and case", "Steven Bala", "macbook-air-2021", 999.99);
-        store.createProduct("3",  "2020 Day One edition PS5", "PS5 that was bought on launch day", "Rodrigo Guy", "ps5-dayone", 499.99);
-        store.createProduct("4",  "Gucci Shoes", "Gucci shoes. Good condition", "Rob Wayne", "gucci-shoes", 299.99);
-        store.createProduct("5",  "Gaming chair", "Gaming chair. Not in good condition but selling it for cheap. Negotiable", "Max Bobby", "gaming-chair", 30.00);
-        store.createProduct("6",  "Gaming PC", "Gaming PC I built back in 2020. Parts are still good and the PC is very customizable", "Jeffrey Kai", "gaming-pc", 550.00);
-        store.createProduct("7",  "IPhone 14 Pro Max", "IPhone 14 Pro Max Unlocked. Everything works fine and in good condition. Provided with charging outlet", "Angelo Mo", "iphone14-promax", 1200.00);
-        store.createProduct("8",  "Samsung Smart Watch", "Used Samsung Smart Watch i bought in 2021. In very good condition", "Rod Mike", "samsung-watch-2021", 100.00);
-    }
+    public static String DB_URL = "jdbc:mysql://localhost:3306/storefront";
+    public static String USER = "root";
+    public static String PASS = "dbuser";
+    Connection con = null;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -67,9 +56,30 @@ public class ProductServlet extends HttpServlet {
 
         /* Handle the GET /products request */
         if (getPathInfo == null){
-            ArrayList<Product> allProducts;
-            allProducts = store.getAllProduct();
-            request.setAttribute("products",allProducts);
+            ArrayList<Product> Products = new ArrayList<>();
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                Statement stmt = conn.createStatement();
+                String Sql = "SELECT * FROM Products";
+                ResultSet rs = stmt.executeQuery(Sql);
+                while(rs.next()){
+                    String name = rs.getString("name");
+                    String vendor = rs.getString("vendor");
+                    String urlSlug = rs.getString("urlSlug");
+                    String sku = rs.getString("sku");
+                    String description = rs.getString("description");
+                    double price = rs.getDouble("price");
+                    Products.add(new Product(name,description,vendor,urlSlug,sku,price));
+                }
+            }
+            catch(SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            catch(ClassNotFoundException c){
+                c.printStackTrace();
+            }
+            request.setAttribute("products",Products);
             RequestDispatcher rd = request.getRequestDispatcher("products.jsp");
             rd.forward(request, response );
             response.setStatus(HttpServletResponse.SC_OK);
@@ -81,7 +91,31 @@ public class ProductServlet extends HttpServlet {
         String getRequestSlug = getPathInfo.split("/")[1];
 
         try {
-            Product singleProduct = store.getProductBySlug(getRequestSlug);
+            //Will be used for error handling, Uncomment once db connection for post products is done
+            //store.getProductBySlug(getRequestSlug);
+            Product singleProduct = new Product();
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM PRODUCTS WHERE urlSlug = ?");
+                stmt.setString(1,getRequestSlug);
+                ResultSet rs = stmt.executeQuery();
+                while(rs.next()){
+                    String name = rs.getString("name");
+                    String vendor = rs.getString("vendor");
+                    String urlSlug = rs.getString("urlSlug");
+                    String sku = rs.getString("sku");
+                    String description = rs.getString("description");
+                    double price = rs.getDouble("price");
+                    singleProduct = new Product(name,description,vendor,urlSlug,sku,price);
+                }
+            }
+            catch(SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            catch(ClassNotFoundException c){
+                c.printStackTrace();
+            }
             request.setAttribute("product",singleProduct);
             RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
             rd.forward(request, response );

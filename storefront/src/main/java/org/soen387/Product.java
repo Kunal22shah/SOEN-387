@@ -9,6 +9,10 @@ public class Product {
     private String sku;
     private double price;
 
+    //Default constructor
+    public Product(){
+
+    }
     public Product(String name, String description, String vendor, String urlSlug, String sku, double price) {
         this.name = name;
         this.description = description;
