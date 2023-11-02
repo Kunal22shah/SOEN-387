@@ -20,8 +20,8 @@ public class ProductServlet extends HttpServlet {
 
     protected static final StorefrontFacade store = new StorefrontFacade();
     public static String DB_URL = "jdbc:mysql://localhost:3306/storefront";
-    public static String USER = "root";
-    public static String PASS = "dbuser";
+    public static String USER = "dbuser";
+    public static String PASS = "dbpass";
     Connection con = null;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

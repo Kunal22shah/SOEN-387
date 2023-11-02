@@ -18,8 +18,14 @@ public class StorefrontFacade {
     private final Connection connection;
 
     protected Map<String, Product> productsBySku;
-    private Map<String, Product> productsBySlug;
-    private Map<String, Cart> cartsByUser;
+    private final Map<String, Product> productsBySlug;
+    private final Map<String, Cart> cartsByUser;
+
+    //Store a list of orders for each user
+    private Map<String, ArrayList<Order>> allOrderByUser;
+
+    //Store all Orders made by everyone
+    private ArrayList<Order> allOrdersInStore;
 
     // Constructor
 //    public StorefrontFacade() {
@@ -28,7 +34,15 @@ public class StorefrontFacade {
 //        this.cartsByUser = new HashMap<>();
 //    }
     public StorefrontFacade() {
+
         this.connection = DatabaseConnection.getConnection();
+
+        this.productsBySku = new HashMap<>();
+        this.productsBySlug = new HashMap<>();
+        this.cartsByUser = new HashMap<>();
+        this.allOrderByUser = new HashMap<>();
+        this.allOrdersInStore = new ArrayList<>();
+
     }
 
     public void createProduct(String sku, String name, String description, String vendor, String urlSlug, double price) {
@@ -263,6 +277,32 @@ public class StorefrontFacade {
             e.printStackTrace();
             throw new RuntimeException("Failed to write the product catalog to file");
         }
+    }
+    public ArrayList<Order> getOrders(String user){
+        if (user == null || user.isEmpty()){
+            throw new IllegalArgumentException("User must not be null or empty");
+        }
+        return allOrderByUser.get(user);
+    }
+
+    public Order getOrder(String user, int id){
+        if (user == null){
+            for (Order order : allOrdersInStore){
+                int orderID = order.getOrderID();
+                if (orderID == id){
+                    return order;
+                }
+            }
+        }
+        ArrayList<Order> userOrders = allOrderByUser.get(user);
+        for (Order order : userOrders){
+            int orderID = order.getOrderID();
+            String userEmail = order.getUser();
+            if (orderID == id && user != null && user.equals(userEmail)){
+                return order;
+            }
+        }
+        return null;
     }
 
     public static class ProductAlreadyInCartException extends RuntimeException {
