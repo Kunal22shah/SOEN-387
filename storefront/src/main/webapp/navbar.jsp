@@ -22,6 +22,9 @@
                 <li class="nav-item" id="cartLink">
                     <a class="nav-link text-white" href="/storefront/cart">Cart</a>
                 </li>
+                <li class="nav-item" id="cartLink">
+                                    <a class="nav-link text-white" href="/storefront/orders">View Orders</a>
+                </li>
             </ul>
             <span class="navbar-text">
                 <!-- User Authentication Links -->
