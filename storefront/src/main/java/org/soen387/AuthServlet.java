@@ -1,5 +1,7 @@
 package org.soen387;
 
+import org.json.JSONException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +39,11 @@ public class AuthServlet extends HttpServlet {
         if ("/login".equals(pathInfo)) {
             handleUserLogin(request, response);
         } else if ("/register".equals(pathInfo)) {
-            handleUserRegistration(request, response);
+            try {
+                handleUserRegistration(request, response);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             handleStaffAuthentication(request, response);
         }
@@ -47,31 +53,31 @@ public class AuthServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        User user = userUtility.getUserByEmail(email);
-        if (user != null && Objects.equals(password, user.getPassword())) {
+        Map<String, String> credentialsMap = userUtility.readFromFile();
+        if (credentialsMap.containsKey(email) && credentialsMap.get(email).equals(password)) {
+            // Authenticate user based on file credentials
+            User user = new User();
+            user.setEmail(email);
             HttpSession session = request.getSession();
-            session.setAttribute("loggedInUser", user); // Storing the entire user object
-            session.setAttribute("loggedInUserEmail", user.getEmail()); // Storing just the user's email
+            session.setAttribute("loggedInUser", user);
+            session.setAttribute("loggedInUserEmail", user.getEmail());
             response.sendRedirect("/storefront/products");
         } else {
-            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
+            // If not found in file, authenticate based on database
+            User user = userUtility.getUserByEmail(email);
+            if (user != null && Objects.equals(password, user.getPassword())) {
+                HttpSession session = request.getSession();
+                session.setAttribute("loggedInUser", user);
+                session.setAttribute("loggedInUserEmail", user.getEmail());
+                response.sendRedirect("/storefront/products");
+            } else {
+                displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
+            }
         }
+
     }
-//    private void writeUserToJsonFile(User user) throws IOException {
-//        String filename = "../java/org/soen387/users.json";
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Map<String, User> users = new HashMap<>();
-//
-//        if (Files.exists(Paths.get(filename))) {
-//            users = objectMapper.readValue(Files.readAllBytes(Paths.get(filename)), objectMapper.getTypeFactory().constructMapType(Map.class, String.class, User.class));
-//        }
-//
-//        users.put(user.getUsername(), user);
-//
-//        String jsonContent = objectMapper.writeValueAsString(users);
-//        Files.write(Paths.get(filename), jsonContent.getBytes(), StandardOpenOption.CREATE);
-//    }
-    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
@@ -93,7 +99,7 @@ public class AuthServlet extends HttpServlet {
         newUser.setEmail(email);
 
         userUtility.addUser(newUser);
-//        writeUserToJsonFile(newUser);
+        userUtility.writeToFile(email, password);
         response.sendRedirect("/storefront/auth/login");
     }
 
@@ -127,7 +133,7 @@ public class AuthServlet extends HttpServlet {
         out.println("</div>");
         out.println("<div class='text-center'>");
         out.println("<a href='/storefront' class='btn btn-primary'>Home</a>");
-        out.println("<a href='/storefront/staffAuth' class='btn btn-secondary'>Return to Authentication</a>");
+        out.println("<a href='/storefront/auth/login' class='btn btn-secondary'>Return to Authentication</a>");
         out.println("</div>");
         out.println("</div>");
         out.println("</body>");

@@ -27,7 +27,7 @@
                 <!-- User Authentication Links -->
                 <c:choose>
                     <c:when test="${not empty sessionScope.loggedInUser}">
-                        <a class="btn btn-danger" href="/storefront/logout">Log Out (${sessionScope.loggedInUser.username})</a>
+                        <a class="btn btn-danger" href="/storefront/logout">Log Out (${sessionScope.loggedInUser.email})</a>
                     </c:when>
                     <c:otherwise>
                         <a class="btn btn-light" href="/storefront/auth/login">Login</a>
