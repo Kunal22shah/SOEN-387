@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.ArrayList;
 
 @WebServlet("/orders/*")
@@ -21,23 +22,45 @@ public class OrderServlet extends HttpServlet {
         String getPathInfo = request.getPathInfo();
         HttpSession session = request.getSession();
 
-        // Check if the user is logged in as staff
+        // Check if the user is logged in
         String userEmail = (String) session.getAttribute("loggedInUserEmail");
 
-        try{
-            if (getPathInfo == null){
-                ArrayList<Order> userOrders = new ArrayList<>();
-                userOrders = store.getOrders(userEmail);
-                request.setAttribute("orders",userOrders);
-                request.getRequestDispatcher("orders.jsp").forward(request,response);
-                response.setStatus(HttpServletResponse.SC_OK);
-                return;
+        if (userEmail != null && !userEmail.isEmpty()){
+            try{
+                if (getPathInfo == null){
+                    ArrayList<Order> userOrders = new ArrayList<>();
+                    userOrders = store.getOrders(userEmail);
+                    request.setAttribute("orders",userOrders);
+                    request.getRequestDispatcher("orders.jsp").forward(request,response);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    return;
+                }
+            }
+            catch (RuntimeException e){
+                displayError(response, HttpServletResponse.SC_NOT_FOUND, "Error fetching orders");
+
             }
         }
-        catch (RuntimeException e){
-            displayError(response, HttpServletResponse.SC_NOT_FOUND, "Error fetching orders");
 
+        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
+
+        if (isStaff != null && isStaff){
+            try{
+                if (getPathInfo == null){
+                    ArrayList<Order> allOrders = new ArrayList<>();
+                    allOrders = store.getAllOrdersInStore();
+                    request.setAttribute("orders",allOrders);
+                    request.getRequestDispatcher("orders.jsp").forward(request,response);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    return;
+                }
+            }
+            catch (RuntimeException e){
+                displayError(response, HttpServletResponse.SC_NOT_FOUND, "Error fetching orders");
+
+            }
         }
+
 
 
 
