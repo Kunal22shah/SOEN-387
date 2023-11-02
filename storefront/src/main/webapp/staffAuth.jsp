@@ -12,22 +12,19 @@
 <body>
 
 <!-- Staff Authentication Modal -->
-<div class="modal fade show d-block" id="staffAuthModal" tabindex="-1" aria-labelledby="staffAuthModalLabel" aria-hidden="true">
+<div class="modal fade show d-block mt-5" id="staffAuthModal" tabindex="-1" aria-labelledby="staffAuthModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="staffAuthModalLabel">Authenticate as Staff</h5>
             </div>
             <div class="modal-body">
-                <form action="/storefront/staffAuth" method="post">
+                <form action="/storefront/auth/staffAuth" method="post">
                     <div class="mb-3">
                         <label for="passcode" class="form-label">Enter Passcode</label>
                         <input type="password" class="form-control" id="passcode" name="passcode" required placeholder="Enter your passcode">
                     </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-primary">Authenticate</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary">Authenticate</button>
                 </form>
             </div>
         </div>
