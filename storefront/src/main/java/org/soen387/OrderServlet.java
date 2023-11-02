@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,20 +19,27 @@ public class OrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String getPathInfo = request.getPathInfo();
+        HttpSession session = request.getSession();
+
+        // Check if the user is logged in as staff
+        String userEmail = (String) session.getAttribute("loggedInUserEmail");
 
         try{
             if (getPathInfo == null){
                 ArrayList<Order> userOrders = new ArrayList<>();
-                userOrders = store.getOrders("johnny124@gmail.com");
-                request.setAttribute("products",userOrders);
-                RequestDispatcher rd = request.getRequestDispatcher("orders.jsp");
-                rd.forward(request, response );
+                userOrders = store.getOrders(userEmail);
+                request.setAttribute("orders",userOrders);
+                request.getRequestDispatcher("orders.jsp").forward(request,response);
                 response.setStatus(HttpServletResponse.SC_OK);
                 return;
             }
-        }catch (Exception e){
-            displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching orders");
         }
+        catch (RuntimeException e){
+            displayError(response, HttpServletResponse.SC_NOT_FOUND, "Error fetching orders");
+
+        }
+
+
 
     }
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {

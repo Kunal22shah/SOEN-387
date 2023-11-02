@@ -22,9 +22,14 @@
                 <li class="nav-item" id="cartLink">
                     <a class="nav-link text-white" href="/storefront/cart">Cart</a>
                 </li>
-                <li class="nav-item" id="cartLink">
-                                    <a class="nav-link text-white" href="/storefront/orders">View Orders</a>
-                </li>
+                <c:choose>
+                     <c:when test="${not empty sessionScope.loggedInUser}">
+                          <a class="nav-link text-white" aria-current="page" href="/storefront/orders">View Orders</a>
+                     </c:when>
+                     <c:otherwise>
+                          <div></div>
+                     </c:otherwise>
+                </c:choose>
             </ul>
             <span class="navbar-text">
                 <!-- User Authentication Links -->
