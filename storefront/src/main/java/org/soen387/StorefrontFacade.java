@@ -36,7 +36,6 @@ public class StorefrontFacade {
     public StorefrontFacade() {
 
         this.connection = DatabaseConnection.getConnection();
-
         this.productsBySku = new HashMap<>();
         this.productsBySlug = new HashMap<>();
         this.cartsByUser = new HashMap<>();
@@ -282,6 +281,22 @@ public class StorefrontFacade {
         if (user == null || user.isEmpty()){
             throw new IllegalArgumentException("User must not be null or empty");
         }
+
+        String sql = "SELECT * FROM ORDERS WHERE userEmail=?";
+        ArrayList<Order> userOrders = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int orderID = resultSet.getInt("orderID");
+                String shippingAddress = resultSet.getString("shippingAddress");
+                int trackingNumber = resultSet.getInt("trackingNumber");
+                userOrders.add(new Order(shippingAddress, null, user, orderID, trackingNumber));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving product by slug.", e);
+        }
+        allOrderByUser.put(user,userOrders);
         return allOrderByUser.get(user);
     }
 

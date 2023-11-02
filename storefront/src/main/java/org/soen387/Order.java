@@ -17,13 +17,11 @@ public class Order {
         this.orderProducts = new ArrayList<>();
     }
 
-    public Order(String shippingAdress, List<Product> orderProducts, String user){
-        Random randomClass = new Random();
-
-        this.orderID = counter++;
+    public Order(String shippingAdress, List<Product> orderProducts, String user, int orderID, int trackingNumber){
+        this.orderID = orderID;
         this.shippingAdress = shippingAdress;
         this.orderProducts = orderProducts;
-        this.trackingNumber = randomClass.nextInt(100000);
+        this.trackingNumber = trackingNumber;
         this.user = user;
     }
     public String getUser() {
