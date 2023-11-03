@@ -9,7 +9,7 @@ public class Order {
     private int orderID;
     private String shippingAdress;
     private int trackingNumber;
-    private String user;
+    private User user;
     private List<Product> orderProducts;
 
     public Order(){
@@ -17,18 +17,24 @@ public class Order {
         this.orderProducts = new ArrayList<>();
     }
 
-    public Order(String shippingAdress, List<Product> orderProducts, String user){
+    public Order(String shippingAdress, List<Product> orderProducts, User user){
         Random randomClass = new Random();
 
         this.orderID = counter++;
         this.shippingAdress = shippingAdress;
-        this.orderProducts = orderProducts;
+        this.orderProducts = new ArrayList<>(orderProducts); 
         this.trackingNumber = randomClass.nextInt(100000);
-        this.user = user;
+        this.user = user; 
     }
-    public String getUser() {
+
+    public User getUser() {
         return user;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public int getOrderID() {
         return orderID;
     }
@@ -39,6 +45,10 @@ public class Order {
 
     public int getTrackingNumber() {
         return trackingNumber;
+    }
+
+    public void setTrackingNumber(int trackingNumber) {
+        this.trackingNumber = trackingNumber;
     }
 
     public List<Product> getOrderProducts() {

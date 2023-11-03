@@ -20,6 +20,8 @@ public class StorefrontFacade {
     protected Map<String, Product> productsBySku;
     private final Map<String, Product> productsBySlug;
     private final Map<String, Cart> cartsByUser;
+    private List<Order> allOrdersInStore;
+    private Map<User, List<Order>> allOrderByUser;
 
     //Store a list of orders for each user
     private Map<String, ArrayList<Order>> allOrderByUser;
@@ -309,5 +311,53 @@ public class StorefrontFacade {
         public ProductAlreadyInCartException(String message) {
             super(message);
         }
+    }
+
+    public Order createOrder(String email, String shippingAddress) {
+        User userObj = userUtility.getUserByEmail(email);
+        if (userObj == null) {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+
+        Cart cart = cartsByUser.get(userObj.getUsername());
+        if (cart == null || cart.getProducts().isEmpty()) {
+            throw new RuntimeException("The cart is empty or does not exist for user: " + userObj.getUsername());
+        }
+
+        Order newOrder = new Order(shippingAddress, new ArrayList<>(cart.getProducts()), userObj);
+
+        allOrdersInStore.add(newOrder);
+        allOrderByUser.computeIfAbsent(userObj, k -> new ArrayList<>()).add(newOrder);
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO orders (order_id, shipping_address, tracking_number, user_id) VALUES (?, ?, ?, ?)";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, newOrder.getOrderID());
+                pstmt.setString(2, newOrder.getShippingAddress());
+                pstmt.setInt(3, newOrder.getTrackingNumber());
+                pstmt.setInt(4, userObj.getUserId()); // Assuming User class has getUserId()
+
+                int rowsAffected = pstmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("Creating order failed, no rows affected.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Database operation failed", e);
+        }
+
+        return newOrder;
+    }
+
+    public boolean shipOrder(int id, int trackingNumber) {
+        for (Order order : allOrdersInStore) {
+            if (order.getOrderID() == id) {
+                order.setTrackingNumber(trackingNumber);
+                return true;
+            }
+        }
+        return false;
     }
 }
