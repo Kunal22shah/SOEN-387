@@ -14,8 +14,6 @@ public class Order {
     private boolean isShipped;
     private List<OrderProductItem> orderProducts;
 
-
-
     public Order(){
         this.orderID = counter++;
         this.orderProducts = new ArrayList<>();
@@ -51,6 +49,7 @@ public class Order {
         return isShipped;
     }
 
+    //Class to store the products in a order
     public static class OrderProductItem {
         private Product product;
         private int quantity;
@@ -77,7 +76,5 @@ public class Order {
         public void setQuantity(int quantity) {
             this.quantity = quantity;
         }
-
-
     }
 }

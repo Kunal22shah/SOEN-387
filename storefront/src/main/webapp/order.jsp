@@ -16,6 +16,7 @@
     <h2>Your Order</h2>
     <p><b>Order ID</b> : ${order.orderID}</p>
     <p><b>Shipping Address</b> : ${order.shippingAdress}</p>
+    <c:set var="totalPrice" value="0" />
     <table class="table">
         <thead>
         <tr>
@@ -32,10 +33,12 @@
                    <td>${orderItem.product.price}</td>
                    <td>${orderItem.product.vendor}</td>
                    <td>${orderItem.quantity}</td>
-        </tr>
+                   <c:set var="totalPrice" value="${totalPrice + (orderItem.product.price * orderItem.quantity)}" />
+              </tr>
         </c:forEach>
         </tbody>
     </table>
+    <h3>Total Price : ${String.format("%.2f", totalPrice)} $</h3>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>

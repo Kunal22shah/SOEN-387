@@ -40,7 +40,7 @@ public class OrderServlet extends HttpServlet {
 
             }
         }
-        else {
+        else if (userEmail != null && !userEmail.isEmpty() && getPathInfo != null){
             String getOrderID = getPathInfo.split("/")[1];
             Order userOrder;
             userOrder = store.getOrder(userEmail, Integer.parseInt(getOrderID));
@@ -49,13 +49,9 @@ public class OrderServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-
-
-
-
-
-
-
+        else {
+            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not autenticated");
+        }
     }
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
         response.setStatus(statusCode);

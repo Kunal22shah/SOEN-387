@@ -313,7 +313,7 @@ public class StorefrontFacade {
                     shippingAddress = resultSet.getString("shippingAddress");
                 }
             } catch (Exception e) {
-                throw new RuntimeException("Error retrieving Specefic Order.", e);
+                throw new RuntimeException("Error retrieving Specific Order.", e);
             }
             ArrayList<Order.OrderProductItem> userOrder = new ArrayList<>();
             sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
@@ -333,7 +333,7 @@ public class StorefrontFacade {
                     userOrder.add(new Order.OrderProductItem(p,quantity));
                 }
             } catch (Exception e) {
-                throw new RuntimeException("Error retrieving Specefic Order.", e);
+                throw new RuntimeException("Error retrieving Specific Order.", e);
             }
             return new Order(shippingAddress, userOrder, user, orderID, 0, false);
         }
@@ -347,7 +347,7 @@ public class StorefrontFacade {
                 shippingAddress = resultSet.getString("shippingAddress");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error retrieving Specefic Order.", e);
+            throw new RuntimeException("Error retrieving Specific Order.", e);
         }
         ArrayList<Order.OrderProductItem> userOrder = new ArrayList<>();
         sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
@@ -367,7 +367,7 @@ public class StorefrontFacade {
                 userOrder.add(new Order.OrderProductItem(p,quantity));
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error retrieving Specefic Order.", e);
+            throw new RuntimeException("Error retrieving Specific Order.", e);
         }
         return new Order(shippingAddress, userOrder, user, orderID, 0, false);
     }
