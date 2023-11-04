@@ -15,8 +15,13 @@ public class CartServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle GET requests to /cart
-        String user = "defaultUser";
-        Cart userCart = store.getCart(user);
+        String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
+        if (userEmail == null) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            return;
+        }
+        Cart userCart = store.getCart(userEmail);
         request.setAttribute("cart", userCart);
         request.getRequestDispatcher("/cart.jsp").forward(request, response);
     }
@@ -24,6 +29,13 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle POST requests to /cart/products/:slug
+        String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
+
+        if (userEmail == null) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            return;
+        }
 
         String pathInfo = request.getPathInfo();
         if (pathInfo == null || !pathInfo.startsWith("/products/")) {
@@ -45,7 +57,7 @@ public class CartServlet extends HttpServlet {
             return;
         }
         try {
-            store.addProductToCart("defaultUser", productToAdd.getSku());
+            store.addProductToCart(userEmail, productToAdd.getSku());
             response.setStatus(HttpServletResponse.SC_OK);
             response.sendRedirect("/storefront/cart");
         } catch (StorefrontFacade.ProductAlreadyInCartException e) {
@@ -59,6 +71,13 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle DELETE requests to /cart/products/:slug
+        String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
+
+        if (userEmail == null) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            return;
+        }
 
         String getPathInfo = request.getPathInfo();
         if (getPathInfo == null || getPathInfo.split("/").length <= 1) {
@@ -71,8 +90,8 @@ public class CartServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
             return;
         }
-        String user = "defaultUser";
-        store.removeProductFromCart(user, productToRemove.getSku());
+
+        store.removeProductFromCart(userEmail, productToRemove.getSku());
         System.out.println("Processing DELETE request for product slug: " + slug);
         response.setStatus(HttpServletResponse.SC_OK);
     }
