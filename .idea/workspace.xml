@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6238e50-a862-4e2b-9970-f89f56ea8db1" name="Changes" comment="Add check for staff user for getOrders">
+    <list default="true" id="c6238e50-a862-4e2b-9970-f89f56ea8db1" name="Changes" comment="Adding view all orders with shipped status for users">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/order.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/orders.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -103,7 +104,14 @@
       <option name="presentableId" value="Default" />
       <updated>1699103348902</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Adding view all orders with shipped status for users">
+      <created>1699105651480</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1699105651480</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -121,60 +129,51 @@
     <MESSAGE value="workspace.xml" />
     <MESSAGE value="add dynamic fetching of orders" />
     <MESSAGE value="Add check for staff user for getOrders" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add check for staff user for getOrders" />
+    <MESSAGE value="Adding view all orders with shipped status for users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding view all orders with shipped status for users" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>27</line>
-          <option name="timeStamp" value="1" />
+          <line>42</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>28</line>
-          <option name="timeStamp" value="2" />
+          <line>43</line>
+          <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>29</line>
-          <option name="timeStamp" value="3" />
+          <line>44</line>
+          <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>30</line>
-          <option name="timeStamp" value="4" />
+          <line>45</line>
+          <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>31</line>
-          <option name="timeStamp" value="5" />
+          <line>46</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>32</line>
-          <option name="timeStamp" value="6" />
+          <line>47</line>
+          <option name="timeStamp" value="76" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="7" />
+          <line>48</line>
+          <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>34</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java</url>
-          <line>36</line>
-          <option name="timeStamp" value="10" />
+          <line>49</line>
+          <option name="timeStamp" value="78" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

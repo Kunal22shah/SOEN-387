@@ -25,22 +25,36 @@ public class OrderServlet extends HttpServlet {
         // Check if the user is logged in
         String userEmail = (String) session.getAttribute("loggedInUserEmail");
 
-        if (userEmail != null && !userEmail.isEmpty()){
+        if (userEmail != null && !userEmail.isEmpty() && getPathInfo == null){
             try{
-                if (getPathInfo == null){
-                    ArrayList<Order> userOrders = new ArrayList<>();
-                    userOrders = store.getOrders(userEmail);
-                    request.setAttribute("orders",userOrders);
-                    request.getRequestDispatcher("orders.jsp").forward(request,response);
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    return;
-                }
+                ArrayList<Order> userOrders = new ArrayList<>();
+                userOrders = store.getOrders(userEmail);
+                request.setAttribute("orders",userOrders);
+                request.getRequestDispatcher("orders.jsp").forward(request,response);
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
+
             }
             catch (RuntimeException e){
-                displayError(response, HttpServletResponse.SC_NOT_FOUND, "Error fetching orders");
+                displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching orders");
 
             }
         }
+        else {
+            String getOrderID = getPathInfo.split("/")[1];
+            Order userOrder;
+            userOrder = store.getOrder(userEmail, Integer.parseInt(getOrderID));
+            request.setAttribute("order", userOrder);
+            request.getRequestDispatcher("/order.jsp").forward(request,response);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+
+
+
+
+
 
     }
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {

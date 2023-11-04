@@ -39,7 +39,7 @@
                        <td>Product has not been shipped</td>
                   </c:otherwise>
                   </c:choose>
-                  <td><a href="" class="btn btn-primary">View Details</a></td>
+                  <td><a href="/storefront/orders/${order.orderID}" class="btn btn-primary">View Details</a></td>
               </tr>
         </tbody>
 

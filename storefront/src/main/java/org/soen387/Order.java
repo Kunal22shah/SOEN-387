@@ -12,7 +12,7 @@ public class Order {
     private String user;
 
     private boolean isShipped;
-    private List<Product> orderProducts;
+    private List<OrderProductItem> orderProducts;
 
 
 
@@ -20,7 +20,7 @@ public class Order {
         this.orderID = counter++;
         this.orderProducts = new ArrayList<>();
     }
-    public Order(String shippingAdress, List<Product> orderProducts, String user, int orderID, int trackingNumber, boolean isShipped){
+    public Order(String shippingAdress, List<OrderProductItem> orderProducts, String user, int orderID, int trackingNumber, boolean isShipped){
         this.orderID = orderID;
         this.shippingAdress = shippingAdress;
         this.orderProducts = orderProducts;
@@ -43,11 +43,41 @@ public class Order {
         return trackingNumber;
     }
 
-    public List<Product> getOrderProducts() {
+    public List<OrderProductItem> getOrderProducts() {
         return orderProducts;
     }
 
     public boolean isShipped() {
         return isShipped;
+    }
+
+    public static class OrderProductItem {
+        private Product product;
+        private int quantity;
+
+
+        public OrderProductItem(Product product, int quantity) {
+            this.product = product;
+            this.quantity = quantity;
+
+        }
+
+        public Product getProduct() {
+            return product;
+        }
+
+        public void setProduct(Product product) {
+            this.product = product;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
+        }
+
+
     }
 }

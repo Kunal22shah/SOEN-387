@@ -14,16 +14,26 @@
 <br/>
 <div class="container mt-5">
     <h2>Your Order</h2>
+    <p><b>Order ID</b> : ${order.orderID}</p>
+    <p><b>Shipping Address</b> : ${order.shippingAdress}</p>
     <table class="table">
         <thead>
         <tr>
             <th>Product Name</th>
             <th>Price</th>
             <th>Vendor</th>
+            <th>Quantity</th>
         </tr>
         </thead>
         <tbody>
-
+        <c:forEach var="orderItem" items="${order.orderProducts}">
+              <tr>
+                   <td>${orderItem.product.name}</td>
+                   <td>${orderItem.product.price}</td>
+                   <td>${orderItem.product.vendor}</td>
+                   <td>${orderItem.quantity}</td>
+        </tr>
+        </c:forEach>
         </tbody>
     </table>
 </div>
