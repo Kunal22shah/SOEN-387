@@ -290,31 +290,14 @@ public class StorefrontFacade {
                 int orderID = resultSet.getInt("orderID");
                 String shippingAddress = resultSet.getString("shippingAddress");
                 int trackingNumber = resultSet.getInt("trackingNumber");
-                userOrders.add(new Order(shippingAddress, null, user, orderID, trackingNumber));
+                boolean isShipped = resultSet.getBoolean("isShipped");
+                userOrders.add(new Order(shippingAddress, null, user, orderID, trackingNumber, isShipped));
             }
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving Order.", e);
         }
         allOrderByUser.put(user,userOrders);
         return allOrderByUser.get(user);
-    }
-
-    public ArrayList<Order> getAllOrdersInStore(){
-        allOrdersInStore.clear();
-        String sql = "SELECT * FROM ORDERS";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int orderID = resultSet.getInt("orderID");
-                String shippingAddress = resultSet.getString("shippingAddress");
-                int trackingNumber = resultSet.getInt("trackingNumber");
-                String user = resultSet.getString("userEmail");
-                allOrdersInStore.add(new Order(shippingAddress, null, user, orderID, trackingNumber));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Error retrieving Order.", e);
-        }
-        return allOrdersInStore;
     }
 
     public Order getOrder(String user, int id){

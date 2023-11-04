@@ -10,19 +10,23 @@ public class Order {
     private String shippingAdress;
     private int trackingNumber;
     private String user;
+
+    private boolean isShipped;
     private List<Product> orderProducts;
+
+
 
     public Order(){
         this.orderID = counter++;
         this.orderProducts = new ArrayList<>();
     }
-
-    public Order(String shippingAdress, List<Product> orderProducts, String user, int orderID, int trackingNumber){
+    public Order(String shippingAdress, List<Product> orderProducts, String user, int orderID, int trackingNumber, boolean isShipped){
         this.orderID = orderID;
         this.shippingAdress = shippingAdress;
         this.orderProducts = orderProducts;
         this.trackingNumber = trackingNumber;
         this.user = user;
+        this.isShipped = isShipped;
     }
     public String getUser() {
         return user;
@@ -41,5 +45,9 @@ public class Order {
 
     public List<Product> getOrderProducts() {
         return orderProducts;
+    }
+
+    public boolean isShipped() {
+        return isShipped;
     }
 }

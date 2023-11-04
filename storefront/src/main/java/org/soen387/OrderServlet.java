@@ -42,28 +42,6 @@ public class OrderServlet extends HttpServlet {
             }
         }
 
-        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
-
-        if (isStaff != null && isStaff){
-            try{
-                if (getPathInfo == null){
-                    ArrayList<Order> allOrders = new ArrayList<>();
-                    allOrders = store.getAllOrdersInStore();
-                    request.setAttribute("orders",allOrders);
-                    request.getRequestDispatcher("orders.jsp").forward(request,response);
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    return;
-                }
-            }
-            catch (RuntimeException e){
-                displayError(response, HttpServletResponse.SC_NOT_FOUND, "Error fetching orders");
-
-            }
-        }
-
-
-
-
     }
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
         response.setStatus(statusCode);

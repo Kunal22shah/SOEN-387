@@ -21,6 +21,7 @@
             <th>Order ID</th>
             <th>Shipping Address</th>
             <th>Tracking Number</th>
+            <th>Shipped</th>
             <th>Details</th>
         </tr>
         </thead>
@@ -30,8 +31,18 @@
                   <td>${order.orderID}</td>
                   <td>${order.shippingAdress}</td>
                   <td>${order.trackingNumber}</td>
+                  <c:choose>
+                       <c:when test="${order.isShipped()}">
+                            <td>Product has been shipped</td>
+                       </c:when>
+                  <c:otherwise>
+                       <td>Product has not been shipped</td>
+                  </c:otherwise>
+                  </c:choose>
+                  <td><a href="" class="btn btn-primary">View Details</a></td>
               </tr>
         </tbody>
+
         </c:forEach>
     </table>
 </div>
