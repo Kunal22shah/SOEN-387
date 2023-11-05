@@ -372,6 +372,61 @@ public class StorefrontFacade {
         return new Order(shippingAddress, userOrder, user, orderID, 0, false);
     }
 
+    public Order createOrder(String user, String shippingAddress) {
+        Cart userCart = getCart(user);
+        if (userCart == null || userCart.getCartItems().isEmpty()) {
+            throw new IllegalArgumentException("Cart is empty or does not exist for user: " + user);
+        }
+
+        List<Order.OrderProductItem> orderProductItems = new ArrayList<>();
+        for (Map.Entry<Product, Integer> entry : userCart.getCartItems().entrySet()) {
+            orderProductItems.add(new Order.OrderProductItem(entry.getKey(), entry.getValue()));
+        }
+
+        Order newOrder = new Order(shippingAddress, orderProductItems, user, Order.generateOrderID());
+
+        String sql = "INSERT INTO Orders (userEmail, shippingAddress) VALUES (?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user);
+            statement.setString(2, shippingAddress);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating order for user: " + user, e);
+        }
+
+        clearCart(user);
+
+        allOrdersInStore.add(newOrder);
+        allOrderByUser.computeIfAbsent(user, k -> new ArrayList<>()).add(newOrder);
+
+        return newOrder;
+    }
+
+    private void clearCart(String user) {
+        String sql = "DELETE FROM Carts WHERE userEmail=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error clearing cart for user: " + user, e);
+        }
+    }
+
+    public Order shipOrder(int orderID) {
+        Random random = new Random();
+        int trackingNumber = random.nextInt(1000000000);
+        String sql = "UPDATE Orders SET trackingNumber=?, isShipped=? WHERE orderID=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, trackingNumber);
+            statement.setBoolean(2, true);
+            statement.setInt(3, orderID);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error shipping order with ID: " + orderID, e);
+        }
+    }
+
     public static class ProductAlreadyInCartException extends RuntimeException {
         public ProductAlreadyInCartException(String message) {
             super(message);
