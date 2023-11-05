@@ -24,22 +24,20 @@
                 </li>
             </ul>
             <span class="navbar-text">
-                <!-- User Authentication Links -->
+                <!-- Combined Authentication Links -->
                 <c:choose>
                     <c:when test="${not empty sessionScope.loggedInUser}">
-                        <a class="btn btn-danger" href="/storefront/logout">Log Out (${sessionScope.loggedInUser.username})</a>
+                        <!-- User is logged in -->
+                        <a class="btn btn-danger" href="/storefront/logout">Log Out (${sessionScope.loggedInUser.password})</a>
                     </c:when>
-                    <c:otherwise>
-                        <a class="btn btn-light" href="/storefront/auth/login">Login</a>
-                        <a class="btn btn-secondary" href="/storefront/auth/register">Register</a>
-                    </c:otherwise>
-                </c:choose>
-                <!-- Staff Authentication Links -->
-                <c:choose>
                     <c:when test="${sessionScope.isStaff}">
+                        <!-- Staff is logged in -->
                         <a class="btn btn-danger" href="/storefront/logout">Staff Log Out</a>
                     </c:when>
                     <c:otherwise>
+                        <!-- No one is logged in -->
+                        <a class="btn btn-light" href="/storefront/auth/login">Login</a>
+                        <a class="btn btn-secondary" href="/storefront/auth/register">Register</a>
                         <a class="btn btn-light" href="/storefront/auth/staffAuth">Authenticate as Staff</a>
                     </c:otherwise>
                 </c:choose>

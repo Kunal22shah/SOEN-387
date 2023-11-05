@@ -1,5 +1,7 @@
 package org.soen387;
 
+import org.json.JSONException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,68 +34,113 @@ public class AuthServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
-        System.out.println(pathInfo);
 
         if ("/login".equals(pathInfo)) {
             handleUserLogin(request, response);
         } else if ("/register".equals(pathInfo)) {
-            handleUserRegistration(request, response);
+            try {
+                handleUserRegistration(request, response);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             handleStaffAuthentication(request, response);
         }
     }
 
-    private void handleUserLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        User user = userUtility.getUserByEmail(email);
-        if (user != null && Objects.equals(password, user.getPassword())) {
-            HttpSession session = request.getSession();
-            session.setAttribute("loggedInUser", user); // Storing the entire user object
-            session.setAttribute("loggedInUserEmail", user.getEmail()); // Storing just the user's email
-            response.sendRedirect("/storefront/products");
-        } else {
-            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
-        }
-    }
-//    private void writeUserToJsonFile(User user) throws IOException {
-//        String filename = "../java/org/soen387/users.json";
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Map<String, User> users = new HashMap<>();
+    //    private void handleUserLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String email = request.getParameter("email");
+//        String password = request.getParameter("password");
 //
-//        if (Files.exists(Paths.get(filename))) {
-//            users = objectMapper.readValue(Files.readAllBytes(Paths.get(filename)), objectMapper.getTypeFactory().constructMapType(Map.class, String.class, User.class));
+//        Map<String, String> credentialsMap = userUtility.readFromFile();
+//        if (credentialsMap.containsKey(email) && credentialsMap.get(email).equals(password)) {
+//            // Authenticate user based on file credentials
+//            User user = new User();
+//            user.setEmail(email);
+//            HttpSession session = request.getSession();
+//            session.setAttribute("loggedInUser", user);
+//            session.setAttribute("loggedInUserEmail", user.getEmail());
+//            response.sendRedirect("/storefront/products");
+//        } else {
+//            // If not found in file, authenticate based on database
+//            User user = userUtility.getUserByEmail(email);
+//            if (user != null && Objects.equals(password, user.getPassword())) {
+//                HttpSession session = request.getSession();
+//                session.setAttribute("loggedInUser", user);
+//                session.setAttribute("loggedInUserEmail", user.getEmail());
+//                response.sendRedirect("/storefront/products");
+//            } else {
+//                displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
+//            }
 //        }
 //
-//        users.put(user.getUsername(), user);
-//
-//        String jsonContent = objectMapper.writeValueAsString(users);
-//        Files.write(Paths.get(filename), jsonContent.getBytes(), StandardOpenOption.CREATE);
 //    }
-    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String username = request.getParameter("username");
+    private void handleUserLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String password = request.getParameter("password");
-        String email = request.getParameter("email");
 
-        if (username == null || password == null || email == null || username.isEmpty() || password.isEmpty() || email.isEmpty()) {
-            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Username, password, and email cannot be empty");
-            return;
+        Map<String, String> credentialsMap = userUtility.readFromFile();
+
+        boolean isAuthenticated = credentialsMap.containsValue(password);
+        if (isAuthenticated) {
+            // Authenticate user based on credentials
+            User user = userUtility.getUserByPassword(password);
+            if (user != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("loggedInUser", user);
+                session.setAttribute("loggedInUserEmail", user.getEmail());
+                response.sendRedirect("/storefront/products");
+            } else {
+                displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "User not found with the given password");
+            }
+        } else {
+            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid password");
         }
+    }
 
-        User existingUserByEmail = userUtility.getUserByEmail(email);
-        if (existingUserByEmail != null) {
-            displayError(response, HttpServletResponse.SC_CONFLICT, "A user with this email already exists");
+    //    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
+//        String username = request.getParameter("username");
+//        String password = request.getParameter("password");
+//        String email = request.getParameter("email");
+//
+//        if (username == null || password == null || email == null || username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+//            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Username, password, and email cannot be empty");
+//            return;
+//        }
+//
+//        User existingUserByEmail = userUtility.getUserByEmail(email);
+//        if (existingUserByEmail != null) {
+//            displayError(response, HttpServletResponse.SC_CONFLICT, "A user with this email already exists");
+//            return;
+//        }
+//
+//        User newUser = new User();
+//        newUser.setUsername(username);
+//        newUser.setPassword(password);
+//        newUser.setEmail(email);
+//
+//        userUtility.addUser(newUser);
+//        userUtility.writeToFile(email, password);
+//        response.sendRedirect("/storefront/auth/login");
+//    }
+    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
+        String password = request.getParameter("password");
+
+        if (password == null || password.isEmpty()) {
+            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Password cannot be empty");
             return;
         }
 
         User newUser = new User();
-        newUser.setUsername(username);
         newUser.setPassword(password);
-        newUser.setEmail(email);
-
-        userUtility.addUser(newUser);
-//        writeUserToJsonFile(newUser);
+        // Set random email to the new user
+        if (userUtility.getUserByPassword(password) != null) {
+            displayError(response, HttpServletResponse.SC_CONFLICT, "A user with this password already exists");
+            return;
+        }
+        newUser.setUsername(User.generateRandomUsername());
+        newUser.setEmail(User.generateRandomEmail());
+        userUtility.addUserWithRandomEmail(newUser);
+        userUtility.writeToFile(password);
         response.sendRedirect("/storefront/auth/login");
     }
 
@@ -127,7 +174,7 @@ public class AuthServlet extends HttpServlet {
         out.println("</div>");
         out.println("<div class='text-center'>");
         out.println("<a href='/storefront' class='btn btn-primary'>Home</a>");
-        out.println("<a href='/storefront/staffAuth' class='btn btn-secondary'>Return to Authentication</a>");
+        out.println("<a href='/storefront/auth/login' class='btn btn-secondary'>Return to Authentication</a>");
         out.println("</div>");
         out.println("</div>");
         out.println("</body>");

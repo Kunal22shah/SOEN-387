@@ -1,5 +1,8 @@
 package org.soen387;
 
+import java.util.Random;
+import java.util.UUID;
+
 public class User {
 
     private String username;
@@ -7,6 +10,24 @@ public class User {
     private String email;
 
     public User() {
+    }
+
+    public static String generateRandomUsername() {
+        String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        String numbers = "0123456789";
+        String combinedChars = letters + numbers;
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(8);
+
+        for (int i = 0; i < 8; i++) {
+            sb.append(combinedChars.charAt(random.nextInt(combinedChars.length())));
+        }
+
+        return sb.toString();
+    }
+
+    public static String generateRandomEmail() {
+        return "user" + UUID.randomUUID() + "@storefront.com";
     }
 
     public String getEmail() {
