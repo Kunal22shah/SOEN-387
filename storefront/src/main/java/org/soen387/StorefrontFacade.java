@@ -36,7 +36,6 @@ public class StorefrontFacade {
     public StorefrontFacade() {
 
         this.connection = DatabaseConnection.getConnection();
-
         this.productsBySku = new HashMap<>();
         this.productsBySlug = new HashMap<>();
         this.cartsByUser = new HashMap<>();
@@ -282,27 +281,95 @@ public class StorefrontFacade {
         if (user == null || user.isEmpty()){
             throw new IllegalArgumentException("User must not be null or empty");
         }
+        String sql = "SELECT * FROM ORDERS WHERE userEmail=?";
+        ArrayList<Order> userOrders = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int orderID = resultSet.getInt("orderID");
+                String shippingAddress = resultSet.getString("shippingAddress");
+                int trackingNumber = resultSet.getInt("trackingNumber");
+                boolean isShipped = resultSet.getBoolean("isShipped");
+                userOrders.add(new Order(shippingAddress, null, user, orderID, trackingNumber, isShipped));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving Order.", e);
+        }
+        allOrderByUser.put(user,userOrders);
         return allOrderByUser.get(user);
     }
 
     public Order getOrder(String user, int id){
+        int orderID = id;
+        String shippingAddress = "";
         if (user == null){
-            for (Order order : allOrdersInStore){
-                int orderID = order.getOrderID();
-                if (orderID == id){
-                    return order;
+            String sql = "SELECT orderID, shippingAddress FROM ORDERS WHERE orderID=?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    orderID = resultSet.getInt("orderID");
+                    shippingAddress = resultSet.getString("shippingAddress");
                 }
+            } catch (Exception e) {
+                throw new RuntimeException("Error retrieving Specific Order.", e);
             }
-        }
-        ArrayList<Order> userOrders = allOrderByUser.get(user);
-        for (Order order : userOrders){
-            int orderID = order.getOrderID();
-            String userEmail = order.getUser();
-            if (orderID == id && user != null && user.equals(userEmail)){
-                return order;
+            ArrayList<Order.OrderProductItem> userOrder = new ArrayList<>();
+            sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    Product p = new Product(
+                            resultSet.getString("name"),
+                            resultSet.getString("description"),
+                            resultSet.getString("vendor"),
+                            resultSet.getString("urlSlug"),
+                            resultSet.getString("sku"),
+                            resultSet.getDouble("price")
+                    );
+                    int quantity = resultSet.getInt("quantity");
+                    userOrder.add(new Order.OrderProductItem(p,quantity));
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error retrieving Specific Order.", e);
             }
+            return new Order(shippingAddress, userOrder, user, orderID, 0, false);
         }
-        return null;
+        String sql = "SELECT orderID, shippingAddress FROM ORDERS WHERE orderID=? and userEmail=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.setString(2,user);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                orderID = resultSet.getInt("orderID");
+                shippingAddress = resultSet.getString("shippingAddress");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving Specific Order.", e);
+        }
+        ArrayList<Order.OrderProductItem> userOrder = new ArrayList<>();
+        sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Product p = new Product(
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getString("vendor"),
+                        resultSet.getString("urlSlug"),
+                        resultSet.getString("sku"),
+                        resultSet.getDouble("price")
+                );
+                int quantity = resultSet.getInt("quantity");
+                userOrder.add(new Order.OrderProductItem(p,quantity));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving Specific Order.", e);
+        }
+        return new Order(shippingAddress, userOrder, user, orderID, 0, false);
     }
 
     public static class ProductAlreadyInCartException extends RuntimeException {

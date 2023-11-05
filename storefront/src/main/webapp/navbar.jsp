@@ -22,6 +22,14 @@
                 <li class="nav-item" id="cartLink">
                     <a class="nav-link text-white" href="/storefront/cart">Cart</a>
                 </li>
+                <c:choose>
+                     <c:when test="${not empty sessionScope.loggedInUser || sessionScope.isStaff}">
+                          <a class="nav-link text-white" aria-current="page" href="/storefront/orders">View Orders</a>
+                     </c:when>
+                     <c:otherwise>
+                          <div></div>
+                     </c:otherwise>
+                </c:choose>
             </ul>
             <span class="navbar-text">
                 <!-- Combined Authentication Links -->

@@ -10,21 +10,21 @@ public class Order {
     private String shippingAdress;
     private int trackingNumber;
     private String user;
-    private List<Product> orderProducts;
+
+    private boolean isShipped;
+    private List<OrderProductItem> orderProducts;
 
     public Order(){
         this.orderID = counter++;
         this.orderProducts = new ArrayList<>();
     }
-
-    public Order(String shippingAdress, List<Product> orderProducts, String user){
-        Random randomClass = new Random();
-
-        this.orderID = counter++;
+    public Order(String shippingAdress, List<OrderProductItem> orderProducts, String user, int orderID, int trackingNumber, boolean isShipped){
+        this.orderID = orderID;
         this.shippingAdress = shippingAdress;
         this.orderProducts = orderProducts;
-        this.trackingNumber = randomClass.nextInt(100000);
+        this.trackingNumber = trackingNumber;
         this.user = user;
+        this.isShipped = isShipped;
     }
     public String getUser() {
         return user;
@@ -41,7 +41,40 @@ public class Order {
         return trackingNumber;
     }
 
-    public List<Product> getOrderProducts() {
+    public List<OrderProductItem> getOrderProducts() {
         return orderProducts;
+    }
+
+    public boolean isShipped() {
+        return isShipped;
+    }
+
+    //Class to store the products in a order
+    public static class OrderProductItem {
+        private Product product;
+        private int quantity;
+
+
+        public OrderProductItem(Product product, int quantity) {
+            this.product = product;
+            this.quantity = quantity;
+
+        }
+
+        public Product getProduct() {
+            return product;
+        }
+
+        public void setProduct(Product product) {
+            this.product = product;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
+        }
     }
 }
