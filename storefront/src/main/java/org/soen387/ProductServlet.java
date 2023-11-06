@@ -56,34 +56,18 @@ public class ProductServlet extends HttpServlet {
 
         /* Handle the GET /products request */
         if (getPathInfo == null){
-            ArrayList<Product> Products = new ArrayList<>();
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                Statement stmt = conn.createStatement();
-                String Sql = "SELECT * FROM Products";
-                ResultSet rs = stmt.executeQuery(Sql);
-                while(rs.next()){
-                    String name = rs.getString("name");
-                    String vendor = rs.getString("vendor");
-                    String urlSlug = rs.getString("urlSlug");
-                    String sku = rs.getString("sku");
-                    String description = rs.getString("description");
-                    double price = rs.getDouble("price");
-                    Products.add(new Product(name,description,vendor,urlSlug,sku,price));
-                }
+            try{
+                ArrayList<Product> Products = new ArrayList<>();
+                Products = store.getAllProduct();
+                request.setAttribute("products",Products);
+                RequestDispatcher rd = request.getRequestDispatcher("products.jsp");
+                rd.forward(request, response );
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
             }
-            catch(SQLException e) {
-                System.out.println(e.getMessage());
+            catch(Exception e){
+                displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching Products");
             }
-            catch(ClassNotFoundException c){
-                c.printStackTrace();
-            }
-            request.setAttribute("products",Products);
-            RequestDispatcher rd = request.getRequestDispatcher("products.jsp");
-            rd.forward(request, response );
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
         }
 
         //Handle the GET /products/:slug request
@@ -91,31 +75,8 @@ public class ProductServlet extends HttpServlet {
         String getRequestSlug = getPathInfo.split("/")[1];
 
         try {
-            //Will be used for error handling, Uncomment once db connection for post products is done
-            //store.getProductBySlug(getRequestSlug);
             Product singleProduct = new Product();
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM PRODUCTS WHERE urlSlug = ?");
-                stmt.setString(1,getRequestSlug);
-                ResultSet rs = stmt.executeQuery();
-                while(rs.next()){
-                    String name = rs.getString("name");
-                    String vendor = rs.getString("vendor");
-                    String urlSlug = rs.getString("urlSlug");
-                    String sku = rs.getString("sku");
-                    String description = rs.getString("description");
-                    double price = rs.getDouble("price");
-                    singleProduct = new Product(name,description,vendor,urlSlug,sku,price);
-                }
-            }
-            catch(SQLException e) {
-                System.out.println(e.getMessage());
-            }
-            catch(ClassNotFoundException c){
-                c.printStackTrace();
-            }
+            singleProduct = store.getProductBySlug(getRequestSlug);
             request.setAttribute("product",singleProduct);
             RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
             rd.forward(request, response );

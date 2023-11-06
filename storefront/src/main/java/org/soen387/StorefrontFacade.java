@@ -3,9 +3,7 @@ package org.soen387;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,9 +129,22 @@ public class StorefrontFacade {
 
     public ArrayList<Product> getAllProduct() {
         ArrayList<Product> allProducts = new ArrayList<Product>();
-        for (Product product : productsBySku.values()) {
-            Product oneProduct = new Product(product.getName(), product.getDescription(), product.getVendor(), product.getUrlSlug(), product.getSku(), product.getPrice());
-            allProducts.add(oneProduct);
+        try {
+            Statement stmt = connection.createStatement();
+            String Sql = "SELECT * FROM Products";
+            ResultSet rs = stmt.executeQuery(Sql);
+            while(rs.next()){
+                String name = rs.getString("name");
+                String vendor = rs.getString("vendor");
+                String urlSlug = rs.getString("urlSlug");
+                String sku = rs.getString("sku");
+                String description = rs.getString("description");
+                double price = rs.getDouble("price");
+                allProducts.add(new Product(name,description,vendor,urlSlug,sku,price));
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
         }
         return allProducts;
     }
