@@ -377,30 +377,45 @@ public class StorefrontFacade {
         if (userCart == null || userCart.getCartItems().isEmpty()) {
             throw new IllegalArgumentException("Cart is empty or does not exist for user: " + user);
         }
-
+    
         List<Order.OrderProductItem> orderProductItems = new ArrayList<>();
         for (Map.Entry<Product, Integer> entry : userCart.getCartItems().entrySet()) {
             orderProductItems.add(new Order.OrderProductItem(entry.getKey(), entry.getValue()));
         }
-
+    
         Order newOrder = new Order(shippingAddress, orderProductItems, user, Order.generateOrderID());
-
-        String sql = "INSERT INTO Orders (userEmail, shippingAddress) VALUES (?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+    
+        String sqlOrder = "INSERT INTO Order (user, shippingAddress) VALUES (?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user);
             statement.setString(2, shippingAddress);
             statement.executeUpdate();
+    
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int orderId = generatedKeys.getInt(1);
+    
+                String sqlOrderProduct = "INSERT INTO OrderProduct (orderId, sku, quantity) VALUES (?, ?, ?)";
+                for (Order.OrderProductItem item : orderProductItems) {
+                    try (PreparedStatement statementOrderProduct = connection.prepareStatement(sqlOrderProduct)) {
+                        statementOrderProduct.setInt(1, orderId);
+                        statementOrderProduct.setString(2, item.getProduct().getSku());
+                        statementOrderProduct.setInt(3, item.getQuantity());
+                        statementOrderProduct.executeUpdate();
+                    }
+                }
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error creating order for user: " + user, e);
         }
-
+    
         clearCart(user);
-
+    
         allOrdersInStore.add(newOrder);
         allOrderByUser.computeIfAbsent(user, k -> new ArrayList<>()).add(newOrder);
-
+    
         return newOrder;
-    }
+}   
 
     private void clearCart(String user) {
         String sql = "DELETE FROM Carts WHERE userEmail=?";
