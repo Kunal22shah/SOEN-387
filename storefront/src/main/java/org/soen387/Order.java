@@ -26,9 +26,17 @@ public class Order {
         this.user = user;
         this.isShipped = isShipped;
     }
+
+    public Order(String shippingAddress, ArrayList<OrderProductItem> orderProductItems, String userEmail){
+        this.shippingAddress = shippingAddress;
+        this.orderProducts = orderProductItems;
+        this.user = userEmail;
+    }
+
     public String getUser() {
         return user;
     }
+    
     public int getOrderID() {
         return orderID;
     }

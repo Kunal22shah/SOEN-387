@@ -76,4 +76,12 @@ public class OrderServlet extends HttpServlet {
         out.println("</body>");
         out.println("</html>");
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String user = req.getParameter("user");
+        String shippingAddress = req.getParameter("shippingAddress");
+
+        store.createOrder(user, shippingAddress);
+    }
 }

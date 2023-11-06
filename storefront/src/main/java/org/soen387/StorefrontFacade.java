@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.google.gson.Gson;
 
@@ -372,22 +373,21 @@ public class StorefrontFacade {
         return new Order(shippingAddress, userOrder, user, orderID, 0, false);
     }
 
-    public Order createOrder(String user, String shippingAddress) {
-        Cart userCart = getCart(user);
+    public Order createOrder(User user, String shippingAddress) {
+        Cart userCart = getCart(user.getEmail());
         if (userCart == null || userCart.getCartItems().isEmpty()) {
-            throw new IllegalArgumentException("Cart is empty or does not exist for user: " + user);
+            throw new IllegalArgumentException("Cart is empty or does not exist for user: ");
         }
     
-        List<Order.OrderProductItem> orderProductItems = new ArrayList<>();
-        for (Map.Entry<Product, Integer> entry : userCart.getCartItems().entrySet()) {
-            orderProductItems.add(new Order.OrderProductItem(entry.getKey(), entry.getValue()));
+        ArrayList<Order.OrderProductItem> orderProductItems = new ArrayList<>();
+        for (Cart.CartItem cartItem : userCart.getCartItems()) {
+            orderProductItems.add(new Order.OrderProductItem(cartItem.getProduct(), cartItem.getQuantity()));
         }
     
-        Order newOrder = new Order(shippingAddress, orderProductItems, user, Order.generateOrderID());
-    
-        String sqlOrder = "INSERT INTO Order (user, shippingAddress) VALUES (?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, user);
+        Order newOrder = new Order(shippingAddress, orderProductItems, user.getEmail());
+        String userEmail = user.getEmail();
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Order (userEmail, shippingAddress) VALUES (?, ?)")) {
+            statement.setString(1, userEmail);
             statement.setString(2, shippingAddress);
             statement.executeUpdate();
     
@@ -409,25 +409,25 @@ public class StorefrontFacade {
             throw new RuntimeException("Error creating order for user: " + user, e);
         }
     
-        clearCart(user);
+        clearCart(user.getEmail());
     
         allOrdersInStore.add(newOrder);
-        allOrderByUser.computeIfAbsent(user, k -> new ArrayList<>()).add(newOrder);
+        allOrderByUser.computeIfAbsent(user.getEmail(), k -> new ArrayList<>()).add(newOrder);
     
         return newOrder;
 }   
 
-    private void clearCart(String user) {
+    private void clearCart(String userEmail) {
         String sql = "DELETE FROM Carts WHERE userEmail=?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, user);
+            statement.setString(1, userEmail);
             statement.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Error clearing cart for user: " + user, e);
+            throw new RuntimeException("Error clearing cart for user: " + userEmail, e);
         }
     }
 
-    public Order shipOrder(int orderID) {
+    public void shipOrder(int orderID) {
         Random random = new Random();
         int trackingNumber = random.nextInt(1000000000);
         String sql = "UPDATE Orders SET trackingNumber=?, isShipped=? WHERE orderID=?";

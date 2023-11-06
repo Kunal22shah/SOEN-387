@@ -40,6 +40,9 @@
                         <input type="hidden" name="_method" value="delete">
                         <button type="submit" class="btn btn-danger">Remove</button>
                     </form>
+                    <form action="OrderServlet" method="post">
+                        <button type="submit" class="btn btn-primary">Create Order</button>
+                    </form>
                 </td>
             </tr>
         </c:forEach>
