@@ -25,21 +25,13 @@ public class StorefrontFacade {
     //Store all Orders made by everyone
     private ArrayList<Order> allOrdersInStore;
 
-    // Constructor
-//    public StorefrontFacade() {
-//        this.productsBySku = new HashMap<>();
-//        this.productsBySlug = new HashMap<>();
-//        this.cartsByUser = new HashMap<>();
-//    }
     public StorefrontFacade() {
-
         this.connection = DatabaseConnection.getConnection();
         this.productsBySku = new HashMap<>();
         this.productsBySlug = new HashMap<>();
         this.cartsByUser = new HashMap<>();
         this.allOrderByUser = new HashMap<>();
         this.allOrdersInStore = new ArrayList<>();
-
     }
 
     public void createProduct(String sku, String name, String description, String vendor, String urlSlug, double price) {
@@ -54,6 +46,18 @@ public class StorefrontFacade {
         Product createdProduct = new Product(name, description, vendor, urlSlug, sku, price);
         productsBySku.put(sku, createdProduct);
         productsBySlug.put(urlSlug, createdProduct); // Also add to productsBySlug map
+        String sql = "INSERT INTO PRODUCTS(sku, name, description, vendor, urlSlug, price) VALUES (?,?,?,?,?,?)";
+        try (PreparedStatement insertStmt = connection.prepareStatement(sql)) {
+            insertStmt.setString(1, sku);
+            insertStmt.setString(2, name);
+            insertStmt.setString(3, description);
+            insertStmt.setString(4, vendor);
+            insertStmt.setString(5, urlSlug);
+            insertStmt.setDouble(6, price);
+            insertStmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been added");
     }

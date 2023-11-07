@@ -115,6 +115,7 @@ public class ProductServlet extends HttpServlet {
             price = Double.parseDouble(request.getParameter("price"));
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid price format");
+            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Error adding Product");
             return;
         }
 
@@ -125,6 +126,7 @@ public class ProductServlet extends HttpServlet {
         response.sendRedirect("/products/" + urlSlug);
         } catch (RuntimeException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
         }
     }
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
