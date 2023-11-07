@@ -95,6 +95,42 @@ public class CartServlet extends HttpServlet {
         System.out.println("Processing DELETE request for product slug: " + slug);
         response.setStatus(HttpServletResponse.SC_OK);
     }
+    // In CartServlet
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Increase or decrease the product quantity
+        // Assume there is a parameter "action" which can be "increase" or "decrease"
+        String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
+        if (userEmail == null) {
+            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            return;
+        }
+
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null || pathInfo.split("/").length <= 2) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        String slug = pathInfo.split("/")[3];
+        Product product = store.getProductBySlug(slug);
+        if (product == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+            return;
+        }
+
+        String action = request.getParameter("action");
+        if ("increase".equals(action)) {
+            store.setProductQuantityInCart(userEmail, product.getSku(), store.getCart(userEmail).getQuantityForSKU(product.getSku()) + 1);
+        } else if ("decrease".equals(action)) {
+            store.setProductQuantityInCart(userEmail, product.getSku(), store.getCart(userEmail).getQuantityForSKU(product.getSku()) - 1);
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+            return;
+        }
+
+        response.sendRedirect("/storefront/cart");
+    }
+
 
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
         response.setStatus(statusCode);

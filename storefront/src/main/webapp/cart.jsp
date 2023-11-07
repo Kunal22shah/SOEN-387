@@ -29,9 +29,20 @@
         <tbody>
         <c:set var="totalPrice" value="0" />
         <c:forEach var="cartItem" items="${cart.cartItems}">
+
             <tr>
                 <td><a href="/storefront/products/${cartItem.product.urlSlug}">${cartItem.product.name}</a></td>
-                <td>${cartItem.quantity}</td>
+                <td>
+                    <form action="/storefront/cart/products/${cartItem.product.urlSlug}?action=increase" method="post">
+                        <input type="hidden" name="_method" value="put">
+                        <button type="submit" class="btn btn-secondary">+</button>
+                    </form>
+                        ${cartItem.quantity}
+                    <form action="/storefront/cart/products/${cartItem.product.urlSlug}?action=decrease" method="post">
+                        <input type="hidden" name="_method" value="put">
+                        <button type="submit" class="btn btn-secondary">-</button>
+                    </form>
+                </td>
                 <td>${cartItem.product.price}</td>
                 <td>${cartItem.product.price * cartItem.quantity}</td>
                 <c:set var="totalPrice" value="${totalPrice + (cartItem.product.price * cartItem.quantity)}" />

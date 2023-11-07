@@ -208,13 +208,7 @@ public class StorefrontFacade {
             ResultSet resultSet = checkStmt.executeQuery();
             if (resultSet.next()) {
                 int quantity = resultSet.getInt("quantity");
-                String sqlUpdate = "UPDATE Carts SET quantity=? WHERE userEmail=? AND sku=?";
-                try (PreparedStatement updateStmt = connection.prepareStatement(sqlUpdate)) {
-                    updateStmt.setInt(1, quantity + 1);
-                    updateStmt.setString(2, userEmail);
-                    updateStmt.setString(3, sku);
-                    updateStmt.executeUpdate();
-                }
+                setProductQuantityInCart(userEmail, sku, quantity + 1);
             } else {
                 String sqlInsert = "INSERT INTO Carts(userEmail, sku, quantity) VALUES (?, ?, 1)";
                 try (PreparedStatement insertStmt = connection.prepareStatement(sqlInsert)) {
@@ -225,6 +219,40 @@ public class StorefrontFacade {
             }
         } catch (Exception e) {
             throw new RuntimeException("Error adding product to cart.", e);
+        }
+    }
+    public void setProductQuantityInCart(String userEmail, String sku, int quantity) {
+
+        String sqlCheck = "SELECT quantity FROM Carts WHERE userEmail=? AND sku=?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(sqlCheck)) {
+            checkStmt.setString(1, userEmail);
+            checkStmt.setString(2, sku);
+            ResultSet resultSet = checkStmt.executeQuery();
+
+            if (resultSet.next() && quantity > 0) {
+                // Update the existing cart entry with the new quantity
+                String sqlUpdate = "UPDATE Carts SET quantity=? WHERE userEmail=? AND sku=?";
+                try (PreparedStatement updateStmt = connection.prepareStatement(sqlUpdate)) {
+                    updateStmt.setInt(1, quantity);
+                    updateStmt.setString(2, userEmail);
+                    updateStmt.setString(3, sku);
+                    updateStmt.executeUpdate();
+                }
+            } else if (!resultSet.next() && quantity > 0) {
+                // Insert a new cart entry with the specified quantity
+                String sqlInsert = "INSERT INTO Carts(userEmail, sku, quantity) VALUES (?, ?, ?)";
+                try (PreparedStatement insertStmt = connection.prepareStatement(sqlInsert)) {
+                    insertStmt.setString(1, userEmail);
+                    insertStmt.setString(2, sku);
+                    insertStmt.setInt(3, quantity);
+                    insertStmt.executeUpdate();
+                }
+            } else if (quantity == 0) {
+                // If the quantity is set to zero, remove the product from the cart
+                removeProductFromCart(userEmail, sku);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error setting product quantity in cart.", e);
         }
     }
 
