@@ -73,26 +73,36 @@ public class StorefrontFacade {
         if (urlSlug.length() > 100 || !urlSlug.matches("^[0-9a-z-]+$")) {
             throw new RuntimeException("Please add a valid url slug");
         }
-        if (!productsBySku.containsKey(sku)) {
-            throw new RuntimeException("Product does not exist. Please add product before updating it");
+        String sql = "SELECT urlSlug, sku FROM PRODUCTS WHERE urlSlug = ?";
+        String getUrlSlug = "";
+        String productSku = "";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, urlSlug);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                getUrlSlug = resultSet.getString("urlSlug");
+                productSku = resultSet.getString("sku");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        Product productWithSameSlug = productsBySlug.get(urlSlug);
-        if (productWithSameSlug != null && !productWithSameSlug.getSku().equals(sku)) {
-            throw new RuntimeException("URL slug is already in use. Please select another slug.");
+
+        if (getUrlSlug.equals(urlSlug) && !productSku.equals(sku) ){
+            throw new RuntimeException("Url slug in use");
         }
-        Product getUpdatedProduct = productsBySku.get(sku);
-        getUpdatedProduct.setName(name);
-        getUpdatedProduct.setDescription(description);
-        getUpdatedProduct.setVendor(vendor);
-        getUpdatedProduct.setUrlSlug(urlSlug);
-        getUpdatedProduct.setPrice(price);
-        productsBySku.replace(sku, getUpdatedProduct);
-        if (!productsBySlug.containsKey(urlSlug)) {
-            productsBySlug.put(urlSlug, getUpdatedProduct);
-        } else {
-            productsBySlug.replace(urlSlug, getUpdatedProduct);
+        String sqlupdate = "UPDATE PRODUCTS SET name=?, description=?, vendor=?, urlSlug=?, price=? WHERE sku = ?";
+        try (PreparedStatement updateStmt = connection.prepareStatement(sqlupdate)) {
+            updateStmt.setString(1, name);
+            updateStmt.setString(2, description);
+            updateStmt.setString(3, vendor);
+            updateStmt.setString(4, urlSlug);
+            updateStmt.setDouble(5, price);
+            updateStmt.setString(6, sku);
+            updateStmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been updated");
+
     }
 
     public Product getProduct(String sku) {

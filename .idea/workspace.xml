@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Adding DB logic in facade for view products">
+    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Adding add product to add to database">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ManageProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ManageProductServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/manageProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/manageProduct.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1699313505970</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Adding add product to add to database">
+      <created>1699317270550</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1699317270550</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -235,7 +242,29 @@
     <MESSAGE value="Adding a error handling single product page" />
     <MESSAGE value="Adding Order Class" />
     <MESSAGE value="Adding DB logic in facade for view products" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding DB logic in facade for view products" />
+    <MESSAGE value="Adding add product to add to database" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding add product to add to database" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
+          <line>91</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
+          <line>93</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
+          <line>98</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

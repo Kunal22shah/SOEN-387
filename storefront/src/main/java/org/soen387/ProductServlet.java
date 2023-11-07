@@ -126,7 +126,7 @@ public class ProductServlet extends HttpServlet {
         response.sendRedirect("/products/" + urlSlug);
         } catch (RuntimeException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-
+            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Error updating Product");
         }
     }
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
