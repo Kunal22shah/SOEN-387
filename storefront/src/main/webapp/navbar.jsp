@@ -45,7 +45,7 @@
                     <c:otherwise>
                         <!-- No one is logged in -->
                         <a class="btn btn-light" href="/storefront/auth/login">Login</a>
-                        <a class="btn btn-secondary" href="/storefront/auth/register">Register</a>
+                        <a class="btn btn-light" href="/storefront/auth/register">Register</a>
                         <a class="btn btn-light" href="/storefront/auth/staffAuth">Authenticate as Staff</a>
                     </c:otherwise>
                 </c:choose>
