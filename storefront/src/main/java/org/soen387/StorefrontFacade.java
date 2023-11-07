@@ -3,10 +3,9 @@ package org.soen387;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,21 +27,13 @@ public class StorefrontFacade {
     //Store all Orders made by everyone
     private ArrayList<Order> allOrdersInStore;
 
-    // Constructor
-//    public StorefrontFacade() {
-//        this.productsBySku = new HashMap<>();
-//        this.productsBySlug = new HashMap<>();
-//        this.cartsByUser = new HashMap<>();
-//    }
     public StorefrontFacade() {
-
         this.connection = DatabaseConnection.getConnection();
         this.productsBySku = new HashMap<>();
         this.productsBySlug = new HashMap<>();
         this.cartsByUser = new HashMap<>();
         this.allOrderByUser = new HashMap<>();
         this.allOrdersInStore = new ArrayList<>();
-
     }
 
     public void createProduct(String sku, String name, String description, String vendor, String urlSlug, double price) {
@@ -57,6 +48,18 @@ public class StorefrontFacade {
         Product createdProduct = new Product(name, description, vendor, urlSlug, sku, price);
         productsBySku.put(sku, createdProduct);
         productsBySlug.put(urlSlug, createdProduct); // Also add to productsBySlug map
+        String sql = "INSERT INTO PRODUCTS(sku, name, description, vendor, urlSlug, price) VALUES (?,?,?,?,?,?)";
+        try (PreparedStatement insertStmt = connection.prepareStatement(sql)) {
+            insertStmt.setString(1, sku);
+            insertStmt.setString(2, name);
+            insertStmt.setString(3, description);
+            insertStmt.setString(4, vendor);
+            insertStmt.setString(5, urlSlug);
+            insertStmt.setDouble(6, price);
+            insertStmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been added");
     }
@@ -72,26 +75,36 @@ public class StorefrontFacade {
         if (urlSlug.length() > 100 || !urlSlug.matches("^[0-9a-z-]+$")) {
             throw new RuntimeException("Please add a valid url slug");
         }
-        if (!productsBySku.containsKey(sku)) {
-            throw new RuntimeException("Product does not exist. Please add product before updating it");
+        String sql = "SELECT urlSlug, sku FROM PRODUCTS WHERE urlSlug = ?";
+        String getUrlSlug = "";
+        String productSku = "";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, urlSlug);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                getUrlSlug = resultSet.getString("urlSlug");
+                productSku = resultSet.getString("sku");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        Product productWithSameSlug = productsBySlug.get(urlSlug);
-        if (productWithSameSlug != null && !productWithSameSlug.getSku().equals(sku)) {
-            throw new RuntimeException("URL slug is already in use. Please select another slug.");
+
+        if (getUrlSlug.equals(urlSlug) && !productSku.equals(sku) ){
+            throw new RuntimeException("Url slug in use");
         }
-        Product getUpdatedProduct = productsBySku.get(sku);
-        getUpdatedProduct.setName(name);
-        getUpdatedProduct.setDescription(description);
-        getUpdatedProduct.setVendor(vendor);
-        getUpdatedProduct.setUrlSlug(urlSlug);
-        getUpdatedProduct.setPrice(price);
-        productsBySku.replace(sku, getUpdatedProduct);
-        if (!productsBySlug.containsKey(urlSlug)) {
-            productsBySlug.put(urlSlug, getUpdatedProduct);
-        } else {
-            productsBySlug.replace(urlSlug, getUpdatedProduct);
+        String sqlupdate = "UPDATE PRODUCTS SET name=?, description=?, vendor=?, urlSlug=?, price=? WHERE sku = ?";
+        try (PreparedStatement updateStmt = connection.prepareStatement(sqlupdate)) {
+            updateStmt.setString(1, name);
+            updateStmt.setString(2, description);
+            updateStmt.setString(3, vendor);
+            updateStmt.setString(4, urlSlug);
+            updateStmt.setDouble(5, price);
+            updateStmt.setString(6, sku);
+            updateStmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been updated");
+
     }
 
     public Product getProduct(String sku) {
@@ -132,9 +145,22 @@ public class StorefrontFacade {
 
     public ArrayList<Product> getAllProduct() {
         ArrayList<Product> allProducts = new ArrayList<Product>();
-        for (Product product : productsBySku.values()) {
-            Product oneProduct = new Product(product.getName(), product.getDescription(), product.getVendor(), product.getUrlSlug(), product.getSku(), product.getPrice());
-            allProducts.add(oneProduct);
+        try {
+            Statement stmt = connection.createStatement();
+            String Sql = "SELECT * FROM Products";
+            ResultSet rs = stmt.executeQuery(Sql);
+            while(rs.next()){
+                String name = rs.getString("name");
+                String vendor = rs.getString("vendor");
+                String urlSlug = rs.getString("urlSlug");
+                String sku = rs.getString("sku");
+                String description = rs.getString("description");
+                double price = rs.getDouble("price");
+                allProducts.add(new Product(name,description,vendor,urlSlug,sku,price));
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
         }
         return allProducts;
     }

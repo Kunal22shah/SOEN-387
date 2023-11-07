@@ -8,6 +8,8 @@
 </head>
 <body>
     <div class="container mt-5">
+        </br>
+        </br>
         <h2>${empty product ? 'Create New Product' : 'Edit Product'}</h2>
         <div id="feedbackAlert" class="alert" role="alert" style="display:none;"></div>
         <form id="productForm" action="/storefront/manageProduct/" method="post">
