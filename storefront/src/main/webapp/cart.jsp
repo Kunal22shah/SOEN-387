@@ -38,8 +38,8 @@
                         <button type="submit" class="btn btn-secondary">+</button>
                     </form>
                         ${cartItem.quantity}
-                    <form action="/storefront/cart/products/${cartItem.product.urlSlug}?action=decrease" method="post">
-                        <input type="hidden" name="_method" value="put">
+                    <form action="/storefront/cart/products/${cartItem.product.urlSlug}" method="post">
+                        <input type="hidden" name="_method" value="delete">
                         <button type="submit" class="btn btn-secondary">-</button>
                     </form>
                 </td>

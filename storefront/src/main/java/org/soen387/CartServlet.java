@@ -97,8 +97,7 @@ public class CartServlet extends HttpServlet {
     }
     // In CartServlet
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Increase or decrease the product quantity
-        // Assume there is a parameter "action" which can be "increase" or "decrease"
+
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
         if (userEmail == null) {
             displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
@@ -121,11 +120,8 @@ public class CartServlet extends HttpServlet {
         String action = request.getParameter("action");
         if ("increase".equals(action)) {
             store.setProductQuantityInCart(userEmail, product.getSku(), store.getCart(userEmail).getQuantityForSKU(product.getSku()) + 1);
-        } else if ("decrease".equals(action)) {
-            store.setProductQuantityInCart(userEmail, product.getSku(), store.getCart(userEmail).getQuantityForSKU(product.getSku()) - 1);
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
-            return;
+            store.removeProductFromCart(userEmail,product.getSku());
         }
 
         response.sendRedirect("/storefront/cart");

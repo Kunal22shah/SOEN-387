@@ -230,7 +230,7 @@ public class StorefrontFacade {
             ResultSet resultSet = checkStmt.executeQuery();
 
             if (resultSet.next() && quantity > 0) {
-                // Update the existing cart entry with the new quantity
+
                 String sqlUpdate = "UPDATE Carts SET quantity=? WHERE userEmail=? AND sku=?";
                 try (PreparedStatement updateStmt = connection.prepareStatement(sqlUpdate)) {
                     updateStmt.setInt(1, quantity);
@@ -239,7 +239,7 @@ public class StorefrontFacade {
                     updateStmt.executeUpdate();
                 }
             } else if (!resultSet.next() && quantity > 0) {
-                // Insert a new cart entry with the specified quantity
+
                 String sqlInsert = "INSERT INTO Carts(userEmail, sku, quantity) VALUES (?, ?, ?)";
                 try (PreparedStatement insertStmt = connection.prepareStatement(sqlInsert)) {
                     insertStmt.setString(1, userEmail);
@@ -248,7 +248,7 @@ public class StorefrontFacade {
                     insertStmt.executeUpdate();
                 }
             } else if (quantity == 0) {
-                // If the quantity is set to zero, remove the product from the cart
+
                 removeProductFromCart(userEmail, sku);
             }
         } catch (Exception e) {
