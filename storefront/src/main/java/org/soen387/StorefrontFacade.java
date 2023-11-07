@@ -3,7 +3,9 @@ package org.soen387;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -292,16 +294,42 @@ public class StorefrontFacade {
     }
 
     public void downloadProductCatalog() {
-        Gson gson = new Gson();
-        String jsonCatalog = gson.toJson(productsBySku.values());
+        ArrayList<Product> productList = new ArrayList<>();
+        String jsonCatalog = "";
+
+        String sqlQuery = "SELECT * FROM Products";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlQuery);
+             ResultSet resultSet = stmt.executeQuery()) {
+
+            while (resultSet.next()) {
+                Product product = new Product(
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getString("vendor"),
+                        resultSet.getString("urlSlug"),
+                        resultSet.getString("sku"),
+                        resultSet.getDouble("price")
+                );
+                productList.add(product);
+            }
+
+            Gson gson = new Gson();
+            jsonCatalog = gson.toJson(productList);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load the product catalog from database", e);
+        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProductCatalog.json"))) {
             writer.write(jsonCatalog);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to write the product catalog to file");
+            throw new RuntimeException("Failed to write the product catalog to file", e);
         }
     }
+
     public ArrayList<Order> getOrders(String user){
         if (user == null || user.isEmpty()){
             throw new IllegalArgumentException("User must not be null or empty");
