@@ -16,11 +16,9 @@ import org.soen387.Product;
 
 public class StorefrontFacade {
     private final Connection connection;
-
-    protected Map<String, Product> productsBySku;
     private final Map<String, Product> productsBySlug;
     private final Map<String, Cart> cartsByUser;
-
+    protected Map<String, Product> productsBySku;
     //Store a list of orders for each user
     private Map<String, ArrayList<Order>> allOrderByUser;
 
@@ -247,6 +245,7 @@ public class StorefrontFacade {
             throw new RuntimeException("Error adding product to cart.", e);
         }
     }
+
     public void setProductQuantityInCart(String userEmail, String sku, int quantity) {
 
         String sqlCheck = "SELECT quantity FROM Carts WHERE userEmail=? AND sku=?";
@@ -275,14 +274,15 @@ public class StorefrontFacade {
                 }
             } else if (quantity == 0) {
 
-                removeProductFromCart(userEmail, sku);
+                removeProductCompletelyFromCart(userEmail, sku);
             }
         } catch (Exception e) {
             throw new RuntimeException("Error setting product quantity in cart.", e);
         }
     }
 
-    public void removeProductFromCart(String userEmail, String sku) {
+
+    public void decreaseProductQuantityInCart(String userEmail, String sku) {
         if (userEmail == null || userEmail.isEmpty()) {
             throw new IllegalArgumentException("User email must not be null or empty");
         }
@@ -305,21 +305,35 @@ public class StorefrontFacade {
                         updateStmt.setString(3, sku);
                         updateStmt.executeUpdate();
                     }
-                } else {
-                    String sqlDelete = "DELETE FROM Carts WHERE userEmail=? AND sku=?";
-                    try (PreparedStatement deleteStmt = connection.prepareStatement(sqlDelete)) {
-                        deleteStmt.setString(1, userEmail);
-                        deleteStmt.setString(2, sku);
-                        deleteStmt.executeUpdate();
-                    }
                 }
-            } else {
-                return;
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error removing product from cart.", e);
+            throw new RuntimeException("Error decreasing product quantity in cart.", e);
         }
     }
+
+
+    public void removeProductCompletelyFromCart(String userEmail, String sku) {
+        if (userEmail == null || userEmail.isEmpty()) {
+            throw new IllegalArgumentException("User email must not be null or empty");
+        }
+        if (sku == null || sku.isEmpty()) {
+            throw new IllegalArgumentException("SKU must not be null or empty");
+        }
+
+        String sqlDelete = "DELETE FROM Carts WHERE userEmail=? AND sku=?";
+        try (PreparedStatement deleteStmt = connection.prepareStatement(sqlDelete)) {
+            deleteStmt.setString(1, userEmail);
+            deleteStmt.setString(2, sku);
+            int rowsAffected = deleteStmt.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("No product found in cart to remove.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error removing product from cart completely.", e);
+        }
+    }
+
 
     public void downloadProductCatalog() {
         ArrayList<Product> productList = new ArrayList<>();
@@ -358,8 +372,8 @@ public class StorefrontFacade {
         }
     }
 
-    public ArrayList<Order> getOrders(String user){
-        if (user == null || user.isEmpty()){
+    public ArrayList<Order> getOrders(String user) {
+        if (user == null || user.isEmpty()) {
             throw new IllegalArgumentException("User must not be null or empty");
         }
         String sql = "SELECT * FROM ORDERS WHERE userEmail=?";
@@ -377,14 +391,14 @@ public class StorefrontFacade {
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving Order.", e);
         }
-        allOrderByUser.put(user,userOrders);
+        allOrderByUser.put(user, userOrders);
         return allOrderByUser.get(user);
     }
 
-    public Order getOrder(String user, int id){
+    public Order getOrder(String user, int id) {
         int orderID = id;
         String shippingAddress = "";
-        if (user == null){
+        if (user == null) {
             String sql = "SELECT orderID, shippingAddress FROM ORDERS WHERE orderID=?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, id);
@@ -411,7 +425,7 @@ public class StorefrontFacade {
                             resultSet.getDouble("price")
                     );
                     int quantity = resultSet.getInt("quantity");
-                    userOrder.add(new Order.OrderProductItem(p,quantity));
+                    userOrder.add(new Order.OrderProductItem(p, quantity));
                 }
             } catch (Exception e) {
                 throw new RuntimeException("Error retrieving Specific Order.", e);
@@ -421,7 +435,7 @@ public class StorefrontFacade {
         String sql = "SELECT orderID, shippingAddress FROM ORDERS WHERE orderID=? and userEmail=?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
-            statement.setString(2,user);
+            statement.setString(2, user);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 orderID = resultSet.getInt("orderID");
@@ -445,7 +459,7 @@ public class StorefrontFacade {
                         resultSet.getDouble("price")
                 );
                 int quantity = resultSet.getInt("quantity");
-                userOrder.add(new Order.OrderProductItem(p,quantity));
+                userOrder.add(new Order.OrderProductItem(p, quantity));
             }
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving Specific Order.", e);

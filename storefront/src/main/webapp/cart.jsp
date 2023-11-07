@@ -49,6 +49,7 @@
                 <td>
                     <form action="/storefront/cart/products/${cartItem.product.urlSlug}" method="post">
                         <input type="hidden" name="_method" value="delete">
+                        <input type="hidden" name="remove" value="true">
                         <button type="submit" class="btn btn-danger">Remove</button>
                     </form>
                 </td>
