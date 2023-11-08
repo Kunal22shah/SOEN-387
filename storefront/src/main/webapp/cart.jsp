@@ -53,8 +53,9 @@
                         <button type="submit" class="btn btn-danger">Remove</button>
                     </form>
                 </td>
-                <form action="/storefront/OrderServlet" method="post">
-                    <input type="hidden" name="shippingAddress" value="${shippingAddress}" />
+                <form action="/storefront/orders" method="post">
+                    <label for="shippingAddress">Shipping Address:</label><br>
+                    <input type="text" id="shippingAddress" name="shippingAddress" value="${shippingAddress}" />
                     <button type="submit" class="btn btn-primary">Create Order</button>
                 </form>
             </tr>
