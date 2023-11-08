@@ -506,7 +506,7 @@ public class StorefrontFacade {
             int rows = statement.executeUpdate();
             statement.close();
         } catch (Exception e) {
-            throw new RuntimeException("Error creating order for user: " + userEmail, e);
+            throw new RuntimeException("Error creating order");
         }
         int orderID = newOrder.getOrderID();
         String sqlselect = "SELECT orderID FROM ORDERS";
@@ -516,7 +516,7 @@ public class StorefrontFacade {
                 orderID = resultSet.getInt("orderID");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error creating order for user: " + userEmail, e);
+            throw new RuntimeException("Error creating order for user");
         }
 
         String sqlOrderProduct = "INSERT INTO OrderProduct (orderID, sku, quantity) VALUES (?, ?, ?)";
@@ -527,7 +527,7 @@ public class StorefrontFacade {
                     statementOrderProduct.setInt(3, item.getQuantity());
                     statementOrderProduct.executeUpdate();
                 } catch (Exception e) {
-                    throw new RuntimeException("Error creating order for user: " + userEmail, e);
+                    throw new RuntimeException("Error creating order for user");
                 }
             }
 
