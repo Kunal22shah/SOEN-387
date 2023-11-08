@@ -45,7 +45,7 @@
                   <td><a href="/storefront/orders/${order.orderID}" class="btn btn-primary">View Details</a></td>
                     <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
                         <td>
-                            <form action="/storefront/OrderServlet" method="post">
+                            <form action="/storefront/orders/shipOrder" method="post">
                                 <input type="hidden" name="orderId" value="${order.orderID}" />
                                 <button type="submit" class="btn btn-primary">Ship Order</button>
                             </form>

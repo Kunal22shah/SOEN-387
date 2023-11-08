@@ -25,39 +25,48 @@ public class OrderServlet extends HttpServlet {
         // Check if the user is logged in
         String userEmail = (String) session.getAttribute("loggedInUserEmail");
         Boolean isStaff = (Boolean) session.getAttribute("isStaff");
-
-        if (userEmail != null && !userEmail.isEmpty() && getPathInfo == null){
-            try{
+        if (isStaff != null && isStaff.equals(true)) {
+            try {
                 ArrayList<Order> userOrders = new ArrayList<>();
-                if (isStaff != null && isStaff.equals(true)) {
-                    userOrders = store.getAllOrders(); // Assuming you have a getAllOrders method
-                } else {
-                    userOrders = store.getOrders(userEmail);
-                }
-                request.setAttribute("orders",userOrders);
-                request.getRequestDispatcher("orders.jsp").forward(request,response);
+                userOrders = store.getAllOrders();
+                request.setAttribute("orders", userOrders);
+                request.getRequestDispatcher("orders.jsp").forward(request, response);
                 response.setStatus(HttpServletResponse.SC_OK);
                 return;
 
-            }
-            catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching orders");
 
             }
         }
-        else if (userEmail != null && !userEmail.isEmpty() && getPathInfo != null){
+
+        if (userEmail != null && !userEmail.isEmpty() && getPathInfo == null) {
+            try {
+                ArrayList<Order> userOrders = new ArrayList<>();
+                    userOrders = store.getOrders(userEmail);
+                request.setAttribute("orders", userOrders);
+                request.getRequestDispatcher("orders.jsp").forward(request, response);
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
+
+            } catch (RuntimeException e) {
+                displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching orders");
+
+            }
+        } else if (userEmail != null && !userEmail.isEmpty() && getPathInfo != null) {
             String getOrderID = getPathInfo.split("/")[1];
+            System.out.println(getOrderID);
             Order userOrder;
             userOrder = store.getOrder(userEmail, Integer.parseInt(getOrderID));
             request.setAttribute("order", userOrder);
-            request.getRequestDispatcher("/order.jsp").forward(request,response);
+            request.getRequestDispatcher("/order.jsp").forward(request, response);
             response.setStatus(HttpServletResponse.SC_OK);
             return;
-        }
-        else {
+        } else {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not autenticated");
         }
     }
+
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
         response.setStatus(statusCode);
         response.setContentType("text/html");
@@ -84,14 +93,48 @@ public class OrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userEmail = (String)request.getSession().getAttribute("loggedInUserEmail");
-        String shippingAddress = request.getParameter("shippingAddress");
         String pathInfo = request.getPathInfo();
+        System.out.println("Path Info: " + pathInfo);
 
-        store.createOrder(userEmail, shippingAddress);
+        // Ship order operation
+        if ("/shipOrder".equals(pathInfo)) {
+            String orderIdString = request.getParameter("orderId");
+            if (orderIdString != null && !orderIdString.isEmpty()) {
+                try {
+                    int orderId = Integer.parseInt(orderIdString);
+                    store.shipOrder(orderId);
+                    response.sendRedirect("/storefront/orders");
+                } catch (NumberFormatException e) {
+                    displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Invalid order ID");
+                } catch (RuntimeException e) {
+                    displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error shipping order");
+                }
+            } else {
+                displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Order ID is required");
+            }
+        }
+        // Create order operation
+        else if ("/createOrder".equals(pathInfo)) { // Or some other path you designate for creating orders
+            String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
+            String shippingAddress = request.getParameter("shippingAddress");
 
-//        int orderId = Integer.parseInt(request.getParameter("orderId"));
-//        store.shipOrder(orderId);
-        response.sendRedirect("/storefront/orders");
+            if (userEmail == null || userEmail.isEmpty()) {
+                displayError(response, HttpServletResponse.SC_BAD_REQUEST, "User email must not be null or empty");
+                return;
+            }
+
+            // Attempt to create a new order
+            try {
+                store.createOrder(userEmail, shippingAddress);
+                response.sendRedirect("/storefront/orders");
+            } catch (RuntimeException e) {
+                displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error creating order");
+            }
+        }
+
+        else {
+            displayError(response, HttpServletResponse.SC_NOT_FOUND, "Not Found");
+        }
     }
+
 }

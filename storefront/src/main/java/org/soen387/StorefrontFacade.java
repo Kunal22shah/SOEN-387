@@ -496,19 +496,19 @@ public class StorefrontFacade {
             orderProductItems.add(new Order.OrderProductItem(cartItem.getProduct(), cartItem.getQuantity()));
         }
 
-        Order A = new Order();
         Order newOrder = new Order(shippingAddress, orderProductItems, userEmail);
-        String sql = "INSERT INTO ORDERS(userEmail, shippingAddress, isShipped) VALUES ( ?, ?, ?)";
+        String sql = "INSERT INTO ORDERS(orderId,userEmail, shippingAddress, isShipped) VALUES ( ?, ?, ?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, userEmail);
-            statement.setString(2, shippingAddress);
-            statement.setBoolean(3, false);
+            statement.setInt(1, newOrder.getOrderID());
+            statement.setString(2, userEmail);
+            statement.setString(3, shippingAddress);
+            statement.setBoolean(4, false);
             int rows = statement.executeUpdate();
             statement.close();
         } catch (Exception e) {
             throw new RuntimeException("Error creating order for user: " + userEmail, e);
         }
-        int orderID = 0;
+        int orderID = newOrder.getOrderID();
         String sqlselect = "SELECT orderID FROM ORDERS";
         try (PreparedStatement statement = connection.prepareStatement(sqlselect)) {
             ResultSet resultSet = statement.executeQuery();

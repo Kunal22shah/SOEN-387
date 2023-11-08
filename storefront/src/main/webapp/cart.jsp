@@ -16,7 +16,7 @@
 <body>
 <div class="container container-custom-margin">
     <h2>Your Cart</h2>
-    <form action="/storefront/orders" method="post">
+    <form action="/storefront/orders/createOrder" method="post">
             <label for="shippingAddress">Shipping Address:</label><br>
             <input type="text" id="shippingAddress" name="shippingAddress" value="${shippingAddress}" />
             <button type="submit" class="btn btn-primary">Create Order</button>

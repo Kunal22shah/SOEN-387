@@ -28,6 +28,7 @@ public class Order {
     }
 
     public Order(String shippingAddress, ArrayList<OrderProductItem> orderProductItems, String userEmail){
+        this.orderID = counter++;
         this.shippingAddress = shippingAddress;
         this.orderProducts = orderProductItems;
         this.user = userEmail;
