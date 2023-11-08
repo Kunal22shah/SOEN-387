@@ -495,33 +495,45 @@ public class StorefrontFacade {
         for (Cart.CartItem cartItem : userCart.getCartItems()) {
             orderProductItems.add(new Order.OrderProductItem(cartItem.getProduct(), cartItem.getQuantity()));
         }
-    
+
+        Order A = new Order();
         Order newOrder = new Order(shippingAddress, orderProductItems, userEmail);
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Order (userEmail, shippingAddress, trackingNumber, isShipped, orderID) VALUES (?, ?, ?, ?, ?)")) {
+        String sql = "INSERT INTO ORDERS(userEmail, shippingAddress, isShipped) VALUES ( ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, userEmail);
             statement.setString(2, shippingAddress);
-            statement.setInt(3, 0);
-            statement.setBoolean(4, false);
-            statement.setInt(5, newOrder.getOrderID());
-            statement.executeUpdate();
-    
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int orderId = generatedKeys.getInt(1);
-    
-                String sqlOrderProduct = "INSERT INTO OrderProduct (orderId, sku, quantity) VALUES (?, ?, ?)";
-                for (Order.OrderProductItem item : orderProductItems) {
-                    try (PreparedStatement statementOrderProduct = connection.prepareStatement(sqlOrderProduct)) {
-                        statementOrderProduct.setInt(1, orderId);
-                        statementOrderProduct.setString(2, item.getProduct().getSku());
-                        statementOrderProduct.setInt(3, item.getQuantity());
-                        statementOrderProduct.executeUpdate();
-                    }
-                }
+            statement.setBoolean(3, false);
+            int rows = statement.executeUpdate();
+            statement.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating order for user: " + userEmail, e);
+        }
+        int orderID = 0;
+        String sqlselect = "SELECT orderID FROM ORDERS";
+        try (PreparedStatement statement = connection.prepareStatement(sqlselect)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                orderID = resultSet.getInt("orderID");
             }
         } catch (Exception e) {
             throw new RuntimeException("Error creating order for user: " + userEmail, e);
         }
+
+        String sqlOrderProduct = "INSERT INTO OrderProduct (orderID, sku, quantity) VALUES (?, ?, ?)";
+            for (Order.OrderProductItem item : orderProductItems) {
+                try (PreparedStatement statementOrderProduct = connection.prepareStatement(sqlOrderProduct)) {
+                    statementOrderProduct.setInt(1, orderID);
+                    statementOrderProduct.setString(2, item.getProduct().getSku());
+                    statementOrderProduct.setInt(3, item.getQuantity());
+                    statementOrderProduct.executeUpdate();
+                } catch (Exception e) {
+                    throw new RuntimeException("Error creating order for user: " + userEmail, e);
+                }
+            }
+
+
+
+
     
         clearCart(userEmail);
     

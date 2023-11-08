@@ -17,7 +17,6 @@ public class CartServlet extends HttpServlet {
         // Handle GET requests to /cart
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
         if (userEmail == null) {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
             displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
             return;
         }
@@ -32,7 +31,6 @@ public class CartServlet extends HttpServlet {
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
 
         if (userEmail == null) {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
             displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
             return;
         }
@@ -73,7 +71,6 @@ public class CartServlet extends HttpServlet {
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
 
         if (userEmail == null) {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
             displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
             return;
         }
