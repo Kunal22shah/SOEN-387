@@ -497,9 +497,12 @@ public class StorefrontFacade {
         }
     
         Order newOrder = new Order(shippingAddress, orderProductItems, userEmail);
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Order (userEmail, shippingAddress) VALUES (?, ?)")) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Order (userEmail, shippingAddress, trackingNumber, isShipped, orderID) VALUES (?, ?, ?, ?, ?)")) {
             statement.setString(1, userEmail);
             statement.setString(2, shippingAddress);
+            statement.setInt(3, 0);
+            statement.setBoolean(4, false);
+            statement.setInt(5, newOrder.getOrderID());
             statement.executeUpdate();
     
             ResultSet generatedKeys = statement.getGeneratedKeys();
