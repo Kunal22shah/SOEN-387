@@ -64,16 +64,14 @@ public class ManageProductServlet extends HttpServlet {
                 store.createProduct(newProduct.getSku(), newProduct.getName(), newProduct.getDescription(), newProduct.getVendor(), newProduct.getUrlSlug(), newProduct.getPrice());
                 response.sendRedirect("/storefront/products/" + newProduct.getUrlSlug());
             } catch (RuntimeException e) {
-                request.setAttribute("error", e.getMessage());
-                request.getRequestDispatcher("/manageProduct.jsp").forward(request, response);
+                displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Error adding product");
             }
         } else if ("edit".equals(action)) {
             try {
                 store.updateProduct(sku, name, description, vendor, urlSlug, price);
                 response.sendRedirect("/storefront/products/" + urlSlug);
             } catch (RuntimeException e) {
-                request.setAttribute("error", e.getMessage());
-                request.getRequestDispatcher("/manageProduct.jsp").forward(request, response);
+                displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Error updating product");
             }
         }
     }

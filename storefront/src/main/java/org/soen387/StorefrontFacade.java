@@ -3,9 +3,9 @@ package org.soen387;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
+import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,32 +17,22 @@ import org.soen387.Product;
 
 public class StorefrontFacade {
     private final Connection connection;
-
-    protected Map<String, Product> productsBySku;
     private final Map<String, Product> productsBySlug;
     private final Map<String, Cart> cartsByUser;
-
+    protected Map<String, Product> productsBySku;
     //Store a list of orders for each user
     private Map<String, ArrayList<Order>> allOrderByUser;
 
     //Store all Orders made by everyone
     private ArrayList<Order> allOrdersInStore;
 
-    // Constructor
-//    public StorefrontFacade() {
-//        this.productsBySku = new HashMap<>();
-//        this.productsBySlug = new HashMap<>();
-//        this.cartsByUser = new HashMap<>();
-//    }
     public StorefrontFacade() {
-
         this.connection = DatabaseConnection.getConnection();
         this.productsBySku = new HashMap<>();
         this.productsBySlug = new HashMap<>();
         this.cartsByUser = new HashMap<>();
         this.allOrderByUser = new HashMap<>();
         this.allOrdersInStore = new ArrayList<>();
-
     }
 
     public void createProduct(String sku, String name, String description, String vendor, String urlSlug, double price) {
@@ -57,6 +47,18 @@ public class StorefrontFacade {
         Product createdProduct = new Product(name, description, vendor, urlSlug, sku, price);
         productsBySku.put(sku, createdProduct);
         productsBySlug.put(urlSlug, createdProduct); // Also add to productsBySlug map
+        String sql = "INSERT INTO PRODUCTS(sku, name, description, vendor, urlSlug, price) VALUES (?,?,?,?,?,?)";
+        try (PreparedStatement insertStmt = connection.prepareStatement(sql)) {
+            insertStmt.setString(1, sku);
+            insertStmt.setString(2, name);
+            insertStmt.setString(3, description);
+            insertStmt.setString(4, vendor);
+            insertStmt.setString(5, urlSlug);
+            insertStmt.setDouble(6, price);
+            insertStmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been added");
     }
@@ -72,26 +74,36 @@ public class StorefrontFacade {
         if (urlSlug.length() > 100 || !urlSlug.matches("^[0-9a-z-]+$")) {
             throw new RuntimeException("Please add a valid url slug");
         }
-        if (!productsBySku.containsKey(sku)) {
-            throw new RuntimeException("Product does not exist. Please add product before updating it");
+        String sql = "SELECT urlSlug, sku FROM PRODUCTS WHERE urlSlug = ?";
+        String getUrlSlug = "";
+        String productSku = "";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, urlSlug);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                getUrlSlug = resultSet.getString("urlSlug");
+                productSku = resultSet.getString("sku");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        Product productWithSameSlug = productsBySlug.get(urlSlug);
-        if (productWithSameSlug != null && !productWithSameSlug.getSku().equals(sku)) {
-            throw new RuntimeException("URL slug is already in use. Please select another slug.");
+
+        if (getUrlSlug.equals(urlSlug) && !productSku.equals(sku) ){
+            throw new RuntimeException("Url slug in use");
         }
-        Product getUpdatedProduct = productsBySku.get(sku);
-        getUpdatedProduct.setName(name);
-        getUpdatedProduct.setDescription(description);
-        getUpdatedProduct.setVendor(vendor);
-        getUpdatedProduct.setUrlSlug(urlSlug);
-        getUpdatedProduct.setPrice(price);
-        productsBySku.replace(sku, getUpdatedProduct);
-        if (!productsBySlug.containsKey(urlSlug)) {
-            productsBySlug.put(urlSlug, getUpdatedProduct);
-        } else {
-            productsBySlug.replace(urlSlug, getUpdatedProduct);
+        String sqlupdate = "UPDATE PRODUCTS SET name=?, description=?, vendor=?, urlSlug=?, price=? WHERE sku = ?";
+        try (PreparedStatement updateStmt = connection.prepareStatement(sqlupdate)) {
+            updateStmt.setString(1, name);
+            updateStmt.setString(2, description);
+            updateStmt.setString(3, vendor);
+            updateStmt.setString(4, urlSlug);
+            updateStmt.setDouble(5, price);
+            updateStmt.setString(6, sku);
+            updateStmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println("Product with sku " + productsBySku.get(sku).getSku() + " has been updated");
+
     }
 
     public Product getProduct(String sku) {
@@ -132,9 +144,22 @@ public class StorefrontFacade {
 
     public ArrayList<Product> getAllProduct() {
         ArrayList<Product> allProducts = new ArrayList<Product>();
-        for (Product product : productsBySku.values()) {
-            Product oneProduct = new Product(product.getName(), product.getDescription(), product.getVendor(), product.getUrlSlug(), product.getSku(), product.getPrice());
-            allProducts.add(oneProduct);
+        try {
+            Statement stmt = connection.createStatement();
+            String Sql = "SELECT * FROM Products";
+            ResultSet rs = stmt.executeQuery(Sql);
+            while(rs.next()){
+                String name = rs.getString("name");
+                String vendor = rs.getString("vendor");
+                String urlSlug = rs.getString("urlSlug");
+                String sku = rs.getString("sku");
+                String description = rs.getString("description");
+                double price = rs.getDouble("price");
+                allProducts.add(new Product(name,description,vendor,urlSlug,sku,price));
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
         }
         return allProducts;
     }
@@ -208,13 +233,7 @@ public class StorefrontFacade {
             ResultSet resultSet = checkStmt.executeQuery();
             if (resultSet.next()) {
                 int quantity = resultSet.getInt("quantity");
-                String sqlUpdate = "UPDATE Carts SET quantity=? WHERE userEmail=? AND sku=?";
-                try (PreparedStatement updateStmt = connection.prepareStatement(sqlUpdate)) {
-                    updateStmt.setInt(1, quantity + 1);
-                    updateStmt.setString(2, userEmail);
-                    updateStmt.setString(3, sku);
-                    updateStmt.executeUpdate();
-                }
+                setProductQuantityInCart(userEmail, sku, quantity + 1);
             } else {
                 String sqlInsert = "INSERT INTO Carts(userEmail, sku, quantity) VALUES (?, ?, 1)";
                 try (PreparedStatement insertStmt = connection.prepareStatement(sqlInsert)) {
@@ -228,7 +247,43 @@ public class StorefrontFacade {
         }
     }
 
-    public void removeProductFromCart(String userEmail, String sku) {
+    public void setProductQuantityInCart(String userEmail, String sku, int quantity) {
+
+        String sqlCheck = "SELECT quantity FROM Carts WHERE userEmail=? AND sku=?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(sqlCheck)) {
+            checkStmt.setString(1, userEmail);
+            checkStmt.setString(2, sku);
+            ResultSet resultSet = checkStmt.executeQuery();
+
+            if (resultSet.next() && quantity > 0) {
+
+                String sqlUpdate = "UPDATE Carts SET quantity=? WHERE userEmail=? AND sku=?";
+                try (PreparedStatement updateStmt = connection.prepareStatement(sqlUpdate)) {
+                    updateStmt.setInt(1, quantity);
+                    updateStmt.setString(2, userEmail);
+                    updateStmt.setString(3, sku);
+                    updateStmt.executeUpdate();
+                }
+            } else if (!resultSet.next() && quantity > 0) {
+
+                String sqlInsert = "INSERT INTO Carts(userEmail, sku, quantity) VALUES (?, ?, ?)";
+                try (PreparedStatement insertStmt = connection.prepareStatement(sqlInsert)) {
+                    insertStmt.setString(1, userEmail);
+                    insertStmt.setString(2, sku);
+                    insertStmt.setInt(3, quantity);
+                    insertStmt.executeUpdate();
+                }
+            } else if (quantity == 0) {
+
+                removeProductCompletelyFromCart(userEmail, sku);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error setting product quantity in cart.", e);
+        }
+    }
+
+
+    public void decreaseProductQuantityInCart(String userEmail, String sku) {
         if (userEmail == null || userEmail.isEmpty()) {
             throw new IllegalArgumentException("User email must not be null or empty");
         }
@@ -251,35 +306,75 @@ public class StorefrontFacade {
                         updateStmt.setString(3, sku);
                         updateStmt.executeUpdate();
                     }
-                } else {
-                    String sqlDelete = "DELETE FROM Carts WHERE userEmail=? AND sku=?";
-                    try (PreparedStatement deleteStmt = connection.prepareStatement(sqlDelete)) {
-                        deleteStmt.setString(1, userEmail);
-                        deleteStmt.setString(2, sku);
-                        deleteStmt.executeUpdate();
-                    }
                 }
-            } else {
-                return;
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error removing product from cart.", e);
+            throw new RuntimeException("Error decreasing product quantity in cart.", e);
         }
     }
 
+
+    public void removeProductCompletelyFromCart(String userEmail, String sku) {
+        if (userEmail == null || userEmail.isEmpty()) {
+            throw new IllegalArgumentException("User email must not be null or empty");
+        }
+        if (sku == null || sku.isEmpty()) {
+            throw new IllegalArgumentException("SKU must not be null or empty");
+        }
+
+        String sqlDelete = "DELETE FROM Carts WHERE userEmail=? AND sku=?";
+        try (PreparedStatement deleteStmt = connection.prepareStatement(sqlDelete)) {
+            deleteStmt.setString(1, userEmail);
+            deleteStmt.setString(2, sku);
+            int rowsAffected = deleteStmt.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("No product found in cart to remove.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error removing product from cart completely.", e);
+        }
+    }
+
+
     public void downloadProductCatalog() {
-        Gson gson = new Gson();
-        String jsonCatalog = gson.toJson(productsBySku.values());
+        ArrayList<Product> productList = new ArrayList<>();
+        String jsonCatalog = "";
+
+        String sqlQuery = "SELECT * FROM Products";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlQuery);
+             ResultSet resultSet = stmt.executeQuery()) {
+
+            while (resultSet.next()) {
+                Product product = new Product(
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getString("vendor"),
+                        resultSet.getString("urlSlug"),
+                        resultSet.getString("sku"),
+                        resultSet.getDouble("price")
+                );
+                productList.add(product);
+            }
+
+            Gson gson = new Gson();
+            jsonCatalog = gson.toJson(productList);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load the product catalog from database", e);
+        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProductCatalog.json"))) {
             writer.write(jsonCatalog);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to write the product catalog to file");
+            throw new RuntimeException("Failed to write the product catalog to file", e);
         }
     }
-    public ArrayList<Order> getOrders(String user){
-        if (user == null || user.isEmpty()){
+
+    public ArrayList<Order> getOrders(String user) {
+        if (user == null || user.isEmpty()) {
             throw new IllegalArgumentException("User must not be null or empty");
         }
         String sql = "SELECT * FROM ORDERS WHERE userEmail=?";
@@ -297,14 +392,14 @@ public class StorefrontFacade {
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving Order.", e);
         }
-        allOrderByUser.put(user,userOrders);
+        allOrderByUser.put(user, userOrders);
         return allOrderByUser.get(user);
     }
 
-    public Order getOrder(String user, int id){
+    public Order getOrder(String user, int id) {
         int orderID = id;
         String shippingAddress = "";
-        if (user == null){
+        if (user == null) {
             String sql = "SELECT orderID, shippingAddress FROM ORDERS WHERE orderID=?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, id);
@@ -331,7 +426,7 @@ public class StorefrontFacade {
                             resultSet.getDouble("price")
                     );
                     int quantity = resultSet.getInt("quantity");
-                    userOrder.add(new Order.OrderProductItem(p,quantity));
+                    userOrder.add(new Order.OrderProductItem(p, quantity));
                 }
             } catch (Exception e) {
                 throw new RuntimeException("Error retrieving Specific Order.", e);
@@ -341,7 +436,7 @@ public class StorefrontFacade {
         String sql = "SELECT orderID, shippingAddress FROM ORDERS WHERE orderID=? and userEmail=?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
-            statement.setString(2,user);
+            statement.setString(2, user);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 orderID = resultSet.getInt("orderID");
@@ -365,7 +460,7 @@ public class StorefrontFacade {
                         resultSet.getDouble("price")
                 );
                 int quantity = resultSet.getInt("quantity");
-                userOrder.add(new Order.OrderProductItem(p,quantity));
+                userOrder.add(new Order.OrderProductItem(p, quantity));
             }
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving Specific Order.", e);

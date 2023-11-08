@@ -47,6 +47,15 @@ public class Cart {
         return false;
     }
 
+    public int getQuantityForSKU(String sku) {
+        for (CartItem cartItem : cartItems) {
+            if (cartItem.getProduct().getSku().equals(sku)) {
+                return cartItem.getQuantity();
+            }
+        }
+        return 0;
+    }
+
     public static class CartItem {
         private Product product;
         private int quantity;

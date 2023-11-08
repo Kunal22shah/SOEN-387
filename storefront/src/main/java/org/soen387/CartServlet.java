@@ -67,7 +67,6 @@ public class CartServlet extends HttpServlet {
         }
     }
 
-
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Handle DELETE requests to /cart/products/:slug
@@ -90,11 +89,49 @@ public class CartServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
             return;
         }
+        String removeCompletelyParam = request.getParameter("remove");
+        boolean removeCompletely = "true".equalsIgnoreCase(removeCompletelyParam);
 
-        store.removeProductFromCart(userEmail, productToRemove.getSku());
-        System.out.println("Processing DELETE request for product slug: " + slug);
-        response.setStatus(HttpServletResponse.SC_OK);
+        if (removeCompletely) {
+
+            store.removeProductCompletelyFromCart(userEmail, productToRemove.getSku());
+        } else {
+
+            store.decreaseProductQuantityInCart(userEmail, productToRemove.getSku());
+        }
     }
+    // In CartServlet
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
+        if (userEmail == null) {
+            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            return;
+        }
+
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null || pathInfo.split("/").length <= 2) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        String slug = pathInfo.split("/")[3];
+        Product product = store.getProductBySlug(slug);
+        if (product == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+            return;
+        }
+
+        String action = request.getParameter("action");
+        if ("increase".equals(action)) {
+            store.setProductQuantityInCart(userEmail, product.getSku(), store.getCart(userEmail).getQuantityForSKU(product.getSku()) + 1);
+        } else {
+            store.decreaseProductQuantityInCart(userEmail,product.getSku());
+        }
+
+        response.sendRedirect("/storefront/cart");
+    }
+
 
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
         response.setStatus(statusCode);
@@ -121,4 +158,3 @@ public class CartServlet extends HttpServlet {
         out.println("</html>");
     }
 }
-
