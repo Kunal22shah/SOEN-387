@@ -536,8 +536,8 @@ public class StorefrontFacade {
     
         clearCart(userEmail);
     
-        allOrdersInStore.add(newOrder);
-        allOrderByUser.computeIfAbsent(userEmail, k -> new ArrayList<>()).add(newOrder);
+//        allOrdersInStore.add(newOrder);
+//        allOrderByUser.computeIfAbsent(userEmail, k -> new ArrayList<>()).add(newOrder);
     
         return newOrder;
 }   
