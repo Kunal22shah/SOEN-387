@@ -13,8 +13,6 @@ import java.util.Random;
 
 import com.google.gson.Gson;
 
-import org.soen387.Product;
-
 public class StorefrontFacade {
     private final Connection connection;
     private final Map<String, Product> productsBySlug;
@@ -468,7 +466,7 @@ public class StorefrontFacade {
         return new Order(shippingAddress, userOrder, user, orderID, 0, false);
     }
 
-    public Order getAllOrders(){
+    public ArrayList<Order> getAllOrders(){
         String sql = "SELECT * FROM ORDERS";
         ArrayList<Order> allOrders = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -484,26 +482,7 @@ public class StorefrontFacade {
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving Order.", e);
         }
-        ArrayList<Order.OrderProductItem> allOrder = new ArrayList<>();
-        sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Product p = new Product(
-                        resultSet.getString("name"),
-                        resultSet.getString("description"),
-                        resultSet.getString("vendor"),
-                        resultSet.getString("urlSlug"),
-                        resultSet.getString("sku"),
-                        resultSet.getDouble("price")
-                );
-                int quantity = resultSet.getInt("quantity");
-                allOrder.add(new Order.OrderProductItem(p,quantity));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Error retrieving Specific Order.", e);
-        }
-        return new Order();
+        return allOrders;
     }
 
     public Order createOrder(String userEmail, String shippingAddress) {

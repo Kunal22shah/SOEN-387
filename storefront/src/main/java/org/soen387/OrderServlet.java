@@ -86,15 +86,14 @@ public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String user = request.getParameter("user");
         String shippingAddress = request.getParameter("shippingAddress");
+        String pathInfo = request.getPathInfo();
 
         store.createOrder(user, shippingAddress);
 
-        if ("/shipOrder".equals(path)) {
-        String orderId = request.getParameter("orderId");
+        if ("/shipOrder".equals(pathInfo)) {
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
         store.shipOrder(orderId);
         response.sendRedirect("/storefront/orders");
-        } else {
-        response.sendRedirect("/storefront/orders/" + orderId);
         }
     }
 }
