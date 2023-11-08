@@ -24,11 +24,16 @@ public class OrderServlet extends HttpServlet {
 
         // Check if the user is logged in
         String userEmail = (String) session.getAttribute("loggedInUserEmail");
+        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
 
         if (userEmail != null && !userEmail.isEmpty() && getPathInfo == null){
             try{
                 ArrayList<Order> userOrders = new ArrayList<>();
-                userOrders = store.getOrders(userEmail);
+                if (isStaff != null && isStaff.equals(true)) {
+                    userOrders = store.getAllOrders(); // Assuming you have a getAllOrders method
+                } else {
+                    userOrders = store.getOrders(userEmail);
+                }
                 request.setAttribute("orders",userOrders);
                 request.getRequestDispatcher("orders.jsp").forward(request,response);
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -79,9 +84,17 @@ public class OrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String user = req.getParameter("user");
-        String shippingAddress = req.getParameter("shippingAddress");
+        String user = request.getParameter("user");
+        String shippingAddress = request.getParameter("shippingAddress");
 
         store.createOrder(user, shippingAddress);
+
+        if ("/shipOrder".equals(path)) {
+        String orderId = request.getParameter("orderId");
+        store.shipOrder(orderId);
+        response.sendRedirect("/storefront/orders");
+        } else {
+        response.sendRedirect("/storefront/orders/" + orderId);
+        }
     }
 }

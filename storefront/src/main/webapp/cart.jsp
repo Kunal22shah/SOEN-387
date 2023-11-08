@@ -40,10 +40,11 @@
                         <input type="hidden" name="_method" value="delete">
                         <button type="submit" class="btn btn-danger">Remove</button>
                     </form>
-                    <form action="OrderServlet" method="post">
-                        <button type="submit" class="btn btn-primary">Create Order</button>
-                    </form>
                 </td>
+                <form action="/storefront/OrderServlet" method="post">
+                    <input type="hidden" name="shippingAddress" value="${shippingAddress}" />
+                    <button type="submit" class="btn btn-primary">Create Order</button>
+                </form>
             </tr>
         </c:forEach>
         </tbody>

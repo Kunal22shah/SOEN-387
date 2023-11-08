@@ -373,8 +373,46 @@ public class StorefrontFacade {
         return new Order(shippingAddress, userOrder, user, orderID, 0, false);
     }
 
-    public Order createOrder(User user, String shippingAddress) {
-        Cart userCart = getCart(user.getEmail());
+    public Order getAllOrders(){
+        String sql = "SELECT * FROM ORDERS";
+        ArrayList<Order> allOrders = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int orderID = resultSet.getInt("orderID");
+                String shippingAddress = resultSet.getString("shippingAddress");
+                String user = resultSet.getString("userEmail");
+                int trackingNumber = resultSet.getInt("trackingNumber");
+                boolean isShipped = resultSet.getBoolean("isShipped");
+                allOrders.add(new Order(shippingAddress, null, user, orderID, trackingNumber, isShipped));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving Order.", e);
+        }
+        ArrayList<Order.OrderProductItem> allOrder = new ArrayList<>();
+        sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Product p = new Product(
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getString("vendor"),
+                        resultSet.getString("urlSlug"),
+                        resultSet.getString("sku"),
+                        resultSet.getDouble("price")
+                );
+                int quantity = resultSet.getInt("quantity");
+                allOrder.add(new Order.OrderProductItem(p,quantity));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving Specific Order.", e);
+        }
+        return new Order();
+    }
+
+    public Order createOrder(String userEmail, String shippingAddress) {
+        Cart userCart = getCart(userEmail);
         if (userCart == null || userCart.getCartItems().isEmpty()) {
             throw new IllegalArgumentException("Cart is empty or does not exist for user: ");
         }
@@ -384,8 +422,7 @@ public class StorefrontFacade {
             orderProductItems.add(new Order.OrderProductItem(cartItem.getProduct(), cartItem.getQuantity()));
         }
     
-        Order newOrder = new Order(shippingAddress, orderProductItems, user.getEmail());
-        String userEmail = user.getEmail();
+        Order newOrder = new Order(shippingAddress, orderProductItems, userEmail);
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Order (userEmail, shippingAddress) VALUES (?, ?)")) {
             statement.setString(1, userEmail);
             statement.setString(2, shippingAddress);
@@ -406,13 +443,13 @@ public class StorefrontFacade {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error creating order for user: " + user, e);
+            throw new RuntimeException("Error creating order for user: " + userEmail, e);
         }
     
-        clearCart(user.getEmail());
+        clearCart(userEmail);
     
         allOrdersInStore.add(newOrder);
-        allOrderByUser.computeIfAbsent(user.getEmail(), k -> new ArrayList<>()).add(newOrder);
+        allOrderByUser.computeIfAbsent(userEmail, k -> new ArrayList<>()).add(newOrder);
     
         return newOrder;
 }   

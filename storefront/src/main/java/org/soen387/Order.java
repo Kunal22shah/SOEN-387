@@ -7,7 +7,7 @@ import java.util.Random;
 public class Order {
     private static int counter = 10000;
     private int orderID;
-    private String shippingAdress;
+    private String shippingAddress;
     private int trackingNumber;
     private String user;
 
@@ -18,9 +18,9 @@ public class Order {
         this.orderID = counter++;
         this.orderProducts = new ArrayList<>();
     }
-    public Order(String shippingAdress, List<OrderProductItem> orderProducts, String user, int orderID, int trackingNumber, boolean isShipped){
+    public Order(String shippingAddress, List<OrderProductItem> orderProducts, String user, int orderID, int trackingNumber, boolean isShipped){
         this.orderID = orderID;
-        this.shippingAdress = shippingAdress;
+        this.shippingAddress = shippingAddress;
         this.orderProducts = orderProducts;
         this.trackingNumber = trackingNumber;
         this.user = user;
@@ -41,8 +41,8 @@ public class Order {
         return orderID;
     }
 
-    public String getShippingAdress() {
-        return shippingAdress;
+    public String getShippingAddress() {
+        return shippingAddress;
     }
 
     public int getTrackingNumber() {

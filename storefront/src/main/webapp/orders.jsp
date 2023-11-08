@@ -23,6 +23,9 @@
             <th>Tracking Number</th>
             <th>Shipped</th>
             <th>Details</th>
+            <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
+                <th>Ship Order</th>
+            </c:if>
         </tr>
         </thead>
         <tbody>
@@ -40,6 +43,14 @@
                   </c:otherwise>
                   </c:choose>
                   <td><a href="/storefront/orders/${order.orderID}" class="btn btn-primary">View Details</a></td>
+                    <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
+                        <td>
+                            <form action="/storefront/OrderServlet" method="post">
+                                <input type="hidden" name="orderId" value="${order.orderID}" />
+                                <button type="submit" class="btn btn-primary">Ship Order</button>
+                            </form>
+                        </td>
+                </c:if>
               </tr>
         </tbody>
 
