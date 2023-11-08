@@ -43,14 +43,20 @@
                   </c:otherwise>
                   </c:choose>
                   <td><a href="/storefront/orders/${order.orderID}" class="btn btn-primary">View Details</a></td>
-                    <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
-                        <td>
-                            <form action="/storefront/orders/shipOrder" method="post">
-                                <input type="hidden" name="orderId" value="${order.orderID}" />
-                                <button type="submit" class="btn btn-primary">Ship Order</button>
-                            </form>
-                        </td>
-                </c:if>
+                  <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
+                      <td>
+                          <c:if test="${order.trackingNumber == 0}">
+                              <form action="/storefront/orders/shipOrder" method="post">
+                                  <input type="hidden" name="orderId" value="${order.orderID}" />
+                                  <input type="number" name="trackingNumber" placeholder="Enter Tracking Number" required="required"/>
+                                  <button type="submit" class="btn btn-primary">Ship Order</button>
+                              </form>
+                          </c:if>
+                          <c:if test="${order.trackingNumber != 0}">
+                              <span>Tracking number assigned</span>
+                          </c:if>
+                      </td>
+                  </c:if>
               </tr>
         </tbody>
 

@@ -429,7 +429,6 @@ public class StorefrontFacade {
             } catch (Exception e) {
                 throw new RuntimeException("Error retrieving Specific Order.", e);
             }
-            return new Order(shippingAddress, userOrder, user, orderID, 0, false);
         }
         String sql = "SELECT orderID, shippingAddress FROM ORDERS WHERE orderID=? and userEmail=?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -553,9 +552,7 @@ public class StorefrontFacade {
         }
     }
 
-    public void shipOrder(int orderID) {
-        Random random = new Random();
-        int trackingNumber = random.nextInt(1000000000);
+    public void shipOrder(int orderID, int trackingNumber) {
         String sql = "UPDATE Orders SET trackingNumber=?, isShipped=? WHERE orderID=?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
