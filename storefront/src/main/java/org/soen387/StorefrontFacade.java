@@ -9,10 +9,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.google.gson.Gson;
-
-import org.soen387.Product;
 
 public class StorefrontFacade {
     private final Connection connection;
@@ -465,6 +464,108 @@ public class StorefrontFacade {
             throw new RuntimeException("Error retrieving Specific Order.", e);
         }
         return new Order(shippingAddress, userOrder, user, orderID, 0, false);
+    }
+
+    public ArrayList<Order> getAllOrders(){
+        String sql = "SELECT * FROM ORDERS";
+        ArrayList<Order> allOrders = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int orderID = resultSet.getInt("orderID");
+                String shippingAddress = resultSet.getString("shippingAddress");
+                String user = resultSet.getString("userEmail");
+                int trackingNumber = resultSet.getInt("trackingNumber");
+                boolean isShipped = resultSet.getBoolean("isShipped");
+                allOrders.add(new Order(shippingAddress, null, user, orderID, trackingNumber, isShipped));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving Order.", e);
+        }
+        return allOrders;
+    }
+
+    public Order createOrder(String userEmail, String shippingAddress) {
+        Cart userCart = getCart(userEmail);
+        if (userCart == null || userCart.getCartItems().isEmpty()) {
+            throw new IllegalArgumentException("Cart is empty or does not exist for user: ");
+        }
+    
+        ArrayList<Order.OrderProductItem> orderProductItems = new ArrayList<>();
+        for (Cart.CartItem cartItem : userCart.getCartItems()) {
+            orderProductItems.add(new Order.OrderProductItem(cartItem.getProduct(), cartItem.getQuantity()));
+        }
+
+        Order newOrder = new Order(shippingAddress, orderProductItems, userEmail);
+        String sql = "INSERT INTO ORDERS(orderId,userEmail, shippingAddress, isShipped) VALUES ( ?, ?, ?,?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, newOrder.getOrderID());
+            statement.setString(2, userEmail);
+            statement.setString(3, shippingAddress);
+            statement.setBoolean(4, false);
+            int rows = statement.executeUpdate();
+            statement.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating order");
+        }
+        int orderID = newOrder.getOrderID();
+        String sqlselect = "SELECT orderID FROM ORDERS";
+        try (PreparedStatement statement = connection.prepareStatement(sqlselect)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                orderID = resultSet.getInt("orderID");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating order for user");
+        }
+
+        String sqlOrderProduct = "INSERT INTO OrderProduct (orderID, sku, quantity) VALUES (?, ?, ?)";
+            for (Order.OrderProductItem item : orderProductItems) {
+                try (PreparedStatement statementOrderProduct = connection.prepareStatement(sqlOrderProduct)) {
+                    statementOrderProduct.setInt(1, orderID);
+                    statementOrderProduct.setString(2, item.getProduct().getSku());
+                    statementOrderProduct.setInt(3, item.getQuantity());
+                    statementOrderProduct.executeUpdate();
+                } catch (Exception e) {
+                    throw new RuntimeException("Error creating order for user");
+                }
+            }
+
+
+
+
+    
+        clearCart(userEmail);
+    
+        allOrdersInStore.add(newOrder);
+        allOrderByUser.computeIfAbsent(userEmail, k -> new ArrayList<>()).add(newOrder);
+    
+        return newOrder;
+}   
+
+    private void clearCart(String userEmail) {
+        String sql = "DELETE FROM Carts WHERE userEmail=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, userEmail);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error clearing cart for user: " + userEmail, e);
+        }
+    }
+
+    public void shipOrder(int orderID) {
+        Random random = new Random();
+        int trackingNumber = random.nextInt(1000000000);
+        String sql = "UPDATE Orders SET trackingNumber=?, isShipped=? WHERE orderID=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, trackingNumber);
+            statement.setBoolean(2, true);
+            statement.setInt(3, orderID);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error shipping order with ID: " + orderID, e);
+        }
     }
 
     public static class ProductAlreadyInCartException extends RuntimeException {

@@ -15,7 +15,7 @@
 <div class="container mt-5">
     <h2>Your Order</h2>
     <p><b>Order ID</b> : ${order.orderID}</p>
-    <p><b>Shipping Address</b> : ${order.shippingAdress}</p>
+    <p><b>Shipping Address</b> : ${order.shippingAddress}</p>
     <c:set var="totalPrice" value="0" />
     <table class="table">
         <thead>

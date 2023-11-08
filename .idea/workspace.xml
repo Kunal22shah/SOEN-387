@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="storefront:war" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Adding add product to add to database">
+    <list default="true" id="c6238e50-a862-4e2b-9970-f89f56ea8db1" name="Changes" comment="Adding view all orders with shipped status for users">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ManageProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ManageProductServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/cart.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +21,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Class" />
       </list>
     </option>
@@ -27,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="createOrder2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,52 +43,31 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="usePluginRegistry" value="true" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
-  <component name="ProjectId" id="2WFy63CyZOwBSG2ZMXXMzZsEUja" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2XiE8vNXQih0Jck5hAeIL5bZuoy" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Git.Branch.Popup.ShowAllRemotes": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/imran/Desktop/SOEN 387/Project/Assignment 1/Main/storefront/src/main/webapp",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15820312",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;createOrder2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/vatsashah/Desktop/Concordia/Academics/Fall2023/Soen387/SOEN-387&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\imran\Desktop\SOEN 387\Project\Assignment 1\Main\storefront\target\storefront\WEB-INF\lib" />
-      <recent name="C:\Users\imran\Desktop\SOEN 387\Project\Assignment 1\Main\storefront\target\storefront\WEB-INF" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Smart Tomcat.Tomcat 9">
-    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.soen387.Main" />
-      <module name="storefront" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.soen387.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Tomcat 9" type="com.poratu.idea.plugins.tomcat">
+}</component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="com.poratu.idea.plugins.tomcat" nameIsGenerated="true">
       <predefined_log_file enabled="true" id="Tomcat Localhost Log" />
       <predefined_log_file enabled="true" id="Tomcat Access Log" />
       <predefined_log_file id="Tomcat Catalina Log" />
@@ -110,164 +90,86 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Application.Main" />
-      <item itemvalue="Smart Tomcat.Tomcat 9" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="" />
-      <created>1696342449266</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1696342449266</updated>
-    </task>
-    <task id="LOCAL-00001" summary="Adding the GET/products request">
-      <created>1696347567125</created>
+    <task id="LOCAL-00001" summary="workspace.xml">
+      <created>1698941579990</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1696347567125</updated>
+      <updated>1698941579990</updated>
     </task>
-    <task id="LOCAL-00002" summary="Adding the GET/products/:slug request">
-      <created>1696351409053</created>
+    <task id="LOCAL-00002" summary="add dynamic fetching of orders">
+      <created>1698944885533</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1696351409053</updated>
+      <updated>1698944885533</updated>
     </task>
-    <task id="LOCAL-00003" summary="Adding Homepage">
-      <created>1696972660318</created>
+    <task id="LOCAL-00003" summary="Add check for staff user for getOrders">
+      <created>1698951530106</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1696972660318</updated>
+      <updated>1698951530106</updated>
     </task>
-    <task id="LOCAL-00004" summary="Adding Navbar.jsp and all products page">
-      <created>1696978575542</created>
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c6238e50-a862-4e2b-9970-f89f56ea8db1" name="Changes" comment="Add check for staff user for getOrders" />
+      <created>1699103348902</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1699103348902</updated>
+      <workItem from="1699324716705" duration="11420000" />
+    </task>
+    <task id="LOCAL-00004" summary="Adding view all orders with shipped status for users">
+      <created>1699105651480</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1696978575542</updated>
+      <updated>1699105651480</updated>
     </task>
-    <task id="LOCAL-00005" summary="Adding dynamic all products page">
-      <created>1696983077328</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1696983077328</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Adding static single product page">
-      <created>1696985333122</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1696985333122</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Adding dynamic single page">
-      <created>1696988069364</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1696988069364</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Small UI changes">
-      <created>1696990813275</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1696990813275</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Adding a error handling single product page">
-      <created>1697935977698</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1697935977698</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Adding Order Class">
-      <created>1698777483519</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1698777483519</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Adding DB logic in facade for view products">
-      <created>1699313505970</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1699313505970</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Adding add product to add to database">
-      <created>1699317270550</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1699317270550</updated>
-    </task>
-    <option name="localTasksCounter" value="13" />
+    <option name="localTasksCounter" value="5" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="viewOrder" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adding the GET/products request" />
-    <MESSAGE value="Adding the GET/products/:slug request" />
-    <MESSAGE value="Adding Homepage" />
-    <MESSAGE value="Adding Navbar.jsp and all products page" />
-    <MESSAGE value="Adding dynamic all products page" />
-    <MESSAGE value="Adding static single product page" />
-    <MESSAGE value="Adding dynamic single page" />
-    <MESSAGE value="Small UI changes" />
-    <MESSAGE value="Adding a error handling single product page" />
-    <MESSAGE value="Adding Order Class" />
-    <MESSAGE value="Adding DB logic in facade for view products" />
-    <MESSAGE value="Adding add product to add to database" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding add product to add to database" />
+    <MESSAGE value="workspace.xml" />
+    <MESSAGE value="add dynamic fetching of orders" />
+    <MESSAGE value="Add check for staff user for getOrders" />
+    <MESSAGE value="Adding view all orders with shipped status for users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding view all orders with shipped status for users" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
-          <line>91</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
-          <line>93</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
-          <line>98</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
+    <watches-manager>
+      <configuration name="com.poratu.idea.plugins.tomcat">
+        <watch expression="orderProductItems.get(2)" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

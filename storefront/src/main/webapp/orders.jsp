@@ -23,13 +23,16 @@
             <th>Tracking Number</th>
             <th>Shipped</th>
             <th>Details</th>
+            <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
+                <th>Ship Order</th>
+            </c:if>
         </tr>
         </thead>
         <tbody>
         <c:forEach var="order" items="${orders}">
               <tr>
                   <td>${order.orderID}</td>
-                  <td>${order.shippingAdress}</td>
+                  <td>${order.shippingAddress}</td>
                   <td>${order.trackingNumber}</td>
                   <c:choose>
                        <c:when test="${order.isShipped()}">
@@ -40,6 +43,14 @@
                   </c:otherwise>
                   </c:choose>
                   <td><a href="/storefront/orders/${order.orderID}" class="btn btn-primary">View Details</a></td>
+                    <c:if test="${sessionScope.isStaff != null && sessionScope.isStaff}">
+                        <td>
+                            <form action="/storefront/orders/shipOrder" method="post">
+                                <input type="hidden" name="orderId" value="${order.orderID}" />
+                                <button type="submit" class="btn btn-primary">Ship Order</button>
+                            </form>
+                        </td>
+                </c:if>
               </tr>
         </tbody>
 
