@@ -32,7 +32,7 @@ CREATE TABLE `carts` (
   KEY `sku` (`sku`),
   CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `users` (`email`),
   CONSTRAINT `carts_ibfk_2` FOREIGN KEY (`sku`) REFERENCES `products` (`sku`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +41,7 @@ CREATE TABLE `carts` (
 
 LOCK TABLES `carts` WRITE;
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
+INSERT INTO `carts` VALUES (1,'user2ab545f5-7f1d-4fac-ab3d-1b7a6c524e89@storefront.com','PROD001',2),(2,'user2ab545f5-7f1d-4fac-ab3d-1b7a6c524e89@storefront.com','PROD003',1),(3,'usera2670fdd-7a17-49fd-97e2-fe086c859669@storefront.com','PROD008',3),(4,'usera2670fdd-7a17-49fd-97e2-fe086c859669@storefront.com','PROD005',1);
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +69,6 @@ CREATE TABLE `orderproduct` (
 
 LOCK TABLES `orderproduct` WRITE;
 /*!40000 ALTER TABLE `orderproduct` DISABLE KEYS */;
-INSERT INTO `orderproduct` VALUES (10000,'PROD002',1),(10001,'PROD002',1),(10001,'PROD003',3);
 /*!40000 ALTER TABLE `orderproduct` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `orders` (
   UNIQUE KEY `trackingNumber` (`trackingNumber`),
   KEY `userEmail` (`userEmail`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `users` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (10000,'25 Saint Catherine',NULL,'usercc4e08ef-e39f-4dca-9411-887a8a7e631c@storefront.com',0),(10001,'25 Saint Catherine',1234,'usercc4e08ef-e39f-4dca-9411-887a8a7e631c@storefront.com',1),(10002,'123test',NULL,'userb4aa178a-ffb6-419a-b4c4-4d79aa3db938@storefront.com',0);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,7 +153,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'usercc4e08ef-e39f-4dca-9411-887a8a7e631c@storefront.com','usercc4e08ef-e39f-4dca-9411-887a8a7e631c@storefront.com','test@123'),(2,'userb4aa178a-ffb6-419a-b4c4-4d79aa3db938@storefront.com','userb4aa178a-ffb6-419a-b4c4-4d79aa3db938@storefront.com','user1*');
+INSERT INTO `users` VALUES (1,'user2ab545f5-7f1d-4fac-ab3d-1b7a6c524e89@storefront.com','user2ab545f5-7f1d-4fac-ab3d-1b7a6c524e89@storefront.com','test@123'),(2,'usera2670fdd-7a17-49fd-97e2-fe086c859669@storefront.com','usera2670fdd-7a17-49fd-97e2-fe086c859669@storefront.com','user1*');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -167,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-08 14:08:16
+-- Dump completed on 2023-11-08 20:51:19
