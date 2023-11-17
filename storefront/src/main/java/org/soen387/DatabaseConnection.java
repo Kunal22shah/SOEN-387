@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/storefront";
+    private static final String URL = "jdbc:sqlite:C:/root/soen387.db";
     private static final String USER = "dbuser";
     private static final String PASS = "dbpass";
     private static Connection connection = null;
@@ -14,8 +14,8 @@ public class DatabaseConnection {
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USER, PASS);
+                Class.forName("org.sqlite.JDBC");
+                connection = DriverManager.getConnection(URL);
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }

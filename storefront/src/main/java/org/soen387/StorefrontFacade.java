@@ -410,7 +410,7 @@ public class StorefrontFacade {
                 throw new RuntimeException("Error retrieving Specific Order.", e);
             }
             ArrayList<Order.OrderProductItem> userOrder = new ArrayList<>();
-            sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
+            sql = "SELECT p.*, op.quantity FROM OrderProducts op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, id);
                 ResultSet resultSet = statement.executeQuery();
@@ -443,7 +443,7 @@ public class StorefrontFacade {
             throw new RuntimeException("Error retrieving Specific Order.", e);
         }
         ArrayList<Order.OrderProductItem> userOrder = new ArrayList<>();
-        sql = "SELECT p.*, op.quantity FROM OrderProduct op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
+        sql = "SELECT p.*, op.quantity FROM OrderProducts op JOIN Products p ON op.sku = p.sku WHERE op.orderID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -496,20 +496,21 @@ public class StorefrontFacade {
         }
 
         Order newOrder = new Order(shippingAddress, orderProductItems, userEmail);
-        String sql = "INSERT INTO ORDERS(orderId,userEmail, shippingAddress, isShipped) VALUES ( ?, ?, ?,?)";
+        String sql = "INSERT INTO ORDERS(userEmail, shippingAddress, isShipped) VALUES (?,?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, newOrder.getOrderID());
-            statement.setString(2, userEmail);
-            statement.setString(3, shippingAddress);
-            statement.setBoolean(4, false);
+//            statement.setInt(1, newOrder.getOrderID());
+            statement.setString(1, userEmail);
+            statement.setString(2, shippingAddress);
+            statement.setBoolean(3, false);
             int rows = statement.executeUpdate();
             statement.close();
         } catch (Exception e) {
             throw new RuntimeException("Error creating order");
         }
         int orderID = newOrder.getOrderID();
-        String sqlselect = "SELECT orderID FROM ORDERS";
+        String sqlselect = "SELECT orderID FROM ORDERS WHERE userEmail=?";
         try (PreparedStatement statement = connection.prepareStatement(sqlselect)) {
+            statement.setString(1, userEmail);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 orderID = resultSet.getInt("orderID");
@@ -518,7 +519,7 @@ public class StorefrontFacade {
             throw new RuntimeException("Error creating order for user");
         }
 
-        String sqlOrderProduct = "INSERT INTO OrderProduct (orderID, sku, quantity) VALUES (?, ?, ?)";
+        String sqlOrderProduct = "INSERT INTO OrderProducts (orderID, sku, quantity) VALUES (?, ?, ?)";
             for (Order.OrderProductItem item : orderProductItems) {
                 try (PreparedStatement statementOrderProduct = connection.prepareStatement(sqlOrderProduct)) {
                     statementOrderProduct.setInt(1, orderID);
@@ -543,7 +544,7 @@ public class StorefrontFacade {
 }   
 
     private void clearCart(String userEmail) {
-        String sql = "DELETE FROM Carts WHERE userEmail=?";
+        String sql = "DELETE FROM carts WHERE userEmail=?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, userEmail);
             statement.executeUpdate();
@@ -553,7 +554,7 @@ public class StorefrontFacade {
     }
 
     public void shipOrder(int orderID, int trackingNumber) {
-        String sql = "UPDATE Orders SET trackingNumber=?, isShipped=? WHERE orderID=?";
+        String sql = "UPDATE orders SET trackingNumber=?, isShipped=? WHERE orderID=?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, trackingNumber);
