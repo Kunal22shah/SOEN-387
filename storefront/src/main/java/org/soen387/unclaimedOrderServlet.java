@@ -41,6 +41,40 @@ public class unclaimedOrderServlet extends HttpServlet {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthenticated. Sign in as User");
         }
     }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String getPathInfo = request.getPathInfo();
+        HttpSession session = request.getSession();
+
+        String orderIdString = request.getParameter("orderId");
+        String userorderIdString = request.getParameter("userOrderId");
+        int orderId = Integer.parseInt(orderIdString);
+        int userOrderId = Integer.parseInt(userorderIdString);
+
+        // Check if the user is logged in
+        String userEmail = (String) session.getAttribute("loggedInUserEmail");
+        if (userEmail != null && getPathInfo == null) {
+            try {
+                if (orderId == userOrderId){
+                    store.setOrderOwner(orderId, userEmail);
+                    response.sendRedirect("/storefront/orders");
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    return;
+                }
+                else{
+                    displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Invalid Order ID");
+                }
+
+            } catch (RuntimeException e) {
+                displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error Claiming Order");
+
+            }
+        }
+        else {
+            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthenticated. Sign in as User");
+        }
+    }
+
     private void displayError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
         response.setStatus(statusCode);
         response.setContentType("text/html");

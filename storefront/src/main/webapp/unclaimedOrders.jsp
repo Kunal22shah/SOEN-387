@@ -41,9 +41,9 @@
                   </c:choose>
                   <td><a href="/storefront/orders/${unclaimedOrders.orderID}" class="btn btn-primary">View Details</a></td>
                       <td>
-                              <form action="/storefront/orders/unclaimedOrders" method="post">
-                                  <input type="hidden" name="orderId" value="${unclaimed.orderID}" />
-                                  <input type="number" name="orderId" placeholder="Enter Order ID" required="required"/>
+                              <form action="/storefront/unclaimedOrders" method="post">
+                                  <input type="hidden" name="orderId" value="${unclaimedOrders.orderID}" />
+                                  <input type="number" name="userOrderId" placeholder="Enter Order ID" required="required"/>
                                   <button type="submit" class="btn btn-primary">Claim Order Order</button>
                               </form>
 
