@@ -128,7 +128,13 @@ public class OrderServlet extends HttpServlet {
             String shippingAddress = request.getParameter("shippingAddress");
 
             if (userEmail == null || userEmail.isEmpty()) {
-                displayError(response, HttpServletResponse.SC_BAD_REQUEST, "User email must not be null or empty");
+                // Attempt to create a new order
+                try {
+                    store.createOrder("guest", shippingAddress);
+                    response.sendRedirect("/storefront/cart");
+                } catch (RuntimeException e) {
+                    displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error creating order");
+                }
                 return;
             }
 
