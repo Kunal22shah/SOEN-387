@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Add db connection and fix ship order bug">
+    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Making cart and create order accessible by guest users">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/CartServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/CartServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -232,7 +231,14 @@
       <option name="project" value="LOCAL" />
       <updated>1700187469604</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Making cart and create order accessible by guest users">
+      <created>1700411830067</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1700411830067</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -261,7 +267,8 @@
     <MESSAGE value="Adding add product to add to database" />
     <MESSAGE value="Fix bug" />
     <MESSAGE value="Add db connection and fix ship order bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add db connection and fix ship order bug" />
+    <MESSAGE value="Making cart and create order accessible by guest users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Making cart and create order accessible by guest users" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

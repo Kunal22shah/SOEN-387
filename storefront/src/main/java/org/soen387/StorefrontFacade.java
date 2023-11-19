@@ -566,6 +566,18 @@ public class StorefrontFacade {
         }
     }
 
+    public void setOrderOwner(int orderID, String userEmail){
+        String sql ="UPDATE orders SET userEmail = ? WHERE orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, userEmail);
+            statement.setInt(2,orderID);
+            statement.executeUpdate();
+        }
+        catch(Exception e){
+            throw new RuntimeException("Error claiming order with ID " + orderID, e);
+        }
+    }
+
     public static class ProductAlreadyInCartException extends RuntimeException {
         public ProductAlreadyInCartException(String message) {
             super(message);
