@@ -19,6 +19,7 @@
     <table class="table">
         <thead>
         <tr>
+            <th>Order ID </th>
             <th>Shipping Address</th>
             <th>Tracking Number</th>
             <th>Shipped</th>
@@ -29,6 +30,7 @@
         <tbody>
         <c:forEach var="unclaimedOrders" items="${unclaimedOrders}">
               <tr>
+                  <td>${unclaimedOrders.orderID}</td>
                   <td>${unclaimedOrders.shippingAddress}</td>
                   <td>${unclaimedOrders.trackingNumber}</td>
                   <c:choose>
