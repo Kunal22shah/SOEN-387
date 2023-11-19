@@ -578,6 +578,29 @@ public class StorefrontFacade {
         }
     }
 
+    public ArrayList<Order> getGuestOrders(String user){
+        if (user == null || user.isEmpty()) {
+            throw new IllegalArgumentException("User must not be null or empty");
+        }
+        String sql = "SELECT * FROM ORDERS WHERE userEmail=?";
+        ArrayList<Order> userOrders = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "guest");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int orderID = resultSet.getInt("orderID");
+                String shippingAddress = resultSet.getString("shippingAddress");
+                int trackingNumber = resultSet.getInt("trackingNumber");
+                boolean isShipped = resultSet.getBoolean("isShipped");
+                userOrders.add(new Order(shippingAddress, null, user, orderID, trackingNumber, isShipped));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving Order.", e);
+        }
+        allOrderByUser.put(user, userOrders);
+        return allOrderByUser.get(user);
+    }
+
     public static class ProductAlreadyInCartException extends RuntimeException {
         public ProductAlreadyInCartException(String message) {
             super(message);

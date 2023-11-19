@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Making cart and create order accessible by guest users">
+    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Adding setOrderOwner business function">
+      <change afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storefront/src/main/webapp/unclaimedOrders.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/navbar.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,7 +241,14 @@
       <option name="project" value="LOCAL" />
       <updated>1700411830067</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Adding setOrderOwner business function">
+      <created>1700412253023</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1700412253023</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -268,7 +278,8 @@
     <MESSAGE value="Fix bug" />
     <MESSAGE value="Add db connection and fix ship order bug" />
     <MESSAGE value="Making cart and create order accessible by guest users" />
-    <option name="LAST_COMMIT_MESSAGE" value="Making cart and create order accessible by guest users" />
+    <MESSAGE value="Adding setOrderOwner business function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding setOrderOwner business function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -289,9 +300,94 @@
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="62" />
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="91" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="92" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="93" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="96" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>27</line>
+          <option name="timeStamp" value="97" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="98" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>30</line>
+          <option name="timeStamp" value="100" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="101" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>32</line>
+          <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>37</line>
+          <option name="timeStamp" value="105" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>38</line>
+          <option name="timeStamp" value="106" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>39</line>
+          <option name="timeStamp" value="107" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="108" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="109" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
