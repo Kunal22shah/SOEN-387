@@ -571,4 +571,32 @@ public class StorefrontFacade {
             super(message);
         }
     }
+
+    public ArrayList<User> getAllUsers() {
+    ArrayList<User> users = new ArrayList<>();
+    String sql = "SELECT password FROM users";
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            User user = new User();
+            user.setPassword(resultSet.getString("password"));
+            users.add(user);
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Error retrieving users.", e);
+    }
+    return users;
+}
+
+public void ChangePermission(User user, User.Role role) {
+    String sql = "UPDATE Users SET role = ? WHERE password = ?";
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setString(1, role.toString());
+        statement.setString(2, user.getPassword());
+        statement.executeUpdate();
+    } catch (SQLException e) {
+        throw new RuntimeException("Error updating user role.", e);
+    }
+}
+
 }
