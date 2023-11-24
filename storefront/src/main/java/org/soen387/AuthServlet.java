@@ -26,6 +26,8 @@ public class AuthServlet extends HttpServlet {
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         } else if ("/register".equals(pathInfo)) {
             request.getRequestDispatcher("/register.jsp").forward(request, response);
+        } else if ("/changePass".equals(pathInfo)) {
+            request.getRequestDispatcher("/changePass.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("/staffAuth.jsp").forward(request, response);
         }
@@ -35,95 +37,43 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
 
-        if ("/login".equals(pathInfo)) {
-            handleUserLogin(request, response);
-        } else if ("/register".equals(pathInfo)) {
-            try {
+        switch (pathInfo) {
+            case "/login":
+                handleUserLogin(request, response);
+                break;
+            case "/register":
                 handleUserRegistration(request, response);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            handleStaffAuthentication(request, response);
+                break;
+            case "/staffAuth":
+                handleStaffAuthentication(request, response);
+                break;
+            case "/changePass":
+                handleChangePassword(request, response);
+                break;
+            default:
+                displayError(response, HttpServletResponse.SC_NOT_FOUND, "Not Found");
+                break;
         }
     }
 
-    //    private void handleUserLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String email = request.getParameter("email");
-//        String password = request.getParameter("password");
-//
-//        Map<String, String> credentialsMap = userUtility.readFromFile();
-//        if (credentialsMap.containsKey(email) && credentialsMap.get(email).equals(password)) {
-//            // Authenticate user based on file credentials
-//            User user = new User();
-//            user.setEmail(email);
-//            HttpSession session = request.getSession();
-//            session.setAttribute("loggedInUser", user);
-//            session.setAttribute("loggedInUserEmail", user.getEmail());
-//            response.sendRedirect("/storefront/products");
-//        } else {
-//            // If not found in file, authenticate based on database
-//            User user = userUtility.getUserByEmail(email);
-//            if (user != null && Objects.equals(password, user.getPassword())) {
-//                HttpSession session = request.getSession();
-//                session.setAttribute("loggedInUser", user);
-//                session.setAttribute("loggedInUserEmail", user.getEmail());
-//                response.sendRedirect("/storefront/products");
-//            } else {
-//                displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
-//            }
-//        }
-//
-//    }
     private void handleUserLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String password = request.getParameter("password");
 
-        Map<String, String> credentialsMap = userUtility.readFromFile();
-
-        boolean isAuthenticated = credentialsMap.containsValue(password);
-        if (isAuthenticated) {
-            // Authenticate user based on credentials
-            User user = userUtility.getUserByPassword(password);
-            if (user != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("loggedInUser", user);
-                session.setAttribute("loggedInUserEmail", user.getEmail());
-                response.sendRedirect("/storefront/products");
-            } else {
-                displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "User not found with the given password");
-            }
+        User user = userUtility.getUserByPassword(password);
+        if (user != null && Objects.equals(password, user.getPassword())) {
+            HttpSession session = request.getSession();
+            session.setAttribute("loggedInUser", user);
+            session.setAttribute("loggedInUserEmail", user.getEmail());
+            response.sendRedirect("/storefront/products");
         } else {
-            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid password");
+            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
         }
+
     }
 
-    //    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
-//        String username = request.getParameter("username");
-//        String password = request.getParameter("password");
-//        String email = request.getParameter("email");
-//
-//        if (username == null || password == null || email == null || username.isEmpty() || password.isEmpty() || email.isEmpty()) {
-//            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Username, password, and email cannot be empty");
-//            return;
-//        }
-//
-//        User existingUserByEmail = userUtility.getUserByEmail(email);
-//        if (existingUserByEmail != null) {
-//            displayError(response, HttpServletResponse.SC_CONFLICT, "A user with this email already exists");
-//            return;
-//        }
-//
-//        User newUser = new User();
-//        newUser.setUsername(username);
-//        newUser.setPassword(password);
-//        newUser.setEmail(email);
-//
-//        userUtility.addUser(newUser);
-//        userUtility.writeToFile(email, password);
-//        response.sendRedirect("/storefront/auth/login");
-//    }
-    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
+    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String password = request.getParameter("password");
+        System.out.println(password);
 
         if (password == null || password.isEmpty()) {
             displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Password cannot be empty");
@@ -132,17 +82,15 @@ public class AuthServlet extends HttpServlet {
 
         User newUser = new User();
         newUser.setPassword(password);
-        // Set random email to the new user
-        if (userUtility.getUserByPassword(password) != null) {
-            displayError(response, HttpServletResponse.SC_CONFLICT, "A user with this password already exists");
-            return;
-        }
         newUser.setUsername(User.generateRandomUsername());
         newUser.setEmail(User.generateRandomEmail());
-        userUtility.addUserWithRandomEmail(newUser);
-        userUtility.writeToFile(password);
+
+        // Add user to the database
+        userUtility.addUser(newUser);
+
         response.sendRedirect("/storefront/auth/login");
     }
+
 
     private void handleStaffAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String passcode = request.getParameter("passcode");
@@ -153,6 +101,23 @@ public class AuthServlet extends HttpServlet {
             response.sendRedirect("/storefront/products");
         } else {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid passcode");
+        }
+    }
+    private void handleChangePassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String oldPassword = request.getParameter("oldPassword");
+        String newPassword = request.getParameter("newPassword");
+        String confirmNewPassword = request.getParameter("confirmNewPassword");
+
+        if (!newPassword.equals(confirmNewPassword)) {
+            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "New passwords do not match.");
+            return;
+        }
+
+        try {
+            userUtility.setPasscode(oldPassword, newPassword);
+            response.sendRedirect("/storefront/successPasscodeSet.jsp");
+        } catch (Exception e) {
+            displayError(response, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
 
