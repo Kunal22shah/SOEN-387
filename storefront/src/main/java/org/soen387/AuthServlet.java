@@ -64,6 +64,11 @@ public class AuthServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", user);
             session.setAttribute("loggedInUserEmail", user.getEmail());
+            if (User.Role.STAFF.equals(user.getRole())) {
+                session.setAttribute("isStaff", true);
+            } else {
+                session.setAttribute("isStaff", false);
+            }
             response.sendRedirect("/storefront/products");
         } else {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid email or password");
@@ -73,7 +78,6 @@ public class AuthServlet extends HttpServlet {
 
     private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String password = request.getParameter("password");
-        System.out.println(password);
 
         if (password == null || password.isEmpty()) {
             displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Password cannot be empty");
@@ -103,6 +107,7 @@ public class AuthServlet extends HttpServlet {
             displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid passcode");
         }
     }
+
     private void handleChangePassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String oldPassword = request.getParameter("oldPassword");
         String newPassword = request.getParameter("newPassword");

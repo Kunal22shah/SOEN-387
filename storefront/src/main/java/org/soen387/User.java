@@ -5,6 +5,9 @@ import java.util.UUID;
 
 public class User {
 
+    public User(String username, String password, String mail) {
+    }
+
     public enum Role {
         STAFF, CUSTOMER
     }
@@ -12,7 +15,7 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private Role role
+    private Role role;
 
     public User() {
         this.role = Role.CUSTOMER;

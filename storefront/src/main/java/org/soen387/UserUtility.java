@@ -85,9 +85,6 @@ public class UserUtility {
 
     public void setPasscode(String oldPassword, String newPassword) throws Exception {
         User user = getUserByPassword(oldPassword);
-        if(oldPassword.equals("secret")){
-            throw new Exception("Staff Passcode cannot be changed");
-        }
         if (user == null) {
             throw new Exception("Incorrect old password.");
         }
