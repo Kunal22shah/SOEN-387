@@ -17,7 +17,9 @@ public class CartServlet extends HttpServlet {
         // Handle GET requests to /cart
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
         if (userEmail == null) {
-            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            Cart userCart = store.getCart("guest");
+            request.setAttribute("cart", userCart);
+            request.getRequestDispatcher("/cart.jsp").forward(request, response);
             return;
         }
         Cart userCart = store.getCart(userEmail);
@@ -31,7 +33,34 @@ public class CartServlet extends HttpServlet {
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
 
         if (userEmail == null) {
-            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            String pathInfo = request.getPathInfo();
+            if (pathInfo == null || !pathInfo.startsWith("/products/")) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product slug");
+                return;
+            }
+
+            String slug = pathInfo.split("/")[2];
+            Product productToAdd = store.getProductBySlug(slug);
+            if (productToAdd == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+                return;
+            }
+
+            String methodOverride = request.getParameter("_method");
+            if ("delete".equalsIgnoreCase(methodOverride)) {
+                doDelete(request, response);
+                response.sendRedirect("/storefront/cart");
+                return;
+            }
+            try {
+                store.addProductToCart("guest", productToAdd.getSku());
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.sendRedirect("/storefront/cart");
+            } catch (StorefrontFacade.ProductAlreadyInCartException e) {
+                displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Product has already been added to the cart");
+            } catch (Exception e) {
+                displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while adding the product to the cart");
+            }
             return;
         }
 
@@ -71,7 +100,27 @@ public class CartServlet extends HttpServlet {
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
 
         if (userEmail == null) {
-            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            String getPathInfo = request.getPathInfo();
+            if (getPathInfo == null || getPathInfo.split("/").length <= 1) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+            String slug = getPathInfo.split("/")[2];
+            Product productToRemove = store.getProductBySlug(slug);
+            if (productToRemove == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+                return;
+            }
+            String removeCompletelyParam = request.getParameter("remove");
+            boolean removeCompletely = "true".equalsIgnoreCase(removeCompletelyParam);
+
+            if (removeCompletely) {
+
+                store.removeProductCompletelyFromCart("guest", productToRemove.getSku());
+            } else {
+
+                store.decreaseProductQuantityInCart("guest", productToRemove.getSku());
+            }
             return;
         }
 
@@ -102,7 +151,27 @@ public class CartServlet extends HttpServlet {
 
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
         if (userEmail == null) {
-            displayError(response,HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            String pathInfo = request.getPathInfo();
+            if (pathInfo == null || pathInfo.split("/").length <= 2) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+
+            String slug = pathInfo.split("/")[3];
+            Product product = store.getProductBySlug(slug);
+            if (product == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+                return;
+            }
+
+            String action = request.getParameter("action");
+            if ("increase".equals(action)) {
+                store.setProductQuantityInCart("guest", product.getSku(), store.getCart("guest").getQuantityForSKU(product.getSku()) + 1);
+            } else {
+                store.decreaseProductQuantityInCart("guest",product.getSku());
+            }
+
+            response.sendRedirect("/storefront/cart");
             return;
         }
 

@@ -25,6 +25,7 @@
                 <c:choose>
                      <c:when test="${not empty sessionScope.loggedInUser || sessionScope.isStaff}">
                           <a class="nav-link text-white" aria-current="page" href="/storefront/orders">View Orders</a>
+                          <a class="nav-link text-white" aria-current="page" href="/storefront/unclaimedOrders">View Unclaimed Orders</a>
                      </c:when>
                      <c:otherwise>
                           <div></div>
