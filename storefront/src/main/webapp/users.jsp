@@ -36,7 +36,7 @@
                 <td><%= user.getRole()%></td>
                 <td>
                     <form action="/storefront/users" method="post">
-                        <input type="hidden" name="userId" value="<%= user.getEmail() %>" />
+                        <input type="hidden" name="password" value="<%= user.getPassword() %>" />
                         <select name="newRole">
                             <option value="CUSTOMER">Customer</option>
                             <option value="STAFF">Staff</option>

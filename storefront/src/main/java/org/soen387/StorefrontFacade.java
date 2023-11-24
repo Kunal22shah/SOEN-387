@@ -574,12 +574,13 @@ public class StorefrontFacade {
 
     public ArrayList<User> getAllUsers() {
     ArrayList<User> users = new ArrayList<>();
-    String sql = "SELECT password FROM users";
+    String sql = "SELECT password, role FROM users";
     try (PreparedStatement statement = connection.prepareStatement(sql)) {
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
             User user = new User();
             user.setPassword(resultSet.getString("password"));
+            user.setRole(User.Role.valueOf(resultSet.getString("role")));   
             users.add(user);
         }
     } catch (SQLException e) {
@@ -589,7 +590,8 @@ public class StorefrontFacade {
 }
 
 public void ChangePermission(User user, User.Role role) {
-    String sql = "UPDATE Users SET role = ? WHERE password = ?";
+    String password = user.getPassword();
+    String sql = "UPDATE Users SET Role = ? WHERE password = ?";
     try (PreparedStatement statement = connection.prepareStatement(sql)) {
         statement.setString(1, role.toString());
         statement.setString(2, user.getPassword());
