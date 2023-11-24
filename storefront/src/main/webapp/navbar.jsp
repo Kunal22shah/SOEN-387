@@ -11,9 +11,14 @@
 <nav class="navbar navbar-expand-lg bg-primary fixed-top" >
     <div class="container-fluid">
         <a class="navbar-brand" href="/storefront" style="font-weight:bold; color: white;">StoreFront</a>
-        <c:when test="${not empty sessionScope.loggedInUser || sessionScope.isStaff}">
-            <a class="nav-link text-white" aria-current="page" href="/storefront/users">All Users</a>
-        </c:when>
+        <c:choose>
+            <c:when test="${not empty sessionScope.loggedInUser || sessionScope.isStaff}">
+                <a class="nav-link text-white" aria-current="page" href="/storefront/users">All Users</a>
+            </c:when>
+            <c:otherwise>
+                 <div></div>
+            </c:otherwise>
+        </c:choose>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
