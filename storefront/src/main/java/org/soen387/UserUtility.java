@@ -56,10 +56,11 @@ public class UserUtility {
     public void addUser(User user) {
         Connection connection = DatabaseConnection.getConnection();
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO Users (username, email, password) VALUES (?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO Users (username, email, password,role) VALUES (?, ?, ?,?)");
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
+            statement.setString(4, user.getRole().toString());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
