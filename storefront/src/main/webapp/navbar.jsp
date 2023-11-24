@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/storefront" style="font-weight:bold; color: white;">StoreFront</a>
         <c:choose>
-            <c:when test="${not empty sessionScope.loggedInUser || sessionScope.isStaff}">
+            <c:when test="${not empty sessionScope.isStaff}">
                 <a class="nav-link text-white" aria-current="page" href="/storefront/users">All Users</a>
             </c:when>
             <c:otherwise>
