@@ -614,6 +614,7 @@ public class StorefrontFacade {
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
             User user = new User();
+
             String password = user.getPassword();
             if (!"guest".equals(password)) {
                 user.setPassword(resultSet.getString("password"));
