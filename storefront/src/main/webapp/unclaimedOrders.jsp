@@ -19,18 +19,15 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Order ID </th>
             <th>Shipping Address</th>
             <th>Tracking Number</th>
             <th>Shipped</th>
-            <th>Details</th>
             <th>Claim Order</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach var="unclaimedOrders" items="${unclaimedOrders}">
               <tr>
-                  <td>${unclaimedOrders.orderID}</td>
                   <td>${unclaimedOrders.shippingAddress}</td>
                   <td>${unclaimedOrders.trackingNumber}</td>
                   <c:choose>
@@ -41,7 +38,7 @@
                        <td>Product has not been shipped</td>
                   </c:otherwise>
                   </c:choose>
-                  <td><a href="/storefront/orders/${unclaimedOrders.orderID}" class="btn btn-primary">View Details</a></td>
+
                       <td>
                               <form action="/storefront/unclaimedOrders" method="post">
                                   <input type="hidden" name="orderId" value="${unclaimedOrders.orderID}" />
