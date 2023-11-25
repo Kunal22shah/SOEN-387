@@ -5,11 +5,18 @@ import java.util.UUID;
 
 public class User {
 
+
+    public enum Role {
+        STAFF, CUSTOMER
+    }
+
     private String username;
     private String password;
     private String email;
+    private Role role;
 
     public User() {
+        this.role = Role.CUSTOMER;
     }
 
     public static String generateRandomUsername() {
@@ -52,5 +59,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
