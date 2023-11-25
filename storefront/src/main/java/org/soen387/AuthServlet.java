@@ -99,14 +99,24 @@ public class AuthServlet extends HttpServlet {
     private void handleStaffAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String passcode = request.getParameter("passcode");
 
-        if ("secret".equals(passcode)) {
+        if (passcode == null || passcode.trim().isEmpty()) {
+            displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Passcode cannot be null or empty.");
+            return;
+        }
+
+        User user = userUtility.getUserByPassword(passcode);
+        if (user != null && User.Role.STAFF.equals(user.getRole())) {
             HttpSession session = request.getSession();
+            session.setAttribute("loggedInUser", user);
+            session.setAttribute("loggedInUserEmail", user.getEmail());
             session.setAttribute("isStaff", true);
             response.sendRedirect("/storefront/products");
         } else {
-            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid passcode");
+            displayError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid passcode or not authorized as staff");
         }
     }
+
+
 
     private void handleChangePassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String oldPassword = request.getParameter("oldPassword");

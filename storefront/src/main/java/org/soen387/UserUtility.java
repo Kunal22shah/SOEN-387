@@ -110,21 +110,34 @@ public class UserUtility {
 
 
     public User getUserByPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty.");
+        }
+
         Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) {
+            throw new IllegalStateException("Database connection is not available.");
+        }
+
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Users WHERE password = ?");
             statement.setString(1, password);
             ResultSet resultSet = statement.executeQuery();
+
             if (resultSet.next()) {
                 User user = new User();
                 user.setUsername(resultSet.getString("username"));
                 user.setEmail(resultSet.getString("email"));
                 user.setPassword(resultSet.getString("password"));
+                user.setRole(User.Role.valueOf(resultSet.getString("Role").toUpperCase()));
                 return user;
+            } else {
+                return null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error retrieving user by password.", e);
         }
-        return null;
     }
+
 }
