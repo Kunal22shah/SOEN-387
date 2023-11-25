@@ -614,9 +614,13 @@ public class StorefrontFacade {
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
             User user = new User();
-            user.setPassword(resultSet.getString("password"));
-            user.setRole(User.Role.valueOf(resultSet.getString("role")));   
-            users.add(user);
+
+            String password = user.getPassword();
+            if (!"guest".equals(password)) {
+                user.setPassword(resultSet.getString("password"));
+                user.setRole(User.Role.valueOf(resultSet.getString("role")));   
+                users.add(user);
+            }
         }
     } catch (SQLException e) {
         throw new RuntimeException("Error retrieving users.", e);

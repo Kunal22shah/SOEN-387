@@ -5,8 +5,6 @@ import java.util.UUID;
 
 public class User {
 
-    public User(String username, String password, String mail) {
-    }
 
     public enum Role {
         STAFF, CUSTOMER
