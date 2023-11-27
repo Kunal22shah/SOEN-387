@@ -25,7 +25,17 @@
         </p>
         <p>Vendor: ${product.vendor}</p>
         <form action="/storefront/cart/products/${product.urlSlug}" method="post">
-          <button type="submit" class="btn btn-primary">Add to cart</button>
+          <c:choose>
+
+            <c:when test="${not (sessionScope.isStaff != null && sessionScope.isStaff)}">
+
+              <button type="submit" class="btn btn-primary">Add to cart</button>
+            </c:when>
+            <c:otherwise>
+              <div></div>
+            </c:otherwise>
+          </c:choose>
+
         </form>
     </div>
   </div>

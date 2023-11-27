@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -14,6 +15,14 @@ import static org.soen387.ProductServlet.store;
 public class CartServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        // Check if the user is logged in as staff
+        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
+        if (isStaff == null || isStaff) {
+            displayError(response, HttpServletResponse.SC_FORBIDDEN, "You are not authorized to access this page.");
+            return;
+        }
         // Handle GET requests to /cart
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
         if (userEmail == null) {
