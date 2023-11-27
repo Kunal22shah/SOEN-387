@@ -17,7 +17,6 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        // Check if the user is logged in as staff
         Boolean isStaff = (Boolean) session.getAttribute("isStaff");
         if (isStaff == null || isStaff) {
             displayError(response, HttpServletResponse.SC_FORBIDDEN, "You are not authorized to access this page.");
