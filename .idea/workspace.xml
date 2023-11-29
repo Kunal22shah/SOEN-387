@@ -9,12 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Fix bug">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="make unclaimedOrder not accesible by staff">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/AuthServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/AuthServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/DatabaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/UserUtility.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/UserUtility.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/unclaimedOrders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/unclaimedOrders.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,32 +54,32 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2WFy63CyZOwBSG2ZMXXMzZsEUja" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Git.Branch.Popup.ShowAllRemotes": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/imran/Desktop/SOEN 387/Project/Assignment 1/Main/storefront/src/main/java/org/soen387",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15820312",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/imran/Desktop/SOEN 387/Project/Assignment 1/Main/storefront/src/main/java/org/soen387&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15820312&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\imran\Desktop\SOEN 387\Project\Assignment 1\Main\storefront\src\main\java\org\soen387" />
@@ -90,17 +90,9 @@
       <recent name="C:\Users\imran\Desktop\SOEN 387\Project\Assignment 1\Main\storefront\target\storefront\WEB-INF" />
     </key>
   </component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 9.0.82">
-    <configuration name="UserUtilityTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="storefront" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="UserUtilityTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserUtilityTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Smart Tomcat.Tomcat 9">
+    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.soen387.UserUtilityTest" />
       <module name="storefront" />
       <extension name="coverage">
         <pattern>
@@ -108,118 +100,18 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.soen387" />
-      <option name="MAIN_CLASS_NAME" value="org.soen387.UserUtilityTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserUtilityTest.testSetPasscodeWithCorrectOldPassword" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SetOrderTest.SetOrder" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="storefront" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="UserUtilityTest" />
-      <option name="METHOD_NAME" value="testSetPasscodeWithCorrectOldPassword" />
+      <option name="MAIN_CLASS_NAME" value="SetOrderTest" />
+      <option name="METHOD_NAME" value="SetOrder" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserUtilityTest.testSetPasscodeWithTakenNewPassword" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="storefront" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="UserUtilityTest" />
-      <option name="METHOD_NAME" value="testSetPasscodeWithTakenNewPassword" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Tomcat 9.0.82" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.82" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
-      <option name="UPDATING_POLICY" value="restart-server" />
-      <deployment>
-        <artifact name="storefront:war">
-          <settings>
-            <option name="CONTEXT_PATH" value="/storefront" />
-          </settings>
-        </artifact>
-      </deployment>
-      <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="ab80fcb7-12e7-4e42-985a-3b4811071e73" />
-      </server-settings>
-      <predefined_log_file enabled="true" id="Tomcat" />
-      <predefined_log_file enabled="true" id="Tomcat Catalina" />
-      <predefined_log_file id="Tomcat Manager" />
-      <predefined_log_file id="Tomcat Host Manager" />
-      <predefined_log_file id="Tomcat Localhost Access" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="56571" />
-      </RunnerSettings>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Profile">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <method v="2">
-        <option name="Make" enabled="true" />
-        <option name="BuildArtifacts" enabled="true">
-          <artifact name="storefront:war" />
-        </option>
       </method>
     </configuration>
     <configuration name="Tomcat 9" type="com.poratu.idea.plugins.tomcat">
@@ -246,18 +138,17 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.UserUtilityTest" />
-      <item itemvalue="JUnit.UserUtilityTest (1)" />
-      <item itemvalue="JUnit.UserUtilityTest.testSetPasscodeWithCorrectOldPassword" />
-      <item itemvalue="JUnit.UserUtilityTest.testSetPasscodeWithTakenNewPassword" />
-      <item itemvalue="Tomcat Server.Tomcat 9.0.82" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.SetOrderTest.SetOrder" />
+      <item itemvalue="Smart Tomcat.Tomcat 9" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.UserUtilityTest.testSetPasscodeWithTakenNewPassword" />
-        <item itemvalue="JUnit.UserUtilityTest.testSetPasscodeWithCorrectOldPassword" />
-        <item itemvalue="JUnit.UserUtilityTest (1)" />
-        <item itemvalue="JUnit.UserUtilityTest" />
+        <item itemvalue="JUnit.SetOrderTest.SetOrder" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -362,7 +253,21 @@
       <option name="project" value="LOCAL" />
       <updated>1699470076803</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Fix bugs">
+      <created>1700937133097</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1700937133097</updated>
+    </task>
+    <task id="LOCAL-00015" summary="make unclaimedOrder not accesible by staff">
+      <created>1700938055062</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1700938055062</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -393,7 +298,9 @@
     <MESSAGE value="Adding DB logic in facade for view products" />
     <MESSAGE value="Adding add product to add to database" />
     <MESSAGE value="Fix bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix bug" />
+    <MESSAGE value="Fix bugs" />
+    <MESSAGE value="make unclaimedOrder not accesible by staff" />
+    <option name="LAST_COMMIT_MESSAGE" value="make unclaimedOrder not accesible by staff" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -412,6 +319,11 @@
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
           <line>98</line>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="62" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

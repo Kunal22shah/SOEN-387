@@ -27,11 +27,12 @@ public class Order {
         this.isShipped = isShipped;
     }
 
-    public Order(String shippingAddress, ArrayList<OrderProductItem> orderProductItems, String userEmail){
+    public Order(String shippingAddress, ArrayList<OrderProductItem> orderProductItems, String userEmail, int orderID){
         this.orderID = counter++;
         this.shippingAddress = shippingAddress;
         this.orderProducts = orderProductItems;
         this.user = userEmail;
+        this.orderID = orderID;
     }
 
     public String getUser() {

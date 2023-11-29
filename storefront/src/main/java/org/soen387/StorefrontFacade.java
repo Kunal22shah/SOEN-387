@@ -494,8 +494,7 @@ public class StorefrontFacade {
         for (Cart.CartItem cartItem : userCart.getCartItems()) {
             orderProductItems.add(new Order.OrderProductItem(cartItem.getProduct(), cartItem.getQuantity()));
         }
-
-        Order newOrder = new Order(shippingAddress, orderProductItems, userEmail);
+        int orderID = 0;
         String sql = "INSERT INTO ORDERS(userEmail, shippingAddress, isShipped) VALUES (?,?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
 //            statement.setInt(1, newOrder.getOrderID());
@@ -507,7 +506,6 @@ public class StorefrontFacade {
         } catch (Exception e) {
             throw new RuntimeException("Error creating order");
         }
-        int orderID = newOrder.getOrderID();
         String sqlselect = "SELECT orderID FROM ORDERS WHERE userEmail=?";
         try (PreparedStatement statement = connection.prepareStatement(sqlselect)) {
             statement.setString(1, userEmail);
@@ -518,6 +516,7 @@ public class StorefrontFacade {
         } catch (Exception e) {
             throw new RuntimeException("Error creating order for user");
         }
+        Order newOrder = new Order(shippingAddress, orderProductItems, userEmail, orderID);
 
         String sqlOrderProduct = "INSERT INTO OrderProducts (orderID, sku, quantity) VALUES (?, ?, ?)";
             for (Order.OrderProductItem item : orderProductItems) {
@@ -530,7 +529,6 @@ public class StorefrontFacade {
                     throw new RuntimeException("Error creating order for user");
                 }
             }
-
 
 
 

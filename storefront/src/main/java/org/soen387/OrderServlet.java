@@ -113,6 +113,7 @@ public class OrderServlet extends HttpServlet {
 
                     store.shipOrder(orderId,trackingNumber);
                     response.sendRedirect("/storefront/orders");
+
                 } catch (NumberFormatException e) {
                     displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Invalid order ID");
                 } catch (RuntimeException e) {
@@ -130,8 +131,29 @@ public class OrderServlet extends HttpServlet {
             if (userEmail == null || userEmail.isEmpty()) {
                 // Attempt to create a new order
                 try {
-                    store.createOrder("guest", shippingAddress);
-                    response.sendRedirect("/storefront/cart");
+                    Order userOrder = store.createOrder("guest", shippingAddress);
+                    response.setContentType("text/html");
+                    PrintWriter out = response.getWriter();
+                    out.println("<!DOCTYPE html>");
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>");
+                    out.println("<title>Error</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<div class='container mt-5'>");
+                    out.println("<div class='alert alert-success' role='alert'>");
+                    out.println();
+                    out.println("<p> Your Order ID is " + (userOrder.getOrderID()) + "</p>");
+                    out.println("</div>");
+                    out.println("<div class='text-center'>");
+                    out.println("<a href='/storefront' class='btn btn-primary'>Home</a>");
+                    out.println("</div>");
+                    out.println("</div>");
+                    out.println("</body>");
+                    out.println("</html>");
+//                    response.sendRedirect("/storefront/cart");
+
                 } catch (RuntimeException e) {
                     displayError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error creating order");
                 }

@@ -23,7 +23,8 @@ public class unclaimedOrderServlet extends HttpServlet {
 
         // Check if the user is logged in
         String userEmail = (String) session.getAttribute("loggedInUserEmail");
-        if (userEmail != null && getPathInfo == null) {
+        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
+        if (userEmail != null && getPathInfo == null && !isStaff) {
             try {
                 ArrayList<Order> unclaimedOrders = new ArrayList<>();
                 unclaimedOrders = store.getGuestOrders(userEmail);
@@ -50,10 +51,11 @@ public class unclaimedOrderServlet extends HttpServlet {
         String userorderIdString = request.getParameter("userOrderId");
         int orderId = Integer.parseInt(orderIdString);
         int userOrderId = Integer.parseInt(userorderIdString);
+        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
 
         // Check if the user is logged in
         String userEmail = (String) session.getAttribute("loggedInUserEmail");
-        if (userEmail != null && getPathInfo == null) {
+        if (userEmail != null && getPathInfo == null && !isStaff) {
             try {
                 if (orderId == userOrderId){
                     store.setOrderOwner(orderId, userEmail);
