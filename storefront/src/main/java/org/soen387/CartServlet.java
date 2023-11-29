@@ -13,26 +13,29 @@ import static org.soen387.ProductServlet.store;
 
 @WebServlet("/cart/*")
 public class CartServlet extends HttpServlet {
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
         Boolean isStaff = (Boolean) session.getAttribute("isStaff");
-        if (isStaff == null || isStaff) {
-            displayError(response, HttpServletResponse.SC_FORBIDDEN, "You are not authorized to access this page.");
-            return;
-        }
+        
         // Handle GET requests to /cart
         String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
-        if (userEmail == null) {
+        if (userEmail == null && isStaff==null) {
             Cart userCart = store.getCart("guest");
             request.setAttribute("cart", userCart);
             request.getRequestDispatcher("/cart.jsp").forward(request, response);
             return;
-        }
+        }else if(userEmail!=null && isStaff==null){
+ 
         Cart userCart = store.getCart(userEmail);
         request.setAttribute("cart", userCart);
         request.getRequestDispatcher("/cart.jsp").forward(request, response);
+    }
+    else if(userEmail == null && isStaff!=null) {
+            displayError(response, HttpServletResponse.SC_FORBIDDEN, "You are not authorized to access this page.");
+            return;
+        }
     }
 
     @Override
