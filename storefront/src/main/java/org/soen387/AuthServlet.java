@@ -42,7 +42,11 @@ public class AuthServlet extends HttpServlet {
                 handleUserLogin(request, response);
                 break;
             case "/register":
-                handleUserRegistration(request, response);
+                try {
+                    handleUserRegistration(request, response);
+                } catch (Exception e) {
+                    displayError(response,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
+                }
                 break;
             case "/staffAuth":
                 handleStaffAuthentication(request, response);
@@ -76,12 +80,15 @@ public class AuthServlet extends HttpServlet {
 
     }
 
-    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void handleUserRegistration(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String password = request.getParameter("password");
 
         if (password == null || password.isEmpty()) {
             displayError(response, HttpServletResponse.SC_BAD_REQUEST, "Password cannot be empty");
             return;
+        }
+        if(userUtility.isPasscodeTaken(password)){
+            throw new Exception("Passcode already taken");
         }
 
         User newUser = new User();

@@ -22,7 +22,7 @@ public class UserUtility {
         String projectRootPath = System.getProperty("user.dir");
 
         FILE_PATH = Paths.get(projectRootPath, dataDirectory, fileName);
-        System.out.println("Credentials file path is: " + FILE_PATH);
+//        System.out.println("Credentials file path is: " + FILE_PATH);
 
         try {
             if (Files.notExists(FILE_PATH)) {
