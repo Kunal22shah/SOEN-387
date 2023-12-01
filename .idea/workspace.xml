@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ArtifactsWorkspaceSettings">
-    <artifacts-to-build>
-      <artifact name="storefront:war" />
-    </artifacts-to-build>
-  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="make unclaimedOrder not accesible by staff">
+    <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="Removing Orderid from unclaimedOrder page and showing orderID for guest user once they create order">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/unclaimedOrders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/unclaimedOrders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/unclaimedOrderServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/order.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/orders.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="changePermission" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -54,9 +49,6 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 1
-}</component>
   <component name="ProjectId" id="2WFy63CyZOwBSG2ZMXXMzZsEUja" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -68,16 +60,11 @@
     &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/imran/Desktop/SOEN 387/Project/Assignment 1/Main/storefront/src/main/java/org/soen387&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15820312&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -90,9 +77,9 @@
       <recent name="C:\Users\imran\Desktop\SOEN 387\Project\Assignment 1\Main\storefront\target\storefront\WEB-INF" />
     </key>
   </component>
-  <component name="RunManager" selected="Smart Tomcat.Tomcat 9">
+  <component name="RunManager" selected="JUnit.SetPasscodeTest">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.soen387.UserUtilityTest" />
+      <option name="MAIN_CLASS_NAME" value="org.soen387.Main" />
       <module name="storefront" />
       <extension name="coverage">
         <pattern>
@@ -104,12 +91,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SetOrderTest.SetOrder" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SetOrderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="storefront" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="SetOrderTest" />
-      <option name="METHOD_NAME" value="SetOrder" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SetPasscodeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="storefront" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SetPasscodeTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -139,13 +134,14 @@
     </configuration>
     <list>
       <item itemvalue="Application.Main" />
-      <item itemvalue="JUnit.SetOrderTest.SetOrder" />
+      <item itemvalue="JUnit.SetOrderTest" />
+      <item itemvalue="JUnit.SetPasscodeTest" />
       <item itemvalue="Smart Tomcat.Tomcat 9" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SetOrderTest.SetOrder" />
-        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.SetPasscodeTest" />
+        <item itemvalue="JUnit.SetOrderTest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
@@ -160,7 +156,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1696342449266</updated>
-      <workItem from="1700929086792" duration="522000" />
     </task>
     <task id="LOCAL-00001" summary="Adding the GET/products request">
       <created>1696347567125</created>
@@ -253,25 +248,43 @@
       <option name="project" value="LOCAL" />
       <updated>1699470076803</updated>
     </task>
-    <task id="LOCAL-00014" summary="Fix bugs">
-      <created>1700937133097</created>
+    <task id="LOCAL-00014" summary="Add db connection and fix ship order bug">
+      <created>1700187469604</created>
       <option name="number" value="00014" />
       <option name="presentableId" value="LOCAL-00014" />
       <option name="project" value="LOCAL" />
-      <updated>1700937133097</updated>
+      <updated>1700187469604</updated>
     </task>
-    <task id="LOCAL-00015" summary="make unclaimedOrder not accesible by staff">
-      <created>1700938055062</created>
+    <task id="LOCAL-00015" summary="Making cart and create order accessible by guest users">
+      <created>1700411830067</created>
       <option name="number" value="00015" />
       <option name="presentableId" value="LOCAL-00015" />
       <option name="project" value="LOCAL" />
-      <updated>1700938055062</updated>
+      <updated>1700411830067</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Adding setOrderOwner business function">
+      <created>1700412253023</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1700412253023</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Adding unclaimed Order page">
+      <created>1700415488512</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1700415488513</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Adding unclaimed Order functionality">
+      <created>1700416576324</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1700416576324</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -298,9 +311,12 @@
     <MESSAGE value="Adding DB logic in facade for view products" />
     <MESSAGE value="Adding add product to add to database" />
     <MESSAGE value="Fix bug" />
-    <MESSAGE value="Fix bugs" />
-    <MESSAGE value="make unclaimedOrder not accesible by staff" />
-    <option name="LAST_COMMIT_MESSAGE" value="make unclaimedOrder not accesible by staff" />
+    <MESSAGE value="Add db connection and fix ship order bug" />
+    <MESSAGE value="Making cart and create order accessible by guest users" />
+    <MESSAGE value="Adding setOrderOwner business function" />
+    <MESSAGE value="Adding unclaimed Order page" />
+    <MESSAGE value="Adding unclaimed Order functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding unclaimed Order functionality" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -319,11 +335,6 @@
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
           <line>98</line>
           <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="62" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

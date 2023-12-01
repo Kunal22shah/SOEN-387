@@ -138,13 +138,13 @@ public class OrderServlet extends HttpServlet {
                     out.println("<html>");
                     out.println("<head>");
                     out.println("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>");
-                    out.println("<title>Error</title>");
+                    out.println("<title>Order Confirmed</title>");
                     out.println("</head>");
                     out.println("<body>");
                     out.println("<div class='container mt-5'>");
                     out.println("<div class='alert alert-success' role='alert'>");
                     out.println();
-                    out.println("<p> Your Order ID is " + (userOrder.getOrderID()) + "</p>");
+                    out.println("<p> Your Order ID is " + (userOrder.getOrderID()+10000) + "</p>");
                     out.println("</div>");
                     out.println("<div class='text-center'>");
                     out.println("<a href='/storefront' class='btn btn-primary'>Home</a>");

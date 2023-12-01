@@ -50,7 +50,7 @@ public class unclaimedOrderServlet extends HttpServlet {
         String orderIdString = request.getParameter("orderId");
         String userorderIdString = request.getParameter("userOrderId");
         int orderId = Integer.parseInt(orderIdString);
-        int userOrderId = Integer.parseInt(userorderIdString);
+        int userOrderId = Integer.parseInt(userorderIdString)-10000;
         Boolean isStaff = (Boolean) session.getAttribute("isStaff");
 
         // Check if the user is logged in
