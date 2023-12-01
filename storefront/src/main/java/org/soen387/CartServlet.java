@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -13,15 +14,24 @@ import static org.soen387.ProductServlet.store;
 @WebServlet("/cart/*")
 public class CartServlet extends HttpServlet {
 
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Handle GET requests to /cart
-        String userEmail = (String) request.getSession().getAttribute("loggedInUserEmail");
+        HttpSession session = request.getSession(false);
+        String userEmail = (String) session.getAttribute("loggedInUserEmail");
+        Boolean isStaff = (Boolean) session.getAttribute("isStaff");
+        
+        if (isStaff != null && isStaff) {
+            displayError(response, HttpServletResponse.SC_FORBIDDEN, "Staff members are not authorized to access the cart.");
+            return;
+        }
+
         if (userEmail == null) {
             Cart userCart = store.getCart("guest");
             request.setAttribute("cart", userCart);
             request.getRequestDispatcher("/cart.jsp").forward(request, response);
             return;
         }
+
         Cart userCart = store.getCart(userEmail);
         request.setAttribute("cart", userCart);
         request.getRequestDispatcher("/cart.jsp").forward(request, response);

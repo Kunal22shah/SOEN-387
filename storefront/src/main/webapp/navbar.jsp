@@ -29,9 +29,15 @@
                 <li class="nav-item" id="productsLink">
                     <a class="nav-link text-white" aria-current="page" href="/storefront/products">Products</a>
                 </li>
-                <li class="nav-item" id="cartLink">
-                    <a class="nav-link text-white" href="/storefront/cart">Cart</a>
-                </li>
+                <c:choose>
+                    <c:when test="${not (sessionScope.isStaff != null && sessionScope.isStaff)}">
+                            <a class="nav-link text-white" href="/storefront/cart">Cart</a>
+                    </c:when>
+                    <c:otherwise>
+                        <div></div>
+                    </c:otherwise>
+                </c:choose>
+
                 <c:choose>
                      <c:when test="${not empty sessionScope.loggedInUser || sessionScope.isStaff}">
                           <a class="nav-link text-white" aria-current="page" href="/storefront/orders">View Orders</a>
@@ -57,7 +63,6 @@
                         <!-- No one is logged in -->
                         <a class="btn btn-light" href="/storefront/auth/login">Login</a>
                         <a class="btn btn-light" href="/storefront/auth/register">Register</a>
-                        <a class="btn btn-light" href="/storefront/auth/staffAuth">Authenticate as Staff</a>
                     </c:otherwise>
                 </c:choose>
             </span>
