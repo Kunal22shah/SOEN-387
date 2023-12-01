@@ -1,17 +1,14 @@
 package org.soen387;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-
-import com.google.gson.Gson;
 
 public class StorefrontFacade {
     private final Connection connection;

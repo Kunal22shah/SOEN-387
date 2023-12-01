@@ -11,10 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e7a24771-3f0b-4897-ae6f-f559a57a991a" name="Changes" comment="make unclaimedOrder not accesible by staff">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/OrderServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/DatabaseConnection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storefront/src/main/webapp/unclaimedOrders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/main/webapp/unclaimedOrders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storefront/src/test/java/SetPasscodeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/storefront/src/test/java/SetPasscodeTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="changePermission" />
+        <entry key="$PROJECT_DIR$" value="UI-Fixes" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -62,24 +61,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/imran/Desktop/SOEN 387/Project/Assignment 1/Main/storefront/src/main/java/org/soen387&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15820312&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Git.Branch.Popup.ShowAllRemotes": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/imran/Desktop/SOEN 387/Project/Assignment 1/Main/storefront/src/main/java/org/soen387",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15820312",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\imran\Desktop\SOEN 387\Project\Assignment 1\Main\storefront\src\main\java\org\soen387" />
@@ -90,7 +94,7 @@
       <recent name="C:\Users\imran\Desktop\SOEN 387\Project\Assignment 1\Main\storefront\target\storefront\WEB-INF" />
     </key>
   </component>
-  <component name="RunManager" selected="Smart Tomcat.Tomcat 9">
+  <component name="RunManager" selected="JUnit.SetPasscodeTest.testSetPasscodeWithCorrectOldPassword">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.soen387.UserUtilityTest" />
       <module name="storefront" />
@@ -109,6 +113,35 @@
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="SetOrderTest" />
       <option name="METHOD_NAME" value="SetOrder" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SetPasscodeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="storefront" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SetPasscodeTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SetPasscodeTest.testSetPasscodeWithCorrectOldPassword" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="storefront" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SetPasscodeTest" />
+      <option name="METHOD_NAME" value="testSetPasscodeWithCorrectOldPassword" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SetPasscodeTest.testSetPasscodeWithIncorrectOldPassword" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="storefront" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SetPasscodeTest" />
+      <option name="METHOD_NAME" value="testSetPasscodeWithIncorrectOldPassword" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -139,15 +172,17 @@
     </configuration>
     <list>
       <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.SetPasscodeTest" />
+      <item itemvalue="JUnit.SetPasscodeTest.testSetPasscodeWithCorrectOldPassword" />
+      <item itemvalue="JUnit.SetPasscodeTest.testSetPasscodeWithIncorrectOldPassword" />
       <item itemvalue="JUnit.SetOrderTest.SetOrder" />
-      <item itemvalue="Smart Tomcat.Tomcat 9" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SetPasscodeTest.testSetPasscodeWithCorrectOldPassword" />
+        <item itemvalue="JUnit.SetPasscodeTest.testSetPasscodeWithIncorrectOldPassword" />
+        <item itemvalue="JUnit.SetPasscodeTest" />
         <item itemvalue="JUnit.SetOrderTest.SetOrder" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -319,11 +354,6 @@
           <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/ProductServlet.java</url>
           <line>98</line>
           <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/storefront/src/main/java/org/soen387/StorefrontFacade.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="62" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
