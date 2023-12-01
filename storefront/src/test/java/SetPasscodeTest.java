@@ -43,16 +43,12 @@ public class SetPasscodeTest {
         }
     }
 
-    @AfterAll
-    public void tearDownClass() {
-        // Remove the user from the database after tests are complete
-        removeUserFromDatabase(newPassword);
-    }
-
     @Test
     public void testSetPasscodeWithCorrectOldPassword() {
         // Attempt to set a new password using the correct old password
         Assertions.assertDoesNotThrow(() -> userUtility.setPasscode(testPassword, newPassword));
+        removeUserFromDatabase(newPassword);
+        removeUserFromDatabase(testPassword);
     }
 
     @Test
@@ -60,6 +56,8 @@ public class SetPasscodeTest {
         // Attempt to set a new password using an incorrect old password
         Exception exception = Assertions.assertThrows(Exception.class, () -> userUtility.setPasscode("wrongPassword", newPassword));
         Assertions.assertTrue(exception.getMessage().contains("Incorrect old password"));
+        removeUserFromDatabase(newPassword);
+        removeUserFromDatabase(testPassword);
     }
 
     private void removeUserFromDatabase(String newPassword) {
